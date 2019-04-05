@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     // White - Black
+    <color name="fulltranwhite">#7FFF</color>
     <color name="tranwhite">#4FFF</color>
     <color name="White">#fff</color>
     <color name="black">#000</color>
