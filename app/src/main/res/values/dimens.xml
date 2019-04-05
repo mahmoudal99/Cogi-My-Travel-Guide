@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    // Sign In Layout Dimens
+    <dimen name="EditTextMargin">40px</dimen>
+    <dimen name="EditTextHeight">150px</dimen>
+</resources>
