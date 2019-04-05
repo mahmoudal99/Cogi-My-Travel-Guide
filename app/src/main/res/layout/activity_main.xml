@@ -6,15 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
+    <LinearLayout
+        android:id="@+id/loginLinLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/EditTextHeight"
-        android:layout_margin="@dimen/EditTextMargin"
-        android:background="@drawable/edit_text_bg"
-        android:hint="@string/Email"
-        android:gravity="center"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/black"
-        tools:layout_editor_absoluteX="4dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/LogoWidth"
+            android:layout_height="@dimen/LogoHeight"
+            android:layout_gravity="center"
+            android:src="@drawable/logo_prototype_1" />
+
+        <EditText
+            android:id="@+id/emailET"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditTextHeight"
+            android:layout_margin="@dimen/EditTextMargin"
+            android:background="@drawable/edit_text_bg"
+            android:gravity="center"
+            android:hint="@string/Email"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="4dp" />
+
+        <EditText
+            android:id="@+id/passwordET"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditTextHeight"
+            android:layout_margin="@dimen/EditTextMargin"
+            android:background="@drawable/edit_text_bg"
+            android:gravity="center"
+            android:hint="@string/Password"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="4dp" />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
