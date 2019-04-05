@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryDark">#1E88E5</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="tranwhite">#7FFF</color>
+
+    // White - Black
+    <color name="tranwhite">#4FFF</color>
+    <color name="White">#fff</color>
     <color name="black">#000</color>
+    <color name="Grey">#9E9E9E</color>
+
+    // Blues
+    <color name="MainBlue">#03A9F4</color>
 </resources>

@@ -8,4 +8,12 @@
     // Image Dimens
     <dimen name="LogoWidth">250dp</dimen>
     <dimen name="LogoHeight">210dp</dimen>
+
+    // Text Size
+    <dimen name="_15sp">15sp</dimen>
+    <dimen name="_17sp">17sp</dimen>
+    <dimen name="_20sp">20sp</dimen>
+    <dimen name="_24sp">24sp</dimen>
+    <dimen name="_25sp">25sp</dimen>
+    <dimen name="_30sp">30sp</dimen>
 </resources>
