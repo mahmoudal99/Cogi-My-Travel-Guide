@@ -16,4 +16,7 @@
     <dimen name="_24sp">24sp</dimen>
     <dimen name="_25sp">25sp</dimen>
     <dimen name="_30sp">30sp</dimen>
+
+    // Logo Splash Position
+    <dimen name="LogoMarginTop">600px</dimen>
 </resources>
