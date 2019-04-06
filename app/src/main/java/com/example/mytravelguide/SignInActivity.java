@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class SignInActivity extends AppCompatActivity {
 
     TextView createAccountText;
+    Button loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private void init(){
         createAccountText = findViewById(R.id.CreateAccountText);
+        loginBtn = findViewById(R.id.loginBTN);
     }
 
     private void setUpWidgets(){
@@ -31,6 +34,14 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent createAccountIntent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(createAccountIntent);
+            }
+        });
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent homepageIntent = new Intent(SignInActivity.this, HomePageActivity.class);
+                startActivity(homepageIntent);
             }
         });
     }
