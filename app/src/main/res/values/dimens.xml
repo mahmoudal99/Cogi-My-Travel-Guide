@@ -3,7 +3,7 @@
 
     // Sign In Layout Dimens
     <dimen name="EditTextMargin">40px</dimen>
-    <dimen name="EditTextHeight">150px</dimen>
+    <dimen name="EditTextHeight">180px</dimen>
 
     // Image Dimens
     <dimen name="LogoWidth">250dp</dimen>

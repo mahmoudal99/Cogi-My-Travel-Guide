@@ -15,17 +15,42 @@
 
         <ImageView
             android:layout_width="@dimen/LogoWidth"
-            android:layout_height="180dp"
+            android:layout_height="@dimen/LogoHeight"
             android:layout_gravity="center"
             android:layout_marginTop="-40dp"
-            android:src="@drawable/logo_prototype_1" />
+            android:src="@drawable/logo_white" />
+
+        <EditText
+            android:id="@+id/firstnameET"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditTextHeight"
+            android:layout_marginLeft="@dimen/EditTextMargin"
+            android:layout_marginTop="100px"
+            android:layout_marginRight="@dimen/EditTextMargin"
+            android:background="@drawable/edit_text_tran_bg"
+            android:gravity="center"
+            android:hint="@string/FirstName"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            tools:layout_editor_absoluteX="4dp" />
+
+        <EditText
+            android:id="@+id/surnamedET"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditTextHeight"
+            android:layout_margin="@dimen/EditTextMargin"
+            android:background="@drawable/edit_text_tran_bg"
+            android:gravity="center"
+            android:hint="@string/Surname"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            tools:layout_editor_absoluteX="4dp" />
 
         <EditText
             android:id="@+id/emailET"
             android:layout_width="match_parent"
             android:layout_height="@dimen/EditTextHeight"
             android:layout_marginLeft="@dimen/EditTextMargin"
-            android:layout_marginTop="100px"
             android:layout_marginRight="@dimen/EditTextMargin"
             android:background="@drawable/edit_text_tran_bg"
             android:gravity="center"
@@ -52,48 +77,51 @@
             android:id="@+id/loginBTN"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/button_bg"
-            android:text="@string/Login"
-            android:textColor="@color/White"
             android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/button_bg"
+            android:text="@string/SignUp"
+            android:textColor="@color/White"
             android:textSize="@dimen/_20sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <RelativeLayout
             android:layout_gravity="center"
-            android:layout_marginTop="120dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp">
 
             <TextView
                 android:id="@+id/CreateAccountText"
                 android:layout_width="240dp"
                 android:layout_height="55dp"
                 android:gravity="center"
-                android:text="@string/CreateAccount"
+                android:layout_centerHorizontal="true"
+                android:text="@string/Already"
                 android:textColor="@color/White"
                 android:textSize="@dimen/_20sp" />
 
             <View
-                android:layout_width="match_parent"
+                android:id="@+id/divider"
+                android:layout_width="250dp"
+                android:layout_centerHorizontal="true"
                 android:layout_height="1dp"
+                android:layout_below="@id/CreateAccountText"
                 android:background="@color/White" />
 
             <TextView
                 android:id="@+id/ContactUsText"
+                android:layout_below="@id/divider"
                 android:layout_width="240dp"
                 android:layout_height="55dp"
+                android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:text="@string/ContactUs"
                 android:textColor="@color/White"
                 android:textSize="@dimen/_20sp" />
 
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
