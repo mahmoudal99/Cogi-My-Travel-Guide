@@ -11,10 +11,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:text="@string/Attractions"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_28sp"
+            app:fontFamily="@font/rancho" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/attractionsCard1"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@drawable/cardview_bg_white"
@@ -28,11 +38,9 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginTop="10dp"
                     android:src="@drawable/africa" />
 
                 <TextView
@@ -40,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
-                    android:text="Visited"
+                    android:text="@string/Africa"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_24sp"
                     app:fontFamily="@font/rancho" />
@@ -52,7 +60,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/attractionsCard2"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@drawable/cardview_bg_white"
@@ -66,11 +74,9 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginTop="10dp"
                     android:src="@drawable/america" />
 
                 <TextView
@@ -78,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
-                    android:text="Visited"
+                    android:text="@string/America"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_24sp"
                     app:fontFamily="@font/rancho" />
@@ -89,7 +95,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/attractionsCard3"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@drawable/cardview_bg_white"
@@ -103,11 +109,9 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginTop="10dp"
                     android:src="@drawable/asia" />
 
                 <TextView
@@ -115,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
-                    android:text="Visited"
+                    android:text="@string/Asia"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_24sp"
                     app:fontFamily="@font/rancho" />
@@ -126,7 +130,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/attractionsCard4"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@drawable/cardview_bg_white"
@@ -140,11 +144,9 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginTop="10dp"
                     android:src="@drawable/europe" />
 
                 <TextView
@@ -152,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
-                    android:text="Visited"
+                    android:text="@string/Europe"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_24sp"
                     app:fontFamily="@font/rancho" />

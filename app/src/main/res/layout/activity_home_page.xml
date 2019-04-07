@@ -45,7 +45,7 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/attractionsCard"
+                    android:id="@+id/travelGuideCard"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
@@ -130,7 +130,7 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/joggingCard"
+                    android:id="@+id/attractionsCard"
                     android:layout_width="match_parent"
                     android:layout_height="260dp"
                     android:layout_gravity="center_horizontal"
