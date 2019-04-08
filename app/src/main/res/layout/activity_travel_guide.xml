@@ -67,6 +67,12 @@
                 android:textSize="@dimen/_30sp" />
 
             <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:src="@drawable/add" />
+
+            <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/microphone" />
