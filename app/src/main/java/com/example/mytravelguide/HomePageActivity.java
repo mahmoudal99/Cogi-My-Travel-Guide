@@ -9,7 +9,7 @@ import android.view.View;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    CardView attractionsCard, travelGuideCard;
+    CardView attractionsCard, travelGuideCard, visitedCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class HomePageActivity extends AppCompatActivity {
     private void init(){
         attractionsCard = findViewById(R.id.attractionsCard);
         travelGuideCard = findViewById(R.id.travelGuideCard);
+        visitedCard = findViewById(R.id.visitedCard);
     }
 
     private void setUpWidgets(){
@@ -41,5 +42,52 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(travelGuideIntent);
             }
         });
+
+        visitedCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent visitedIntent = new Intent(HomePageActivity.this, VisitedActivity.class);
+                startActivity(visitedIntent);
+            }
+        });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -167,7 +167,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/attractionsCard4"
+                    android:id="@+id/visitedCard"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:layout_gravity="center_horizontal"
