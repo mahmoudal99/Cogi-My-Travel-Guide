@@ -11,33 +11,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/attractionsCard4"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:background="@drawable/cardview_bg_white"
-            app:cardCornerRadius="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/cardview_bg_white"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center|bottom"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/pyramids" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+            android:layout_height="250dp"
+            android:layout_gravity="center|bottom"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/eiffel_tower" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,20 +28,25 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginLeft="10dp"
-                app:civ_border_color="@color/black"
-                android:src="@drawable/FLAG"
-                app:civ_border_width="2dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:src="@drawable/flag"
+                app:civ_border_color="@color/White"
+                app:civ_border_width="2dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Attraction Name"
-                android:textSize="@dimen/_30sp"
                 android:layout_gravity="center"
-                android:fontFamily="@font/rancho"
                 android:layout_weight="3"
-                android:textColor="@color/black"/>
+                android:fontFamily="@font/rancho"
+                android:text="Attraction Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_30sp" />
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/microphone" />
 
         </LinearLayout>
 
@@ -89,6 +74,15 @@
                     android:text="About"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/rancho"
+                    android:padding="10dp"
+                    android:text="@string/About"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_20sp" />
 
             </LinearLayout>
 
