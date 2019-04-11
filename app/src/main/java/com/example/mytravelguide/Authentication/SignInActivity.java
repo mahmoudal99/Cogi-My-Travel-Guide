@@ -40,7 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     // Variables
-    String email, password, userID;
+    String email, password, userID, user_id;
 
     Context context;
 
@@ -50,9 +50,9 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         init();
-        setUpFirebaseAuthentication();
         checkUserSignedIn();
         setUpWidgets();
+        setUpFirebaseAuthentication();
 
     }
 
@@ -104,7 +104,9 @@ public class SignInActivity extends AppCompatActivity {
         authentication = FirebaseAuth.getInstance();
 
         email = emailET.getText().toString();
-        password = emailET.getText().toString();
+        password = passwordET.getText().toString();
+
+        Toast.makeText(SignInActivity.this, email + " " +  password, Toast.LENGTH_LONG).show();
 
 
         if (isStringNull(email) && isStringNull(password)) {
@@ -117,7 +119,6 @@ public class SignInActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             currentUser = authentication.getCurrentUser();
-                            userID = currentUser.getUid();
 
                             if(!task.isSuccessful()){
                                 Log.w(TAG, "signInWithEmail:failed", task.getException());
