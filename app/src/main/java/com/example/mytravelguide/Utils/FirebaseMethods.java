@@ -1,4 +1,4 @@
-package com.example.mytravelguide;
+package com.example.mytravelguide.Utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,7 +21,7 @@ public class FirebaseMethods {
     private String userID;
 
     public FirebaseMethods(Context context) {
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
             userID = auth.getCurrentUser().getUid();

@@ -16,8 +16,8 @@
         <activity android:name=".TravelGuideActivity" />
         <activity android:name=".AttractionsActivity" />
         <activity android:name=".HomePageActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity" />
+        <activity android:name=".Authentication.SignUpActivity" />
+        <activity android:name=".Authentication.SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

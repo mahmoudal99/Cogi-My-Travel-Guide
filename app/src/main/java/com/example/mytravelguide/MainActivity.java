@@ -9,6 +9,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.example.mytravelguide.Authentication.SignInActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     ImageView companyLogo;

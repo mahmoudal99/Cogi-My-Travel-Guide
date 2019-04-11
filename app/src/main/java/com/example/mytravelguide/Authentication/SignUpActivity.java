@@ -1,4 +1,4 @@
-package com.example.mytravelguide;
+package com.example.mytravelguide.Authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mytravelguide.Utils.FirebaseMethods;
+import com.example.mytravelguide.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
