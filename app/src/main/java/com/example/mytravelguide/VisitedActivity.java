@@ -7,9 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.mytravelguide.Models.PlaceModel;
+
+import java.util.ArrayList;
+
 public class VisitedActivity extends AppCompatActivity {
 
+    private static final String TAG = "TimetableActivity";
+
     ImageView backArrow;
+
+    // Variables
+    ArrayList<PlaceModel> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,4 +42,38 @@ public class VisitedActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void addPlaceToTimeline(){
+        places = new ArrayList<>();
+
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
