@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
+import com.example.mytravelguide.Utils.FirebaseMethods;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -43,6 +44,8 @@ public class SignInActivity extends AppCompatActivity {
 
     Intent intent;
 
+    FirebaseMethods firebaseMethods;
+
     // Firebase
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -62,19 +65,18 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        authentication = FirebaseAuth.getInstance();
-        authentication.signOut();
-
-        init();
-        checkUserSignedIn();
-        setUpWidgets();
-
+        // Set Up Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        init();
+        checkUserSignedIn();
+        setUpWidgets();
+
 
         setUpFirebaseAuthentication();
 
@@ -89,6 +91,7 @@ public class SignInActivity extends AppCompatActivity {
         context = SignInActivity.this;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         account = GoogleSignIn.getLastSignedInAccount(this);
+        firebaseMethods = new FirebaseMethods(context);
     }
 
     private void setUpWidgets() {
@@ -106,6 +109,9 @@ public class SignInActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+
+        googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
 
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +131,7 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         if (account != null) {
+
             Intent intent = new Intent(context, HomePageActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -187,7 +194,7 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    private void googleSignIn(){
+    private void googleSignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -205,12 +212,24 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+    }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            // Signed in successfully, show authenticated UI.
-            Toast.makeText(SignInActivity.this, "WORKED!!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, HomePageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

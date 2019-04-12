@@ -15,8 +15,8 @@
         <ImageView
             android:layout_width="@dimen/LogoWidth"
             android:layout_height="@dimen/LogoHeight"
-            android:layout_marginTop="-40dp"
             android:layout_gravity="center"
+            android:layout_marginTop="-40dp"
             android:src="@drawable/logo_prototype_1" />
 
         <EditText
@@ -47,36 +47,71 @@
             android:textColorHint="@color/Grey"
             tools:layout_editor_absoluteX="4dp" />
 
+
         <Button
             android:id="@+id/loginBTN"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_bg"
             android:text="@string/Login"
             android:textColor="@color/White"
-            android:layout_gravity="center"
             android:textSize="@dimen/_18sp" />
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:background="@color/Grey" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/rancho"
+                android:text="OR"
+                android:textSize="@dimen/_17sp"
+                app:fontFamily="sans-serif" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:background="@color/Grey" />
+
+        </LinearLayout>
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
-            android:layout_gravity="center"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp" />
 
         <RelativeLayout
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="210dp">
+            android:layout_gravity="center"
+            android:layout_marginTop="130dp">
 
             <TextView
                 android:id="@+id/CreateAccountText"
                 android:layout_width="240dp"
                 android:layout_height="55dp"
-                android:gravity="center"
                 android:layout_centerHorizontal="true"
+                android:gravity="center"
                 android:text="@string/CreateAccount"
                 android:textColor="@color/Grey"
                 android:textSize="@dimen/_17sp" />
@@ -84,16 +119,16 @@
             <View
                 android:id="@+id/divider"
                 android:layout_width="250dp"
-                android:layout_centerHorizontal="true"
                 android:layout_height="1dp"
                 android:layout_below="@id/CreateAccountText"
+                android:layout_centerHorizontal="true"
                 android:background="@color/Grey" />
 
             <TextView
                 android:id="@+id/ContactUsText"
-                android:layout_below="@id/divider"
                 android:layout_width="240dp"
                 android:layout_height="55dp"
+                android:layout_below="@id/divider"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:text="@string/ContactUs"

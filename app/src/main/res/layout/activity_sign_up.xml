@@ -82,7 +82,7 @@
             android:background="@drawable/button_bg"
             android:text="@string/SignUp"
             android:textColor="@color/White"
-            android:textSize="@dimen/_20sp" />
+            android:textSize="@dimen/_18sp" />
 
 
         <RelativeLayout
@@ -99,7 +99,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="@string/Already"
                 android:textColor="@color/White"
-                android:textSize="@dimen/_20sp" />
+                android:textSize="@dimen/_18sp" />
 
             <View
                 android:id="@+id/divider"
@@ -118,7 +118,7 @@
                 android:gravity="center"
                 android:text="@string/ContactUs"
                 android:textColor="@color/White"
-                android:textSize="@dimen/_20sp" />
+                android:textSize="@dimen/_18sp" />
 
         </RelativeLayout>
 
