@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-public class TravelGuideActivity extends AppCompatActivity {
+public class TravelGuideActivity extends AppCompatActivity{
 
-    ImageView backArrow;
+    ImageView backArrow, addPlace;
+
+    VisitedActivity visitedActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,8 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void init(){
         backArrow = findViewById(R.id.backArrow);
+        addPlace = findViewById(R.id.addPlace);
+        visitedActivity = new VisitedActivity();
     }
 
     private void setUpWidgets(){
@@ -30,6 +34,13 @@ public class TravelGuideActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent backIntent = new Intent(TravelGuideActivity.this, HomePageActivity.class);
                 startActivity(backIntent);
+            }
+        });
+
+        addPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                visitedActivity.addPlaceToTimeline("Paris", "10/4/2019");
             }
         });
     }
