@@ -1,6 +1,5 @@
 package com.example.mytravelguide.Utils;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>  {
+public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyViewHolder>  {
 
     private ArrayList<VisitedPlaceObject> places;
 
@@ -28,7 +27,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>  {
     }
 
 
-    public MyAdapter(ArrayList<VisitedPlaceObject> places) {
+    public TimelineAdapter(ArrayList<VisitedPlaceObject> places) {
         this.places = places;
     }
 

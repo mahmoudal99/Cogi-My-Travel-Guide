@@ -13,4 +13,7 @@
 
     // Blues
     <color name="MainBlue">#03A9F4</color>
+
+    // Reds
+    <color name="CherryRed">#607D8B</color>
 </resources>

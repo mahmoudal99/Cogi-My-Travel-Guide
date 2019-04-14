@@ -12,10 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.example.mytravelguide.Models.VisitedPlaceObject;
-import com.example.mytravelguide.Utils.MyAdapter;
 import com.example.mytravelguide.Utils.TimelineAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -64,7 +62,6 @@ public class VisitedActivity extends AppCompatActivity {
     private void init(){
         backArrow = findViewById(R.id.backArrow);
         context = VisitedActivity.this;
-        addPlace = findViewById(R.id.addPlace);
         listView = findViewById(R.id.list);
     }
 
@@ -77,12 +74,6 @@ public class VisitedActivity extends AppCompatActivity {
             }
         });
 
-        addPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addPlaceToTimeline();
-            }
-        });
     }
 
     /// Time Line
@@ -95,7 +86,7 @@ public class VisitedActivity extends AppCompatActivity {
 
         listView = (RecyclerView) findViewById(R.id.list);
 
-        mAdapter = new MyAdapter(placeObjects);
+        mAdapter = new TimelineAdapter(placeObjects);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
