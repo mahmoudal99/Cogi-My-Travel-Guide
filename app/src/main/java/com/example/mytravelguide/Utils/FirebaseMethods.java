@@ -53,7 +53,6 @@ public class FirebaseMethods {
                             String id = user.getUid();
 
 //                            addUser(id, firstname, lastname, email);
-                            sendVerificationEmail();
                             user = FirebaseAuth.getInstance().getCurrentUser();
 
                             if (user != null) {
