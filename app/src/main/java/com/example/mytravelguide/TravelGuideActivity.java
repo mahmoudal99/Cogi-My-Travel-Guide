@@ -73,8 +73,8 @@ public class TravelGuideActivity extends AppCompatActivity{
     private void addVisitedPlace(String name){
         // Create a new user with a first and last name
         Map<String, String> place = new HashMap<>();
-        place.put("Place Name", "Eiffel Tower");
-        place.put("Date Visited", "March 2019");
+        place.put("Place Name", "Alhambra Castle");
+        place.put("Date Visited", "March 2018");
 
         // Access a Cloud Firestore instance from your Activity
         FirebaseFirestore db = FirebaseFirestore.getInstance();

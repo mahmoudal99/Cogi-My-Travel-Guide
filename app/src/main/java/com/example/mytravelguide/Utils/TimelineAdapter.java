@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mytravelguide.Models.VisitedPlaceObject;
@@ -13,77 +11,44 @@ import com.example.mytravelguide.R;
 
 import java.util.ArrayList;
 
-public class TimelineAdapter extends ArrayAdapter<VisitedPlaceObject> {
+import androidx.recyclerview.widget.RecyclerView;
 
-    String name, dateVisited;
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>  {
 
-    public TimelineAdapter(Context context, ArrayList<VisitedPlaceObject> arrayList, String name, String date) {
-        super(context, 0, arrayList);
-        this.name = name;
-        this.dateVisited = date;
+    private ArrayList<VisitedPlaceObject> places;
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView placeName, dateVisited;
+
+        public MyViewHolder(View view) {
+            super(view);
+            placeName = (TextView) view.findViewById(R.id.placeName);
+            dateVisited = (TextView) view.findViewById(R.id.date);
+        }
+    }
+
+
+    public MyAdapter(ArrayList<VisitedPlaceObject> places) {
+        this.places = places;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.timeline_item, parent, false);
 
-        final VisitedPlaceObject placeModel = getItem(position);
+        return new MyViewHolder(itemView);
+    }
 
-        if (convertView == null) {
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        VisitedPlaceObject placeModel = places.get(position);
+        holder.placeName.setText(placeModel.placeName);
+        holder.dateVisited.setText(placeModel.dateVisited);
+    }
 
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.timeline_item, parent, false);
-
-        }
-
-        TextView placeName = convertView.findViewById(R.id.placeName);
-        TextView date = convertView.findViewById(R.id.date);
-        ImageView placeImage = convertView.findViewById(R.id.placeImage);
-
-        placeName.setText(placeModel.placeName);
-        date.setText(placeModel.dateVisited);
-
-        return convertView;
-
+    @Override
+    public int getItemCount() {
+        return places.size();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,6 +2,9 @@ package com.example.mytravelguide;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.mytravelguide.Models.VisitedPlaceObject;
+import com.example.mytravelguide.Utils.MyAdapter;
 import com.example.mytravelguide.Utils.TimelineAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +32,7 @@ public class VisitedActivity extends AppCompatActivity {
     private static final String TAG = "TimetableActivity";
 
     ImageView backArrow;
-    ListView listView;
+    RecyclerView listView;
     ImageView addPlace;
 
     // Variables
@@ -39,6 +43,7 @@ public class VisitedActivity extends AppCompatActivity {
     VisitedPlaceObject model;
 
     TimelineAdapter timelineAdapter;
+    private RecyclerView.Adapter mAdapter;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -53,7 +58,7 @@ public class VisitedActivity extends AppCompatActivity {
         init();
         setUpWidgets();
         setUpFirebaseAuthentication();
-
+        addPlaceToTimeline();
     }
 
     private void init(){
@@ -84,17 +89,17 @@ public class VisitedActivity extends AppCompatActivity {
 
     public void addPlaceToTimeline(){
 
-        // Array List
-        places = new ArrayList<VisitedPlaceObject>();
-        // Adapter
-        timelineAdapter = new TimelineAdapter(VisitedActivity.this, places, placeName, date);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Set Adapater
-        listView = findViewById(R.id.list);
-        listView.setAdapter(timelineAdapter);
+        final ArrayList<VisitedPlaceObject> placeObjects = new ArrayList<>();
 
-        // Notify Data
-        timelineAdapter.notifyDataSetChanged();
+        listView = (RecyclerView) findViewById(R.id.list);
+
+        mAdapter = new MyAdapter(placeObjects);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        listView.setLayoutManager(mLayoutManager);
+        listView.setItemAnimator(new DefaultItemAnimator());
+        listView.setAdapter(mAdapter);
 
         // Read Data from Database
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -109,10 +114,8 @@ public class VisitedActivity extends AppCompatActivity {
                                 model = new VisitedPlaceObject();
                                 model.placeName = document.get("Place Name").toString();
                                 model.dateVisited = document.get("Date Visited").toString();
-
-
-                                places.add(model);
-                                timelineAdapter.notifyDataSetChanged();
+                                placeObjects.add(model);
+                                mAdapter.notifyDataSetChanged();
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
