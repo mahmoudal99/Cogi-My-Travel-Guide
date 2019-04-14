@@ -8,17 +8,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.mytravelguide.Models.PlaceModel;
+import com.example.mytravelguide.Models.VisitedPlaceObject;
 import com.example.mytravelguide.R;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
-public class TimelineAdapter extends ArrayAdapter<PlaceModel> {
+public class TimelineAdapter extends ArrayAdapter<VisitedPlaceObject> {
 
     String name, dateVisited;
 
-    public TimelineAdapter(Context context, ArrayList<PlaceModel> arrayList, String name, String date) {
+    public TimelineAdapter(Context context, ArrayList<VisitedPlaceObject> arrayList, String name, String date) {
         super(context, 0, arrayList);
         this.name = name;
         this.dateVisited = date;
@@ -27,7 +26,7 @@ public class TimelineAdapter extends ArrayAdapter<PlaceModel> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final PlaceModel placeModel = getItem(position);
+        final VisitedPlaceObject placeModel = getItem(position);
 
         if (convertView == null) {
 
@@ -39,8 +38,8 @@ public class TimelineAdapter extends ArrayAdapter<PlaceModel> {
         TextView date = convertView.findViewById(R.id.date);
         ImageView placeImage = convertView.findViewById(R.id.placeImage);
 
-        placeName.setText(name);
-        date.setText(dateVisited);
+        placeName.setText(placeModel.placeName);
+        date.setText(placeModel.dateVisited);
 
         return convertView;
 
