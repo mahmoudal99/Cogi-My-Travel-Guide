@@ -11,6 +11,7 @@ import android.widget.ImageView;
 public class AttractionsActivity extends AppCompatActivity {
 
     ImageView backArrow;
+    CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class AttractionsActivity extends AppCompatActivity {
 
     private void init(){
         backArrow = findViewById(R.id.backArrow);
+        cardView = findViewById(R.id.attractionsCardEurope);
     }
 
     private void setUpWidgets(){
@@ -31,6 +33,13 @@ public class AttractionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent backIntent = new Intent(AttractionsActivity.this, HomePageActivity.class);
                 startActivity(backIntent);
+            }
+        });
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class));
             }
         });
     }

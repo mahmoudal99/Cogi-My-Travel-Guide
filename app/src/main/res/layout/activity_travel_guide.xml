@@ -48,8 +48,8 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:src="@drawable/flag"
@@ -64,18 +64,19 @@
                 android:fontFamily="@font/rancho"
                 android:text="Attraction Name"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_30sp" />
+                android:textSize="@dimen/_28sp" />
 
             <ImageView
                 android:id="@+id/addPlace"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/add" />
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:src="@drawable/microphone" />
 
         </LinearLayout>
@@ -85,7 +86,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/cardview_bg_white"
             app:cardCornerRadius="10dp">
 

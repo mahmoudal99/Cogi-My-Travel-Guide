@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VisitedActivity"></activity>
+        <activity android:name=".ContinentAttractionsActivity"></activity>
+        <activity android:name=".VisitedActivity" />
         <activity android:name=".TravelGuideActivity" />
         <activity android:name=".AttractionsActivity" />
         <activity android:name=".HomePageActivity" />
