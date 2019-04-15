@@ -35,7 +35,7 @@
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/attractionsCard1"
+            android:id="@+id/attractionsCardAfrica"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
@@ -71,7 +71,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/attractionsCard2"
+            android:id="@+id/attractionsCardAmerica"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
@@ -106,7 +106,7 @@
 
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/attractionsCard3"
+            android:id="@+id/attractionsCardAsia"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"

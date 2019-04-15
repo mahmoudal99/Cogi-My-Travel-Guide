@@ -1,16 +1,23 @@
 package com.example.mytravelguide.Attractions;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.mytravelguide.Models.AttractionObject;
 import com.example.mytravelguide.R;
@@ -36,12 +43,21 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
 
+    // Widgets
     ImageView backArrow;
+    RelativeLayout relativeLayout;
+    TextView continentTextView;
+
+    // Variables
+    String continent;
+    String databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_continent_attractions);
+
+        continent = getIntent().getStringExtra("Continent");
 
         init();
         setUpWidgets();
@@ -52,7 +68,10 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
     private void init() {
         listView = findViewById(R.id.list);
         backArrow = findViewById(R.id.backArrow);
+        relativeLayout = findViewById(R.id.continentRelLayout);
+        continentTextView = findViewById(R.id.continentTextView);
     }
+
 
     private void setUpWidgets() {
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +82,31 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
             }
         });
 
+
+        if (continent.equals("Africa")) {
+            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_africa);
+            databaseRef = "TouristAttractionsAfrica";
+            continentTextView.setText(getString(R.string.Africa));
+            relativeLayout.setBackground(drawable);
+
+        } else if (continent.equals("America")) {
+            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_america);
+            databaseRef = "TouristAttractionsAmerica";
+            continentTextView.setText(getString(R.string.America));
+            relativeLayout.setBackground(drawable);
+
+        } else if (continent.equals("Asia")) {
+            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_asia);
+            databaseRef = "TouristAttractionsAsia";
+            continentTextView.setText(getString(R.string.Asia));
+            relativeLayout.setBackground(drawable);
+
+        }else if (continent.equals("Europe")) {
+            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_europe);
+            databaseRef = "TouristAttractionsEurope";
+            continentTextView.setText(getString(R.string.Europe));
+            relativeLayout.setBackground(drawable);
+        }
     }
 
     public void loadAttractions() {
@@ -82,7 +126,7 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
         FirebaseUser user = authentication.getCurrentUser();
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference uidRef = rootRef.child("TouristAttractionsEurope");
+        DatabaseReference uidRef = rootRef.child(databaseRef);
 
         uidRef.orderByChild("placeName").addValueEventListener(new ValueEventListener() {
             @Override
