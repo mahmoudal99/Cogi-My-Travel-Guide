@@ -12,10 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ContinentAttractionsActivity"></activity>
+        <activity android:name=".Attractions.ContinentAttractionsActivity"></activity>
         <activity android:name=".VisitedActivity" />
         <activity android:name=".TravelGuideActivity" />
-        <activity android:name=".AttractionsActivity" />
+        <activity android:name=".Attractions.AttractionsActivity" />
         <activity android:name=".HomePageActivity" />
         <activity android:name=".Authentication.SignUpActivity" />
         <activity android:name=".Authentication.SignInActivity" />

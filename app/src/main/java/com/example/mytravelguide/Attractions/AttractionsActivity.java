@@ -1,4 +1,4 @@
-package com.example.mytravelguide;
+package com.example.mytravelguide.Attractions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.mytravelguide.HomePageActivity;
+import com.example.mytravelguide.R;
 
 public class AttractionsActivity extends AppCompatActivity {
 
