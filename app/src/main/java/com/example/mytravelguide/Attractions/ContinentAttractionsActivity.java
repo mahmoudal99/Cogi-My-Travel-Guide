@@ -44,7 +44,7 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     // Widgets
-    ImageView backArrow;
+    ImageView backArrow, attraction_img;
     RelativeLayout relativeLayout;
     TextView continentTextView;
 
@@ -68,8 +68,8 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
     private void init() {
         listView = findViewById(R.id.list);
         backArrow = findViewById(R.id.backArrow);
-        relativeLayout = findViewById(R.id.continentRelLayout);
         continentTextView = findViewById(R.id.continentTextView);
+        attraction_img = findViewById(R.id.attraction_img);
     }
 
 
@@ -84,28 +84,29 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
 
 
         if (continent.equals("Africa")) {
-            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_africa);
+            Drawable drawable1 = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.africa_bg_img);
             databaseRef = "TouristAttractionsAfrica";
             continentTextView.setText(getString(R.string.Africa));
-            relativeLayout.setBackground(drawable);
+            attraction_img.setImageDrawable(drawable1);
 
         } else if (continent.equals("America")) {
-            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_america);
+            Drawable drawable1 = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.america_bg_img);
             databaseRef = "TouristAttractionsAmerica";
             continentTextView.setText(getString(R.string.America));
-            relativeLayout.setBackground(drawable);
+            attraction_img.setImageDrawable(drawable1);
 
         } else if (continent.equals("Asia")) {
-            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_asia);
+            Drawable drawable1 = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.asia_bg_img);
             databaseRef = "TouristAttractionsAsia";
             continentTextView.setText(getString(R.string.Asia));
-            relativeLayout.setBackground(drawable);
+            attraction_img.setImageDrawable(drawable1);
 
         }else if (continent.equals("Europe")) {
-            Drawable drawable = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.cardview_bg_europe);
+            Drawable drawable1 = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.europe_bg_img);
             databaseRef = "TouristAttractionsEurope";
             continentTextView.setText(getString(R.string.Europe));
-            relativeLayout.setBackground(drawable);
+            attraction_img.setImageDrawable(drawable1);
+
         }
     }
 

@@ -36,16 +36,19 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/continentRelLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/cardview_bg_africa">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        </RelativeLayout>
+            <ImageView
+                android:layout_weight="3"
+                android:id="@+id/attraction_img"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/africa_bg_img"/>
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
