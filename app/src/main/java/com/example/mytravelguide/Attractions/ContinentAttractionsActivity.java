@@ -9,16 +9,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.mytravelguide.Models.AttractionObject;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.Utils.AttractionsAdapter;
@@ -29,8 +38,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class ContinentAttractionsActivity extends AppCompatActivity {
 
@@ -45,12 +57,14 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
 
     // Widgets
     ImageView backArrow, attraction_img;
-    RelativeLayout relativeLayout;
     TextView continentTextView;
+
 
     // Variables
     String continent;
     String databaseRef;
+
+    Drawable drawable1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +77,7 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
         setUpWidgets();
         setUpFirebaseAuthentication();
         loadAttractions();
+
     }
 
     private void init() {
@@ -84,7 +99,8 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
 
 
         if (continent.equals("Africa")) {
-            Drawable drawable1 = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.africa_bg_img);
+
+            drawable1 = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.africa_bg_img);
             databaseRef = "TouristAttractionsAfrica";
             continentTextView.setText(getString(R.string.Africa));
             attraction_img.setImageDrawable(drawable1);
@@ -101,7 +117,7 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
             continentTextView.setText(getString(R.string.Asia));
             attraction_img.setImageDrawable(drawable1);
 
-        }else if (continent.equals("Europe")) {
+        } else if (continent.equals("Europe")) {
             Drawable drawable1 = ContextCompat.getDrawable(ContinentAttractionsActivity.this, R.drawable.europe_bg_img);
             databaseRef = "TouristAttractionsEurope";
             continentTextView.setText(getString(R.string.Europe));
@@ -116,7 +132,7 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
 
         listView = (RecyclerView) findViewById(R.id.list);
 
-        mAdapter = new AttractionsAdapter(attractionObjectArrayList);
+        mAdapter = new AttractionsAdapter(attractionObjectArrayList, ContinentAttractionsActivity.this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
@@ -149,6 +165,7 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
         });
 
     }
+
 
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {

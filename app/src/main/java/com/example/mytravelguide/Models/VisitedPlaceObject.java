@@ -4,4 +4,5 @@ public class VisitedPlaceObject {
 
     public String placeName = "";
     public String dateVisited = "";
+    public String URL = "";
 }

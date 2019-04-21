@@ -1,5 +1,8 @@
 package com.example.mytravelguide.Utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,7 @@ import android.widget.TextView;
 import com.example.mytravelguide.Models.AttractionObject;
 import com.example.mytravelguide.Models.VisitedPlaceObject;
 import com.example.mytravelguide.R;
+import com.example.mytravelguide.TravelGuideActivity;
 
 import java.util.ArrayList;
 
@@ -16,33 +20,46 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.MyViewHolder>  {
 
     private ArrayList<AttractionObject> attractionObjects;
+    Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView placeName, dateVisited;
+        public TextView placeName;
 
         public MyViewHolder(View view) {
             super(view);
             placeName = (TextView) view.findViewById(R.id.place_name);
+
         }
     }
 
 
-    public AttractionsAdapter(ArrayList<AttractionObject> places) {
+    public AttractionsAdapter(ArrayList<AttractionObject> places, Context context) {
         this.attractionObjects = places;
+        this.context = context;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
+        final View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.attraction_item, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         AttractionObject placeModel = attractionObjects.get(position);
         holder.placeName.setText(placeModel.placeName);
+
+        holder.placeName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, TravelGuideActivity.class);
+                intent.putExtra("AttractionName", holder.placeName.getText());
+                context.startActivity(intent);
+
+            }
+        });
     }
 
     @Override

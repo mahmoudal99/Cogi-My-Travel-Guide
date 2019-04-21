@@ -3,6 +3,13 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.example.mytravelguide">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <dist:module dist:instant="true" />
 
     <application
@@ -12,7 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Attractions.ContinentAttractionsActivity"></activity>
+
+        <activity android:name=".CameraActivity">
+
+        </activity>
+        <activity android:name=".Attractions.ContinentAttractionsActivity" />
         <activity android:name=".VisitedActivity" />
         <activity android:name=".TravelGuideActivity" />
         <activity android:name=".Attractions.AttractionsActivity" />

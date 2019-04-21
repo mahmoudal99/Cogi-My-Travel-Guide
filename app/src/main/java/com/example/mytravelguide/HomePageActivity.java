@@ -1,10 +1,12 @@
 package com.example.mytravelguide;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,12 +19,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.protobuf.ByteString;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
 
     private static final String TAG = "HomePageActivity";
 
-    CardView attractionsCard, travelGuideCard, visitedCard;
+    CardView attractionsCard, travelGuideCard, visitedCard, cameraCard;
     ImageView settings;
 
     GoogleSignInClient googleSignInClient;
@@ -32,6 +42,7 @@ public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +56,7 @@ public class HomePageActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
+
         init();
         setUpWidgets();
         setUpFirebaseAuthentication();
@@ -56,9 +68,10 @@ public class HomePageActivity extends AppCompatActivity {
         visitedCard = findViewById(R.id.visitedCard);
         settings = findViewById(R.id.settings);
         authentication = FirebaseAuth.getInstance();
+        cameraCard = findViewById(R.id.attractionsCardCamera);
     }
 
-    private void setUpWidgets(){
+    private void setUpWidgets() {
         attractionsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,12 +96,21 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        settings.setOnClickListener(new View.OnClickListener() {
+        cameraCard.setOnClickListener(new View.OnClickListener() {
             @Override
+            public void onClick(View v) {
+                Intent visitedIntent = new Intent(HomePageActivity.this, CameraActivity.class);
+                startActivity(visitedIntent);
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View v) {
                 authentication.signOut();
                 googleSignInClient.signOut();
                 startActivity(new Intent(HomePageActivity.this, SignInActivity.class));
+
             }
         });
     }

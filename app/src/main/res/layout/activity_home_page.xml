@@ -95,7 +95,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/attractionsCard3"
+                    android:id="@+id/attractionsCardCamera"
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
                     android:layout_gravity="center_horizontal"

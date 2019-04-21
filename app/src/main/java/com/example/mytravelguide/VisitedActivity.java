@@ -35,7 +35,7 @@ public class VisitedActivity extends AppCompatActivity {
     // Variables
     Context context;
 
-    VisitedPlaceObject model;
+    VisitedPlaceObject place;
 
     private RecyclerView.Adapter mAdapter;
 
@@ -82,7 +82,7 @@ public class VisitedActivity extends AppCompatActivity {
 
         listView = (RecyclerView) findViewById(R.id.list);
 
-        mAdapter = new TimelineAdapter(placeObjects);
+        mAdapter = new TimelineAdapter(placeObjects, VisitedActivity.this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
@@ -98,10 +98,11 @@ public class VisitedActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("GOT IT", document.getId() + " => " + document.getData());
-                                model = new VisitedPlaceObject();
-                                model.placeName = document.get("Place Name").toString();
-                                model.dateVisited = document.get("Date Visited").toString();
-                                placeObjects.add(model);
+                                place = new VisitedPlaceObject();
+                                place.placeName = document.get("Place Name").toString();
+                                place.dateVisited = document.get("Date Visited").toString();
+                                place.URL = document.get("URL").toString();
+                                placeObjects.add(place);
                                 mAdapter.notifyDataSetChanged();
                             }
                         } else {
