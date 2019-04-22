@@ -74,12 +74,9 @@ public class TravelGuideActivity extends AppCompatActivity{
     private static final String TAG = "TravelGuideActivity";
     private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
     private final static int FINE_LOCATION = 100;
-    public static final int PICK_IMAGE = 1;
-    static final int REQUEST_IMAGE_CAPTURE = 2;
     static final int AUTOCOMPLETE_REQUEST_CODE = 15;
 
     RecyclerView listView;
-    AttractionObject attractionObject;
     private RecyclerView.Adapter mAdapter;
 
     // Widgets
