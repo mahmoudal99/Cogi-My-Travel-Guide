@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.example.mytravelguide.Attractions.ContinentAttractionsActivity;
 import com.example.mytravelguide.Models.AttractionObject;
 import com.example.mytravelguide.Utils.GooglePlacesApi;
+import com.example.mytravelguide.Utils.GoogleSearch;
+import com.example.mytravelguide.Utils.ImagePicker;
 import com.example.mytravelguide.Utils.NearByLocationsAdapter;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
@@ -55,6 +59,7 @@ import com.google.firebase.ml.vision.label.FirebaseVisionLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetector;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -75,6 +80,7 @@ public class TravelGuideActivity extends AppCompatActivity{
     private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
     private final static int FINE_LOCATION = 100;
     static final int AUTOCOMPLETE_REQUEST_CODE = 15;
+    public static final int PICK_IMAGE = 1;
 
     RecyclerView listView;
     private RecyclerView.Adapter mAdapter;
@@ -82,9 +88,11 @@ public class TravelGuideActivity extends AppCompatActivity{
     // Widgets
     ImageView backArrow, addPlace, image;
     TextView attractionName;
-    ImageView location;
+    ImageView location, gallery;
 
     VisitedActivity visitedActivity;
+
+    Context context;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -101,6 +109,8 @@ public class TravelGuideActivity extends AppCompatActivity{
     String searchString, placeName, URL;
 
     GooglePlacesApi googlePlacesApi;
+    ImagePicker imagePicker;
+    GoogleSearch googleSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +132,10 @@ public class TravelGuideActivity extends AppCompatActivity{
         location = findViewById(R.id.location);
         attractionName = findViewById(R.id.attractionName);
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
+        gallery = findViewById(R.id.gallery);
+        imagePicker = new ImagePicker(TravelGuideActivity.this);
+        context = TravelGuideActivity.this;
+        googleSearch = new GoogleSearch();
     }
 
     private void setUpWidgets(){
@@ -159,6 +173,22 @@ public class TravelGuideActivity extends AppCompatActivity{
             public void onClick(View v) {
 //                loadNearByLocations();
                 placePicker();
+            }
+        });
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                startActivityForResult(chooserIntent, PICK_IMAGE);
             }
         });
 
@@ -219,26 +249,7 @@ public class TravelGuideActivity extends AppCompatActivity{
         if(placeName != null){
             searchString = placeName;
 
-            // looking for
-            String searchStringNoSpaces = searchString.replace(" ", "+");
-
-            // Your API key
-            // TODO replace with your value
-            String key = "AIzaSyCyeExKDw-uElEQ8PlvE3G97_9o9djUrDM";
-
-            // Your Search Engine ID
-            // TODO replace with your value
-            String cx = "000804371853375564055:-lvbacgxzgs";
-
-            String urlString = "https://www.googleapis.com/customsearch/v1?q=" + searchStringNoSpaces + "&key=" + key + "&cx=" + cx + "&searchType=image" + "&alt=json";
-            URL url = null;
-            try {
-                url = new URL(urlString);
-            } catch (MalformedURLException e) {
-                Log.e("GOOGLESEARCH", "ERROR converting String to URL " + e.toString());
-            }
-            Log.d("GOOGLESEARCH", "Url = " + urlString);
-
+            URL url = googleSearch.search(searchString);
 
             // start AsyncTask
             TravelGuideActivity.GoogleSearchAsyncTask searchTask = new TravelGuideActivity.GoogleSearchAsyncTask();
@@ -257,7 +268,6 @@ public class TravelGuideActivity extends AppCompatActivity{
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
-            Log.d("MYURLC3", urldisplay);
             try {
 
                 InputStream in = new java.net.URL(urldisplay).openStream();
@@ -360,38 +370,6 @@ public class TravelGuideActivity extends AppCompatActivity{
         }
     }
 
-
-    //---------- Firebase ----------//
-    private void setUpFirebaseAuthentication() {
-        authentication = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
-                    Log.d(TAG, "Success");
-                } else {
-                    Log.d(TAG, "signed out");
-                }
-            }
-        };
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        authentication.addAuthStateListener(authStateListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (authStateListener != null) {
-            authentication.removeAuthStateListener(authStateListener);
-        }
-    }
-
-
     private void requestPermission() {
 
         //Check whether our app has the fine location permission, and request it if necessary//
@@ -433,8 +411,52 @@ public class TravelGuideActivity extends AppCompatActivity{
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        } if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            try {
+                InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                imagePicker.getLandmark(bitmap);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+
+    //---------- Firebase ----------//
+    private void setUpFirebaseAuthentication() {
+        authentication = FirebaseAuth.getInstance();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                currentUser = firebaseAuth.getCurrentUser();
+                if (currentUser != null) {
+                    Log.d(TAG, "Success");
+                } else {
+                    Log.d(TAG, "signed out");
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        authentication.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authStateListener != null) {
+            authentication.removeAuthStateListener(authStateListener);
+        }
+    }
+
 }
 
 

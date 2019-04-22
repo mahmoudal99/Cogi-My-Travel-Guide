@@ -36,7 +36,7 @@ public class ImagePicker {
         }
     }
 
-    private void getLandmark(Bitmap bitmap) {
+    public void getLandmark(Bitmap bitmap) {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
 

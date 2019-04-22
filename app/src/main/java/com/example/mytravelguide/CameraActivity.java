@@ -143,7 +143,6 @@ public class CameraActivity extends AppCompatActivity {
     private void requestPermission() {
 
         //Check whether our app has the fine location permission, and request it if necessary//
-
         if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{ACCESS_FINE_LOCATION}, FINE_LOCATION);
