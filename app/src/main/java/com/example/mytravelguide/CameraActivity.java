@@ -86,49 +86,49 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Places.initialize(getApplicationContext(), API_KEY);
-                PlacesClient placesClient = Places.createClient(CameraActivity.this);
-
-                List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ID, Place.Field.PHOTO_METADATAS);
-                // Use the builder to create a FindCurrentPlaceRequest.
-                FindCurrentPlaceRequest request = FindCurrentPlaceRequest.builder(placeFields).build();
-                if (ContextCompat.checkSelfPermission(CameraActivity.this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                    placesClient.findCurrentPlace(request).addOnSuccessListener(((response) -> {
-//                        PhotoMetadata photoMetadata = response.getPlaceLikelihoods().get(0).getPlace().getPhotoMetadatas().get(0);
-//                        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-//                                .setMaxWidth(500) // Optional.
-//                                .setMaxHeight(300) // Optional.
-//                                .build();
+//                Places.initialize(getApplicationContext(), API_KEY);
+//                PlacesClient placesClient = Places.createClient(CameraActivity.this);
 //
-//                        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-//                            Bitmap bitmap = fetchPhotoResponse.getBitmap();
-//                            imageView.setImageBitmap(bitmap);
-//                        }).addOnFailureListener((exception) -> {
-//                            if (exception instanceof ApiException) {
-//                                ApiException apiException = (ApiException) exception;
-//                                // Handle error with given status code.
-//                                Log.e("MAHMOUD", "Place not found: " + exception.getMessage());
-//                            }
-//                        });
-
-                        for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                            Log.i("VISION", String.format("Place '%s' has likelihood: %f", placeLikelihood.getPlace().getName(), placeLikelihood.getLikelihood()));
-                            Log.d("HELLOPLACE", response.getPlaceLikelihoods().get(0).getPlace().getId());
-                            placeId = response.getPlaceLikelihoods().get(0).getPlace().getId();
-                        }
-
-                    })).addOnFailureListener((exception) -> {
-                        if (exception instanceof ApiException) {
-                            ApiException apiException = (ApiException) exception;
-
-                        }
-                    });
-                } else {
-                    // A local method to request required permissions;
-                    // See https://developer.android.com/training/permissions/requesting
-                    requestPermission();
-                }
+//                List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ID, Place.Field.PHOTO_METADATAS);
+//                // Use the builder to create a FindCurrentPlaceRequest.
+//                FindCurrentPlaceRequest request = FindCurrentPlaceRequest.builder(placeFields).build();
+//                if (ContextCompat.checkSelfPermission(CameraActivity.this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//
+//                    placesClient.findCurrentPlace(request).addOnSuccessListener(((response) -> {
+////                        PhotoMetadata photoMetadata = response.getPlaceLikelihoods().get(0).getPlace().getPhotoMetadatas().get(0);
+////                        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+////                                .setMaxWidth(500) // Optional.
+////                                .setMaxHeight(300) // Optional.
+////                                .build();
+////
+////                        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+////                            Bitmap bitmap = fetchPhotoResponse.getBitmap();
+////                            imageView.setImageBitmap(bitmap);
+////                        }).addOnFailureListener((exception) -> {
+////                            if (exception instanceof ApiException) {
+////                                ApiException apiException = (ApiException) exception;
+////                                // Handle error with given status code.
+////                                Log.e("MAHMOUD", "Place not found: " + exception.getMessage());
+////                            }
+////                        });
+//
+//                        for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+//                            Log.i("VISION", String.format("Place '%s' has likelihood: %f", placeLikelihood.getPlace().getName(), placeLikelihood.getLikelihood()));
+//                            Log.d("HELLOPLACE", response.getPlaceLikelihoods().get(0).getPlace().getId());
+//                            placeId = response.getPlaceLikelihoods().get(0).getPlace().getId();
+//                        }
+//
+//                    })).addOnFailureListener((exception) -> {
+//                        if (exception instanceof ApiException) {
+//                            ApiException apiException = (ApiException) exception;
+//
+//                        }
+//                    });
+//                } else {
+//                    // A local method to request required permissions;
+//                    // See https://developer.android.com/training/permissions/requesting
+//                    requestPermission();
+//                }
             }
         });
 

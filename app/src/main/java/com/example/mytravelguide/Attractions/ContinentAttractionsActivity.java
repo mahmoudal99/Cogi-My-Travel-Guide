@@ -154,14 +154,11 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
                     attractionObject.placeName = ds.child("placeName").getValue(String.class);
                     attractionObjectArrayList.add(attractionObject);
                     mAdapter.notifyDataSetChanged();
-
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
 
     }

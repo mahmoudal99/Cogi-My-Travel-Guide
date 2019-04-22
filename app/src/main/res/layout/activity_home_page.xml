@@ -78,7 +78,7 @@
                             android:layout_gravity="center|bottom"
                             android:layout_marginBottom="40dp"
                             android:layout_marginTop="30dp"
-                            android:src="@drawable/travel_guide_1" />
+                            android:src="@drawable/options" />
 
                         <TextView
                             android:layout_width="match_parent"
