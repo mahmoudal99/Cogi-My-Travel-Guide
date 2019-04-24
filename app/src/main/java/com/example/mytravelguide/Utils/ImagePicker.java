@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -19,9 +20,14 @@ import java.util.List;
 public class ImagePicker {
 
     Context context;
+    TextView attractionTextView;
 
     public ImagePicker(Context context) {
         this.context = context;
+    }
+
+    public void setTextView(TextView attractionTextView){
+        this.attractionTextView = attractionTextView;
     }
 
     public void getLandmark(Bitmap bitmap) {
@@ -34,6 +40,7 @@ public class ImagePicker {
                     @Override
                     public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
                         Log.d("VISION", firebaseVisionCloudLandmarks.get(0).getLandmark());
+                        attractionTextView.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
                     }
                 });
     }

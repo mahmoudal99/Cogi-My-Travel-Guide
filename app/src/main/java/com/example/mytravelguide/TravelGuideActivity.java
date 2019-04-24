@@ -295,9 +295,9 @@ public class TravelGuideActivity extends AppCompatActivity {
             try {
                 InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                placeName = imagePicker.getLandmark(bitmap);
+                imagePicker.setTextView(attractionName);
+                imagePicker.getLandmark(bitmap);
                 attractionImage.setImageBitmap(bitmap);
-                attractionName.setText(placeName);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
