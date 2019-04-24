@@ -24,19 +24,8 @@ public class ImagePicker {
         this.context = context;
     }
 
-    public void openGallery(Intent data){
-
-        InputStream inputStream = null;
-        try {
-            inputStream = context.getContentResolver().openInputStream(data.getData());
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            getLandmark(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void getLandmark(Bitmap bitmap) {
+        final String[] landmarkName = new String[1];
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
 

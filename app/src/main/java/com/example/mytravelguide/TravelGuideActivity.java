@@ -74,7 +74,7 @@ import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class TravelGuideActivity extends AppCompatActivity{
+public class TravelGuideActivity extends AppCompatActivity {
 
     private static final String TAG = "TravelGuideActivity";
     private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
@@ -86,7 +86,7 @@ public class TravelGuideActivity extends AppCompatActivity{
     private RecyclerView.Adapter mAdapter;
 
     // Widgets
-    ImageView backArrow, addPlace, image;
+    ImageView backArrow, addPlace, attractionImage, search;
     TextView attractionName;
     ImageView location, gallery;
 
@@ -121,14 +121,13 @@ public class TravelGuideActivity extends AppCompatActivity{
         init();
         setUpWidgets();
         setUpFirebaseAuthentication();
-        callSearcEngine();
     }
 
-    private void init(){
+    private void init() {
         backArrow = findViewById(R.id.backArrow);
         addPlace = findViewById(R.id.addPlace);
         visitedActivity = new VisitedActivity();
-        image = findViewById(R.id.attractionImage);
+        attractionImage = findViewById(R.id.attractionImage);
         location = findViewById(R.id.location);
         attractionName = findViewById(R.id.attractionName);
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
@@ -136,9 +135,10 @@ public class TravelGuideActivity extends AppCompatActivity{
         imagePicker = new ImagePicker(TravelGuideActivity.this);
         context = TravelGuideActivity.this;
         googleSearch = new GoogleSearch();
+        search = findViewById(R.id.search);
     }
 
-    private void setUpWidgets(){
+    private void setUpWidgets() {
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,9 +150,9 @@ public class TravelGuideActivity extends AppCompatActivity{
         placeName = "Attraction";
         placeName = getIntent().getStringExtra("AttractionName");
 
-        if(placeName != null){
+        if (placeName != null) {
             attractionName.setText(placeName);
-        }else {
+        } else {
             attractionName.setText("Attraction");
         }
 
@@ -160,9 +160,9 @@ public class TravelGuideActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                if(placeName!=null){
-                    addVisitedPlace(placeName);
-                }else {
+                if (placeName != null) {
+                    addVisitedPlace();
+                } else {
                     Toast.makeText(TravelGuideActivity.this, "No Attraction Selected", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -171,44 +171,40 @@ public class TravelGuideActivity extends AppCompatActivity{
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                loadNearByLocations();
-                placePicker();
+                loadNearByLocations();
             }
         });
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
+                openGallery();
+            }
+        });
 
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickIntent.setType("image/*");
-
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-                startActivityForResult(chooserIntent, PICK_IMAGE);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                placePicker();
             }
         });
 
     }
 
-    private void placePicker(){
+    /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
+
+    private void placePicker() {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), API_KEY);
         }
-        // Set the fields to specify which types of place data to return.
+
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
 
-        // Start the autocomplete intent.
-        Intent intent = new Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.FULLSCREEN, fields)
-                .build(this);
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
-    private void loadNearByLocations(){
+    private void loadNearByLocations() {
         ArrayList<AttractionObject> nearByLocationsArray = new ArrayList<>();
 
         listView = (RecyclerView) findViewById(R.id.list);
@@ -223,7 +219,7 @@ public class TravelGuideActivity extends AppCompatActivity{
         nearByLocationsArray = googlePlacesApi.getNearByLocations(nearByLocationsArray, mAdapter);
     }
 
-    private void addVisitedPlace(String name){
+    private void addVisitedPlace() {
         // Create a new user with a first and last name
         Map<String, String> place = new HashMap<>();
         place.put("Place Name", placeName);
@@ -244,9 +240,9 @@ public class TravelGuideActivity extends AppCompatActivity{
 
     }
 
-    private void callSearcEngine(){
+    private void callSearchEngine(String placeName) {
 
-        if(placeName != null){
+        if (placeName != null) {
             searchString = placeName;
 
             URL url = googleSearch.search(searchString);
@@ -254,121 +250,62 @@ public class TravelGuideActivity extends AppCompatActivity{
             // start AsyncTask
             TravelGuideActivity.GoogleSearchAsyncTask searchTask = new TravelGuideActivity.GoogleSearchAsyncTask();
             searchTask.execute(url);
-            Log.d("URLC1", url.getPath());
         }
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+    private void openGallery(){
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+        startActivityForResult(chooserIntent, PICK_IMAGE);
+    }
+
+
+    /*---------------------------------------------------------------------- Activity Result ----------------------------------------------------------------------*/
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i("vision", "Place: " + place.getName() + ", " + place.getId());
+                attractionName.setText(place.getName());
+                googlePlacesApi.setPhoto(place.getPhotoMetadatas().get(0), attractionImage);
+                placeName = place.getName();
+                callSearchEngine(place.getName());
+
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
         }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
             try {
+                InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                placeName = imagePicker.getLandmark(bitmap);
+                attractionImage.setImageBitmap(bitmap);
+                attractionName.setText(placeName);
 
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            Glide.with(TravelGuideActivity.this).load(result).into(bmImage);
-
         }
     }
 
-    private class GoogleSearchAsyncTask extends AsyncTask<URL, Integer, String> {
-
-        protected void onPreExecute() {
-            Log.d("GOOGLESEARCH", "AsyncTask - onPreExecute");
-        }
-
-
-        @Override
-        protected String doInBackground(URL... urls) {
-
-            URL url = urls[0];
-            Log.d("GOOGLESEARCH", "AsyncTask - doInBackground, url=" + url);
-
-            // Http connection
-            HttpURLConnection conn = null;
-            try {
-                conn = (HttpURLConnection) url.openConnection();
-            } catch (IOException e) {
-                Log.e("GOOGLESEARCH", "Http connection ERROR " + e.toString());
-            }
-
-
-            try {
-                responseCode = conn.getResponseCode();
-                responseMessage = conn.getResponseMessage();
-            } catch (IOException e) {
-                Log.e("GOOGLESEARCH", "Http getting response code ERROR " + e.toString());
-            }
-
-            try {
-
-                if (responseCode == 200) {
-
-                    BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-
-                    while ((line = rd.readLine()) != null) {
-                        sb.append(line + "\n");
-                        if (line.contains("link")) {
-                            results.add(line);
-                        }
-                    }
-                    rd.close();
-                    conn.disconnect();
-                    result = sb.toString();
-
-                    return result;
-
-                } else {
-
-                    String errorMsg = "Http ERROR response " + responseMessage + "\n" + "Make sure to replace in code your own Google API key and Search Engine ID";
-                    Log.e("GOOGLESEARCH", errorMsg);
-                    result = errorMsg;
-                    return result;
-
-                }
-            } catch (IOException e) {
-                Log.e("GOOGLESEARCH", "Http Response ERROR " + e.toString());
-            }
-
-
-            return null;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            Log.d("GOOGLESEARCH", "AsyncTask - onProgressUpdate, progress=" + progress);
-
-        }
-
-        protected void onPostExecute(String result) {
-
-            Log.d("GOOGLESEARCHRESULT", "AsyncTask - onPostExecute, result=" + result);
-
-            StringBuffer sb = new StringBuffer(results.get(1).length());
-            sb.delete(0, 9);
-
-            String res = sb.toString();
-            res.replace(":", "");
-            res = results.get(2).substring(12, results.get(2).length() - 1);
-            URL = res;
-            new TravelGuideActivity.DownloadImageTask((ImageView) findViewById(R.id.attractionImage)).execute(res);
-        }
-    }
+    /*---------------------------------------------------------------------- Permission Requests ----------------------------------------------------------------------*/
 
     private void requestPermission() {
 
@@ -394,40 +331,113 @@ public class TravelGuideActivity extends AppCompatActivity{
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i("vision", "Place: " + place.getName() + ", " + place.getId());
-                attractionName.setText(place.getName());
+    /*---------------------------------------------------------------------- Asyc Task ----------------------------------------------------------------------*/
 
-                googlePlacesApi.setPhoto(place.getPhotoMetadatas().get(0), image);
-
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
-                Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-        } if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                return;
-            }
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
             try {
-                InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                imagePicker.getLandmark(bitmap);
-
-            } catch (FileNotFoundException e) {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            Glide.with(TravelGuideActivity.this).load(result).into(bmImage);
         }
     }
 
+    private class GoogleSearchAsyncTask extends AsyncTask<URL, Integer, String> {
 
-    //---------- Firebase ----------//
+        protected void onPreExecute() {
+            Log.d("GOOGLESEARCH", "AsyncTask - onPreExecute");
+        }
+
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            URL url = urls[0];
+            Log.d("GOOGLESEARCH", "AsyncTask - doInBackground, url=" + url);
+
+            // Http connection
+            HttpURLConnection conn = null;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                Log.e("GOOGLESEARCH", "Http connection ERROR " + e.toString());
+            }
+
+            try {
+                responseCode = conn.getResponseCode();
+                responseMessage = conn.getResponseMessage();
+            } catch (IOException e) {
+                Log.e("GOOGLESEARCH", "Http getting response code ERROR " + e.toString());
+            }
+
+            try {
+                if (responseCode == 200) {
+                    BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+
+                    while ((line = rd.readLine()) != null) {
+                        sb.append(line + "\n");
+                        if (line.contains("snippet")) {
+                            results.add(line);
+                        }
+                    }
+                    rd.close();
+                    conn.disconnect();
+                    result = sb.toString();
+
+                    return result;
+
+                } else {
+                    String errorMsg = "Http ERROR response " + responseMessage + "\n" + "Make sure to replace in code your own Google API key and Search Engine ID";
+                    Log.e("GOOGLESEARCH", errorMsg);
+                    result = errorMsg;
+                    return result;
+                }
+            } catch (IOException e) {
+                Log.e("GOOGLESEARCH", "Http Response ERROR " + e.toString());
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            Log.d("GOOGLESEARCH", "AsyncTask - onProgressUpdate, progress=" + progress);
+        }
+
+        protected void onPostExecute(String result) {
+
+            Log.d("GOOGLESEARCHRESULT", "AsyncTask - onPostExecute, result=" + result);
+
+            for (int i = 0; i < results.size(); i++){
+                Log.d("VISION:", results.get(i));
+            }
+
+//            StringBuffer sb = new StringBuffer(results.get(1).length());
+//            sb.delete(0, 9);
+//
+//            String res = sb.toString();
+//            res.replace(":", "");
+//            res = results.get(2).substring(12, results.get(2).length() - 1);
+//            URL = res;
+//            new TravelGuideActivity.DownloadImageTask((ImageView) findViewById(R.id.attractionImage)).execute(res);
+        }
+    }
+
+    /*---------------------------------------------------------------------- Firebase ----------------------------------------------------------------------*/
+
     private void setUpFirebaseAuthentication() {
         authentication = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {

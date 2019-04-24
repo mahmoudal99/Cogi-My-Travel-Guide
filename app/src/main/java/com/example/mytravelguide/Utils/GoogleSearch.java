@@ -24,7 +24,7 @@ public class GoogleSearch {
         // TODO replace with your value
         String cx = "000804371853375564055:-lvbacgxzgs";
 
-        String urlString = "https://www.googleapis.com/customsearch/v1?q=" + searchStringNoSpaces + "&key=" + key + "&cx=" + cx + "&searchType=image" + "&alt=json";
+        String urlString = "https://www.googleapis.com/customsearch/v1?q=" + searchStringNoSpaces + "&key=" + key + "&cx=" + cx + "&alt=json";
         URL url = null;
         try {
             url = new URL(urlString);
