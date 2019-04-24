@@ -141,6 +141,85 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="10dp"
+                                android:text="Opening Hours: "
+                                android:textColor="@color/Red"
+                                android:textSize="@dimen/_20sp" />
+
+                            <TextView
+                                android:id="@+id/openingHours"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_18sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+
+                            <TextView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="10dp"
+                                android:text="Price: "
+                                android:textColor="@color/LightBlue"
+                                android:textSize="@dimen/_20sp" />
+
+                            <TextView
+                                android:id="@+id/price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_18sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="10dp"
+                                android:text="Rating: "
+                                android:textColor="@color/Green"
+                                android:textSize="@dimen/_20sp" />
+
+                            <TextView
+                                android:id="@+id/rating"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_18sp" />
+
+                        </LinearLayout>
+
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

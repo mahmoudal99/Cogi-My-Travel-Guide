@@ -40,8 +40,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.LocalTime;
+import com.google.android.libraries.places.api.model.OpeningHours;
+import com.google.android.libraries.places.api.model.Period;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -87,7 +91,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     // Widgets
     ImageView backArrow, addPlace, attractionImage, search;
-    TextView attractionName;
+    TextView attractionName, openingHoursTv, price, rating;
     ImageView location, gallery;
 
     VisitedActivity visitedActivity;
@@ -136,6 +140,9 @@ public class TravelGuideActivity extends AppCompatActivity {
         context = TravelGuideActivity.this;
         googleSearch = new GoogleSearch();
         search = findViewById(R.id.search);
+        openingHoursTv = findViewById(R.id.openingHours);
+        rating = findViewById(R.id.rating);
+        price = findViewById(R.id.price);
     }
 
     private void setUpWidgets() {
@@ -198,7 +205,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             Places.initialize(getApplicationContext(), API_KEY);
         }
 
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS, Place.Field.OPENING_HOURS, Place.Field.PRICE_LEVEL, Place.Field.RATING);
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
@@ -253,7 +260,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
-    private void openGallery(){
+    private void openGallery() {
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -278,6 +285,30 @@ public class TravelGuideActivity extends AppCompatActivity {
                 attractionName.setText(place.getName());
                 googlePlacesApi.setPhoto(place.getPhotoMetadatas().get(0), attractionImage);
                 placeName = place.getName();
+
+                try {
+                    // Opening Hours
+                    OpeningHours openingHours;
+                    openingHours = place.getOpeningHours();
+                    List<Period> periods = openingHours.getPeriods();
+                    Period period = periods.get(0);
+                    TimeOfWeek timeOfWeekOpen = period.getOpen();
+                    TimeOfWeek timeOfWeekClose = period.getClose();
+                    LocalTime localTimeOpen = timeOfWeekOpen.getTime();
+                    LocalTime localTimeClose = timeOfWeekClose.getTime();
+
+                    openingHoursTv.setText(localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00");
+                    rating.setText(String.valueOf(place.getRating()));
+
+                    if (place.getPriceLevel() != null) {
+                        price.setText(place.getPriceLevel());
+                    }
+
+                } catch (Exception e) {
+                    Log.d("HELLO", e.getMessage());
+                    e.printStackTrace();
+                }
+
                 callSearchEngine(place.getName());
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -308,9 +339,6 @@ public class TravelGuideActivity extends AppCompatActivity {
     /*---------------------------------------------------------------------- Permission Requests ----------------------------------------------------------------------*/
 
     private void requestPermission() {
-
-        //Check whether our app has the fine location permission, and request it if necessary//
-
         if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{ACCESS_FINE_LOCATION}, FINE_LOCATION);
@@ -335,9 +363,11 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
+
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
@@ -421,7 +451,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
             Log.d("GOOGLESEARCHRESULT", "AsyncTask - onPostExecute, result=" + result);
 
-            for (int i = 0; i < results.size(); i++){
+            for (int i = 0; i < results.size(); i++) {
                 Log.d("VISION:", results.get(i));
             }
 

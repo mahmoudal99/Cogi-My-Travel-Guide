@@ -13,7 +13,13 @@
 
     // Blues
     <color name="MainBlue">#03A9F4</color>
+    <color name="LightBlue">#29B6F6</color>
+    <color name="CherryRed">#607D8B</color>
 
     // Reds
-    <color name="CherryRed">#607D8B</color>
+    <color name="Red">#D50000</color>
+
+    // Greens
+    <color name="Green">#00C853</color>
+
 </resources>
