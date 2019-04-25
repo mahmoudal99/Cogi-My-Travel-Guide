@@ -62,19 +62,30 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.label.FirebaseVisionLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetector;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -115,6 +126,10 @@ public class TravelGuideActivity extends AppCompatActivity {
     GooglePlacesApi googlePlacesApi;
     ImagePicker imagePicker;
     GoogleSearch googleSearch;
+
+
+    //Create the Scanner Object that we need
+    private static final String encoding = "UTF-8";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +213,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     }
 
+
     /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
 
     private void placePicker() {
@@ -251,12 +267,11 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         if (placeName != null) {
             searchString = placeName;
-
             URL url = googleSearch.search(searchString);
 
             // start AsyncTask
-            TravelGuideActivity.GoogleSearchAsyncTask searchTask = new TravelGuideActivity.GoogleSearchAsyncTask();
-            searchTask.execute(url);
+            TravelGuideActivity.WikipediaAsyncTask searchTask = new TravelGuideActivity.WikipediaAsyncTask();
+            searchTask.execute(placeName);
         }
     }
 
@@ -336,6 +351,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
+
     /*---------------------------------------------------------------------- Permission Requests ----------------------------------------------------------------------*/
 
     private void requestPermission() {
@@ -358,6 +374,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                 break;
         }
     }
+
 
     /*---------------------------------------------------------------------- Asyc Task ----------------------------------------------------------------------*/
 
@@ -386,6 +403,49 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
+    private class WikipediaAsyncTask extends AsyncTask<String, Integer, String> {
+
+        protected void onPreExecute() {
+            Log.d("GOOGLESEARCH", "AsyncTask - onPreExecute");
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String keyword = strings[0];
+            String searchText = keyword + " wikipedia";
+
+            try {
+                Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
+                String wikipediaURL = google.getElementsByTag("cite").get(0).text();
+                String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
+                        + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
+
+                HttpURLConnection httpcon = (HttpURLConnection) new URL(wikipediaApiJSON).openConnection();
+                httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
+                BufferedReader in = new BufferedReader(new InputStreamReader(httpcon.getInputStream()));
+
+                String responseSB = in.readLine();
+                in.close();
+
+                String result = responseSB.split("extract\":\"")[1];
+                Log.d("INFORMATIONWHO", result);
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
+
     private class GoogleSearchAsyncTask extends AsyncTask<URL, Integer, String> {
 
         protected void onPreExecute() {
@@ -402,6 +462,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             HttpURLConnection conn = null;
             try {
                 conn = (HttpURLConnection) url.openConnection();
+
             } catch (IOException e) {
                 Log.e("GOOGLESEARCH", "Http connection ERROR " + e.toString());
             }
@@ -440,6 +501,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.e("GOOGLESEARCH", "Http Response ERROR " + e.toString());
             }
+
             return null;
         }
 
@@ -465,6 +527,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 //            new TravelGuideActivity.DownloadImageTask((ImageView) findViewById(R.id.attractionImage)).execute(res);
         }
     }
+
 
     /*---------------------------------------------------------------------- Firebase ----------------------------------------------------------------------*/
 
