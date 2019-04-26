@@ -22,9 +22,13 @@ import com.example.mytravelguide.CameraActivity;
 import com.example.mytravelguide.Models.AttractionObject;
 import com.example.mytravelguide.R;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.LocalTime;
+import com.google.android.libraries.places.api.model.OpeningHours;
+import com.google.android.libraries.places.api.model.Period;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -106,6 +110,22 @@ public class GooglePlacesApi {
                                 Log.e("MAHMOUD", "Place not found: " + exception.getMessage());
                             }
                         });
+    }
+
+    public String placeOpeningHours(Place place){
+        // Opening Hours
+        OpeningHours openingHours;
+        openingHours = place.getOpeningHours();
+        List<Period> periods = openingHours.getPeriods();
+        Period period = periods.get(0);
+        TimeOfWeek timeOfWeekOpen = period.getOpen();
+        TimeOfWeek timeOfWeekClose = period.getClose();
+        LocalTime localTimeOpen = timeOfWeekOpen.getTime();
+        LocalTime localTimeClose = timeOfWeekClose.getTime();
+
+        String openingHoursString = localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00";
+
+        return openingHoursString;
     }
 
 }

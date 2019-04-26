@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.mytravelguide.TravelGuideActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmark;
@@ -20,29 +21,15 @@ import java.util.List;
 public class ImagePicker {
 
     Context context;
-    TextView attractionTextView;
+    TextView attractionNameTextView;
 
     public ImagePicker(Context context) {
         this.context = context;
+
     }
 
     public void setTextView(TextView attractionTextView){
-        this.attractionTextView = attractionTextView;
-    }
-
-    public void getLandmark(Bitmap bitmap) {
-        final String[] landmarkName = new String[1];
-        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
-        FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
-
-        detector.detectInImage(image)
-                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionCloudLandmark>>() {
-                    @Override
-                    public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
-                        Log.d("VISION", firebaseVisionCloudLandmarks.get(0).getLandmark());
-                        attractionTextView.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
-                    }
-                });
+        this.attractionNameTextView = attractionTextView;
     }
 
 }

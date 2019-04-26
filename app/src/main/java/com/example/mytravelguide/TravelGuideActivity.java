@@ -96,40 +96,35 @@ public class TravelGuideActivity extends AppCompatActivity {
     private final static int FINE_LOCATION = 100;
     static final int AUTOCOMPLETE_REQUEST_CODE = 15;
     public static final int PICK_IMAGE = 1;
-
-    RecyclerView listView;
-    private RecyclerView.Adapter mAdapter;
+    private static final String encoding = "UTF-8";
 
     // Widgets
     ImageView backArrow, addPlace, attractionImage, search;
-    TextView attractionName, openingHoursTv, price, rating;
+    TextView attractionName, openingHoursTv, price, rating, landmarkInformation;
     ImageView location, gallery;
 
-    VisitedActivity visitedActivity;
+    // Variables
+    static String result = null;
+    Integer responseCode = null;
+    String responseMessage = "";
+    String searchString, placeName, URL, landmarkInformationResult;
 
-    Context context;
+    ArrayList<String> results = new ArrayList<>();
+    RecyclerView listView;
 
     // Firebase
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
 
-    // Variables
-    static String result = null;
-    Integer responseCode = null;
-    String responseMessage = "";
-
-    ArrayList<String> results = new ArrayList<>();
-
-    String searchString, placeName, URL;
-
+    // Google
     GooglePlacesApi googlePlacesApi;
-    ImagePicker imagePicker;
     GoogleSearch googleSearch;
 
+    // Activity
+    VisitedActivity visitedActivity;
 
-    //Create the Scanner Object that we need
-    private static final String encoding = "UTF-8";
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,13 +146,14 @@ public class TravelGuideActivity extends AppCompatActivity {
         attractionName = findViewById(R.id.attractionName);
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
         gallery = findViewById(R.id.gallery);
-        imagePicker = new ImagePicker(TravelGuideActivity.this);
         context = TravelGuideActivity.this;
         googleSearch = new GoogleSearch();
         search = findViewById(R.id.search);
         openingHoursTv = findViewById(R.id.openingHours);
         rating = findViewById(R.id.rating);
         price = findViewById(R.id.price);
+        landmarkInformationResult = "";
+        landmarkInformation = findViewById(R.id.landmarkInformation);
     }
 
     private void setUpWidgets() {
@@ -171,6 +167,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         placeName = "Attraction";
         placeName = getIntent().getStringExtra("AttractionName");
+        landmarkInformation.setText(landmarkInformationResult);
 
         if (placeName != null) {
             attractionName.setText(placeName);
@@ -221,7 +218,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             Places.initialize(getApplicationContext(), API_KEY);
         }
 
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS, Place.Field.OPENING_HOURS, Place.Field.PRICE_LEVEL, Place.Field.RATING);
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS, Place.Field.OPENING_HOURS, Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL);
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
@@ -233,7 +230,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         listView = (RecyclerView) findViewById(R.id.list);
         listView.setVisibility(View.VISIBLE);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        mAdapter = new NearByLocationsAdapter(nearByLocationsArray, TravelGuideActivity.this);
+        RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(nearByLocationsArray, TravelGuideActivity.this);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
         listView.setAdapter(mAdapter);
@@ -263,7 +260,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     }
 
-    private void callSearchEngine(String placeName) {
+    public void callSearchEngine(String placeName) {
 
         if (placeName != null) {
             searchString = placeName;
@@ -272,7 +269,22 @@ public class TravelGuideActivity extends AppCompatActivity {
             // start AsyncTask
             TravelGuideActivity.WikipediaAsyncTask searchTask = new TravelGuideActivity.WikipediaAsyncTask();
             searchTask.execute(placeName);
+
         }
+    }
+
+    public void getLandmark(Bitmap bitmap) {
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
+        detector.detectInImage(image)
+                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionCloudLandmark>>() {
+                    @Override
+                    public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
+                        Log.d("VISION", firebaseVisionCloudLandmarks.get(0).getLandmark());
+                        attractionName.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
+                        callSearchEngine(firebaseVisionCloudLandmarks.get(0).getLandmark());
+                    }
+                });
     }
 
     private void openGallery() {
@@ -296,23 +308,13 @@ public class TravelGuideActivity extends AppCompatActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i("vision", "Place: " + place.getName() + ", " + place.getId());
+
                 attractionName.setText(place.getName());
                 googlePlacesApi.setPhoto(place.getPhotoMetadatas().get(0), attractionImage);
                 placeName = place.getName();
 
                 try {
-                    // Opening Hours
-                    OpeningHours openingHours;
-                    openingHours = place.getOpeningHours();
-                    List<Period> periods = openingHours.getPeriods();
-                    Period period = periods.get(0);
-                    TimeOfWeek timeOfWeekOpen = period.getOpen();
-                    TimeOfWeek timeOfWeekClose = period.getClose();
-                    LocalTime localTimeOpen = timeOfWeekOpen.getTime();
-                    LocalTime localTimeClose = timeOfWeekClose.getTime();
-
-                    openingHoursTv.setText(localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00");
+                    openingHoursTv.setText(googlePlacesApi.placeOpeningHours(place));
                     rating.setText(String.valueOf(place.getRating()));
 
                     if (place.getPriceLevel() != null) {
@@ -320,7 +322,6 @@ public class TravelGuideActivity extends AppCompatActivity {
                     }
 
                 } catch (Exception e) {
-                    Log.d("HELLO", e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -341,8 +342,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             try {
                 InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                imagePicker.setTextView(attractionName);
-                imagePicker.getLandmark(bitmap);
+                getLandmark(bitmap);
                 attractionImage.setImageBitmap(bitmap);
 
             } catch (FileNotFoundException e) {
@@ -376,7 +376,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
 
-    /*---------------------------------------------------------------------- Asyc Task ----------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------- Async Task ----------------------------------------------------------------------*/
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
@@ -429,7 +429,8 @@ public class TravelGuideActivity extends AppCompatActivity {
                 in.close();
 
                 String result = responseSB.split("extract\":\"")[1];
-                Log.d("INFORMATIONWHO", result);
+
+                return result;
 
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -441,8 +442,8 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(String result) {
+            landmarkInformation.setText(result);
         }
     }
 
