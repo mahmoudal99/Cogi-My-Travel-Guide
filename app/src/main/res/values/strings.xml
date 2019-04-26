@@ -30,4 +30,12 @@
     <string name="Visited">Visited</string>
     <string name="PlaceName">Name</string>
     <string name="DateVisited">Date</string>
+    <string name="backarrow">Back Arrow</string>
+    <string name="place">Place</string>
+    <string name="camera">Camera</string>
+    <string name="choose_photo">Choose Photo</string>
+    <string name="my_location">My Location</string>
+    <string name="logo">Logo</string>
+    <string name="travel_guide">Travel Guide</string>
+    <string name="planet">Planet</string>
 </resources>

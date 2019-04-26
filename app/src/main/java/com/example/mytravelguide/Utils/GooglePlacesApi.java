@@ -30,6 +30,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -54,6 +55,7 @@ public class GooglePlacesApi {
 
     PlacesClient placesClient;
     private Context context;
+    Place place;
 
     public GooglePlacesApi(Context context) {
         this.context = context;
@@ -61,7 +63,7 @@ public class GooglePlacesApi {
         placesClient = Places.createClient(context);
     }
 
-    public ArrayList<AttractionObject> getNearByLocations(ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter){
+    public ArrayList<AttractionObject> getNearByLocations(ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter) {
 
         List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ID, Place.Field.PHOTO_METADATAS);
         // Use the builder to create a FindCurrentPlaceRequest.
@@ -93,26 +95,26 @@ public class GooglePlacesApi {
         return attractionObjects;
     }
 
-    public void setPhoto(PhotoMetadata photo, ImageView imageView){
+    public void setPhoto(PhotoMetadata photo, ImageView imageView) {
 
         FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo)
-                                .setMaxWidth(500) // Optional.
-                                .setMaxHeight(300) // Optional.
-                                .build();
+                .setMaxWidth(500) // Optional.
+                .setMaxHeight(300) // Optional.
+                .build();
 
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-                            Bitmap bitmap = fetchPhotoResponse.getBitmap();
-                            imageView.setImageBitmap(bitmap);
-                        }).addOnFailureListener((exception) -> {
-                            if (exception instanceof ApiException) {
-                                ApiException apiException = (ApiException) exception;
-                                // Handle error with given status code.
-                                Log.e("MAHMOUD", "Place not found: " + exception.getMessage());
-                            }
-                        });
+            Bitmap bitmap = fetchPhotoResponse.getBitmap();
+            imageView.setImageBitmap(bitmap);
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                // Handle error with given status code.
+                Log.e("MAHMOUD", "Place not found: " + exception.getMessage());
+            }
+        });
     }
 
-    public String placeOpeningHours(Place place){
+    public String placeOpeningHours(Place place) {
         // Opening Hours
         OpeningHours openingHours;
         openingHours = place.getOpeningHours();

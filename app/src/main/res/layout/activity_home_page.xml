@@ -24,6 +24,7 @@
                 android:id="@+id/settings"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
@@ -39,6 +40,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
+                android:contentDescription="@string/logo"
                 android:src="@drawable/logo_white" />
 
         </RelativeLayout>
@@ -47,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
 
@@ -62,9 +65,9 @@
                     android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    app:cardElevation="10dp"
                     android:background="@drawable/cardview_bg"
-                    app:cardCornerRadius="10dp">
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -77,8 +80,8 @@
                             android:layout_width="120dp"
                             android:layout_height="120dp"
                             android:layout_gravity="center|bottom"
-                            android:layout_marginBottom="25dp"
                             android:layout_marginTop="25dp"
+                            android:layout_marginBottom="25dp"
                             android:src="@drawable/options" />
 
                         <TextView
@@ -86,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="Travel Guide"
+                            android:text="@string/travel_guide"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />
@@ -117,8 +120,9 @@
                             android:layout_width="140dp"
                             android:layout_height="140dp"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="45dp"
                             android:layout_marginTop="10dp"
+                            android:layout_marginBottom="45dp"
+                            android:contentDescription="@string/camera"
                             android:src="@drawable/camera" />
 
                         <TextView
@@ -126,7 +130,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="Camera"
+                            android:text="@string/camera"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />
@@ -149,9 +153,9 @@
                     android:layout_height="240dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    app:cardElevation="10dp"
                     android:background="@drawable/cardview_bg"
-                    app:cardCornerRadius="10dp">
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -164,6 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="210dp"
                             android:layout_gravity="center"
+                            android:contentDescription="@string/Attractions"
                             android:src="@drawable/pyramids" />
 
                         <TextView
@@ -171,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="Attractions"
+                            android:text="@string/Attractions"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />
@@ -186,9 +191,9 @@
                     android:layout_height="180dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    app:cardElevation="10dp"
                     android:background="@drawable/cardview_bg_white"
-                    app:cardCornerRadius="10dp">
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -201,8 +206,9 @@
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_gravity="center|bottom"
-                            android:layout_marginBottom="40dp"
                             android:layout_marginTop="10dp"
+                            android:layout_marginBottom="40dp"
+                            android:contentDescription="@string/planet"
                             android:src="@drawable/earth" />
 
                         <TextView
@@ -210,7 +216,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="Visited"
+                            android:text="@string/Visited"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />

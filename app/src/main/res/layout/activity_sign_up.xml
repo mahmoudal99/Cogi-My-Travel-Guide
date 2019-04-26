@@ -18,7 +18,8 @@
             android:layout_height="@dimen/LogoHeight"
             android:layout_gravity="center"
             android:layout_marginTop="-40dp"
-            android:src="@drawable/logo_white" />
+            android:src="@drawable/logo_white"
+            android:contentDescription="@string/logo" />
 
         <EditText
             android:id="@+id/firstnameET"
