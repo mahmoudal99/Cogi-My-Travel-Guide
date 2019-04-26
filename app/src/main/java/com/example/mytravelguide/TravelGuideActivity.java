@@ -107,7 +107,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     // Widgets
     ImageView backArrow, addLandmark, landmarkImage, searchLandmarkButton;
     TextView landmarkName, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkInformation;
-    ImageView nearByLocationButton, chooseImageButton, expandInformation, expandAboutImage;
+    ImageView nearByLocationButton, chooseImageButton, expandInformation, expandAboutImage, nearByImage;
 
     CardView informationCard;
     LinearLayout informationLayout;
@@ -171,6 +171,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         informationLayout = findViewById(R.id.informationList);
         expandInformation = findViewById(R.id.expandInformation);
         expandAboutImage = findViewById(R.id.expandAbout);
+        nearByImage = findViewById(R.id.expandNearByImage);
     }
 
     private void setUpWidgets() {
@@ -229,22 +230,13 @@ public class TravelGuideActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(expandInfo){
+                if (expandInfo) {
                     LinearLayout layout = findViewById(R.id.informationList);
-                    // Gets the layout params that will allow you to resize the layout
-                    ViewGroup.LayoutParams params = layout.getLayoutParams();
-                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    layout.setLayoutParams(params);
-                    expandInfo = false;
+                    openList(layout);
 
-                }else if (!expandInfo){
+                } else if (!expandInfo) {
                     LinearLayout layout = findViewById(R.id.informationList);
-                    // Gets the layout params that will allow you to resize the layout
-                    ViewGroup.LayoutParams params = layout.getLayoutParams();
-                    // Changes the height and width to the specified *pixels*
-                    params.height = 200;
-                    layout.setLayoutParams(params);
-                    expandInfo = true;
+                    closeList(layout);
                 }
             }
         });
@@ -253,46 +245,60 @@ public class TravelGuideActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(expandAbout){
+                if (expandAbout) {
                     LinearLayout layout = findViewById(R.id.aboutList);
-                    // Gets the layout params that will allow you to resize the layout
-                    ViewGroup.LayoutParams params = layout.getLayoutParams();
-                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    layout.setLayoutParams(params);
-                    expandAbout = false;
+                    openList(layout);
 
-                }else if (!expandAbout){
+                } else if (!expandAbout) {
                     LinearLayout layout = findViewById(R.id.aboutList);
-                    // Gets the layout params that will allow you to resize the layout
-                    ViewGroup.LayoutParams params = layout.getLayoutParams();
-                    // Changes the height and width to the specified *pixels*
-                    params.height = 200;
-                    layout.setLayoutParams(params);
-                    expandAbout = true;
+                    closeList(layout);
+                }
+            }
+        });
+
+        nearByImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (expandAbout) {
+                    LinearLayout layout = findViewById(R.id.nearByLocationsList);
+                    openList(layout);
+                } else if (!expandAbout) {
+                    LinearLayout layout = findViewById(R.id.nearByLocationsList);
+                    closeList(layout);
                 }
             }
         });
 
     }
 
-    private void setUpLinearLayout(){
-        LinearLayout infoLayour = findViewById(R.id.informationList);
+    private void openList(LinearLayout linearLayout) {
         // Gets the layout params that will allow you to resize the layout
-        ViewGroup.LayoutParams infoParams = infoLayour.getLayoutParams();
-        // Changes the height and width to the specified *pixels*
-        infoParams.height = 200;
-        infoLayour.setLayoutParams(infoParams);
-        expandInfo = true;
+        ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        linearLayout.setLayoutParams(params);
+        expandAbout = false;
+    }
 
-        LinearLayout aboutLayout = findViewById(R.id.aboutList);
+    private void closeList(LinearLayout linearLayout) {
         // Gets the layout params that will allow you to resize the layout
-        ViewGroup.LayoutParams aboutParams = aboutLayout.getLayoutParams();
+        ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
         // Changes the height and width to the specified *pixels*
-        aboutParams.height = 200;
-        aboutLayout.setLayoutParams(aboutParams);
+        params.height = 200;
+        linearLayout.setLayoutParams(params);
         expandAbout = true;
     }
 
+    private void setUpLinearLayout() {
+        LinearLayout infoLayout = findViewById(R.id.informationList);
+        closeList(infoLayout);
+
+        LinearLayout aboutLayout = findViewById(R.id.aboutList);
+        closeList(aboutLayout);
+
+        LinearLayout nearByLayout = findViewById(R.id.nearByLocationsList);
+        closeList(nearByLayout);
+    }
 
     /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
 
