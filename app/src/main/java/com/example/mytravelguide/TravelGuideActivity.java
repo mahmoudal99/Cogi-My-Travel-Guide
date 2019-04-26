@@ -2,6 +2,7 @@ package com.example.mytravelguide;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,8 +22,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,7 +107,10 @@ public class TravelGuideActivity extends AppCompatActivity {
     // Widgets
     ImageView backArrow, addLandmark, landmarkImage, searchLandmarkButton;
     TextView landmarkName, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkInformation;
-    ImageView nearByLocationButton, chooseImageButton;
+    ImageView nearByLocationButton, chooseImageButton, expandInformation, expandAboutImage;
+
+    CardView informationCard;
+    LinearLayout informationLayout;
 
     // Variables
     static String result = null;
@@ -127,6 +133,9 @@ public class TravelGuideActivity extends AppCompatActivity {
     // Activity
     VisitedActivity visitedActivity;
 
+    boolean expandInfo = false;
+    boolean expandAbout = false;
+
     Context context;
 
     @Override
@@ -137,6 +146,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         requestPermission();
         init();
         setUpWidgets();
+        setUpLinearLayout();
         setUpFirebaseAuthentication();
     }
 
@@ -156,7 +166,11 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkRating = findViewById(R.id.rating);
         landmarkPrice = findViewById(R.id.price);
         landmarkInformationResult = "";
+        informationCard = findViewById(R.id.infoCard);
         landmarkInformation = findViewById(R.id.landmarkInformation);
+        informationLayout = findViewById(R.id.informationList);
+        expandInformation = findViewById(R.id.expandInformation);
+        expandAboutImage = findViewById(R.id.expandAbout);
     }
 
     private void setUpWidgets() {
@@ -211,6 +225,72 @@ public class TravelGuideActivity extends AppCompatActivity {
             }
         });
 
+        expandInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(expandInfo){
+                    LinearLayout layout = findViewById(R.id.informationList);
+                    // Gets the layout params that will allow you to resize the layout
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    layout.setLayoutParams(params);
+                    expandInfo = false;
+
+                }else if (!expandInfo){
+                    LinearLayout layout = findViewById(R.id.informationList);
+                    // Gets the layout params that will allow you to resize the layout
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    // Changes the height and width to the specified *pixels*
+                    params.height = 200;
+                    layout.setLayoutParams(params);
+                    expandInfo = true;
+                }
+            }
+        });
+
+        expandAboutImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(expandAbout){
+                    LinearLayout layout = findViewById(R.id.aboutList);
+                    // Gets the layout params that will allow you to resize the layout
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    layout.setLayoutParams(params);
+                    expandAbout = false;
+
+                }else if (!expandAbout){
+                    LinearLayout layout = findViewById(R.id.aboutList);
+                    // Gets the layout params that will allow you to resize the layout
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    // Changes the height and width to the specified *pixels*
+                    params.height = 200;
+                    layout.setLayoutParams(params);
+                    expandAbout = true;
+                }
+            }
+        });
+
+    }
+
+    private void setUpLinearLayout(){
+        LinearLayout infoLayour = findViewById(R.id.informationList);
+        // Gets the layout params that will allow you to resize the layout
+        ViewGroup.LayoutParams infoParams = infoLayour.getLayoutParams();
+        // Changes the height and width to the specified *pixels*
+        infoParams.height = 200;
+        infoLayour.setLayoutParams(infoParams);
+        expandInfo = true;
+
+        LinearLayout aboutLayout = findViewById(R.id.aboutList);
+        // Gets the layout params that will allow you to resize the layout
+        ViewGroup.LayoutParams aboutParams = aboutLayout.getLayoutParams();
+        // Changes the height and width to the specified *pixels*
+        aboutParams.height = 200;
+        aboutLayout.setLayoutParams(aboutParams);
+        expandAbout = true;
     }
 
 

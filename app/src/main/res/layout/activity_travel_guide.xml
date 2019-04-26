@@ -113,8 +113,9 @@
                     app:cardCornerRadius="10dp">
 
                     <LinearLayout
+                        android:id="@+id/informationList"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/cardview_bg_white"
                         android:orientation="vertical">
@@ -133,6 +134,15 @@
                                 android:text="Information"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp" />
+
+
+                            <ImageView
+                                android:id="@+id/expandInformation"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="10dp"
+                                android:src="@drawable/ic_expand_more_black_24dp" />
 
                         </LinearLayout>
 
@@ -234,6 +244,7 @@
                     app:cardCornerRadius="10dp">
 
                     <LinearLayout
+                        android:id="@+id/aboutList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
@@ -259,10 +270,16 @@
                             <ImageView
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:layout_marginRight="5dp"
-                                android:layout_marginTop="5dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/microphone" />
+
+                            <ImageView
+                                android:id="@+id/expandAbout"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="10dp"
+                                android:src="@drawable/ic_expand_more_black_24dp" />
 
                         </LinearLayout>
 
