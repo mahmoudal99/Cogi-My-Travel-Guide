@@ -86,6 +86,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -101,15 +102,15 @@ public class TravelGuideActivity extends AppCompatActivity {
     private static final String encoding = "UTF-8";
 
     // Widgets
-    ImageView backArrow, addPlace, attractionImage, search;
-    TextView attractionName, openingHoursTv, price, rating, landmarkInformation;
-    ImageView location, gallery;
+    ImageView backArrow, addLandmark, landmarkImage, searchLandmarkButton;
+    TextView landmarkName, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkInformation;
+    ImageView nearByLocationButton, chooseImageButton;
 
     // Variables
     static String result = null;
     Integer responseCode = null;
     String responseMessage = "";
-    String searchString, placeName, URL, landmarkInformationResult;
+    String searchString, landmarkNameString, URL, landmarkInformationResult;
 
     ArrayList<String> results = new ArrayList<>();
     RecyclerView listView;
@@ -141,19 +142,19 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void init() {
         backArrow = findViewById(R.id.backArrow);
-        addPlace = findViewById(R.id.addPlace);
+        addLandmark = findViewById(R.id.addPlace);
         visitedActivity = new VisitedActivity();
-        attractionImage = findViewById(R.id.attractionImage);
-        location = findViewById(R.id.location);
-        attractionName = findViewById(R.id.attractionName);
+        landmarkImage = findViewById(R.id.attractionImage);
+        nearByLocationButton = findViewById(R.id.location);
+        landmarkName = findViewById(R.id.attractionName);
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
-        gallery = findViewById(R.id.gallery);
+        chooseImageButton = findViewById(R.id.gallery);
         context = TravelGuideActivity.this;
         googleSearch = new GoogleSearch();
-        search = findViewById(R.id.search);
-        openingHoursTv = findViewById(R.id.openingHours);
-        rating = findViewById(R.id.rating);
-        price = findViewById(R.id.price);
+        searchLandmarkButton = findViewById(R.id.search);
+        landmarkOpeningHours = findViewById(R.id.openingHours);
+        landmarkRating = findViewById(R.id.rating);
+        landmarkPrice = findViewById(R.id.price);
         landmarkInformationResult = "";
         landmarkInformation = findViewById(R.id.landmarkInformation);
     }
@@ -167,21 +168,21 @@ public class TravelGuideActivity extends AppCompatActivity {
             }
         });
 
-        placeName = "Attraction";
-        placeName = getIntent().getStringExtra("AttractionName");
+        landmarkNameString = "Attraction";
+        landmarkNameString = getIntent().getStringExtra("AttractionName");
         landmarkInformation.setText(landmarkInformationResult);
 
-        if (placeName != null) {
-            attractionName.setText(placeName);
+        if (landmarkNameString != null) {
+            landmarkName.setText(landmarkNameString);
         } else {
-            attractionName.setText("Attraction");
+            landmarkName.setText(getString(R.string.Attraction));
         }
 
-        addPlace.setOnClickListener(new View.OnClickListener() {
+        addLandmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (placeName != null) {
+                if (landmarkNameString != null) {
                     addVisitedPlace();
                 } else {
                     Toast.makeText(TravelGuideActivity.this, "No Attraction Selected", Toast.LENGTH_SHORT).show();
@@ -189,21 +190,21 @@ public class TravelGuideActivity extends AppCompatActivity {
             }
         });
 
-        location.setOnClickListener(new View.OnClickListener() {
+        nearByLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadNearByLocations();
             }
         });
 
-        gallery.setOnClickListener(new View.OnClickListener() {
+        chooseImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
             }
         });
 
-        search.setOnClickListener(new View.OnClickListener() {
+        searchLandmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 placePicker();
@@ -244,7 +245,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     private void addVisitedPlace() {
         // Create a new user with a first and last name
         Map<String, String> place = new HashMap<>();
-        place.put("Place Name", placeName);
+        place.put("Place Name", landmarkNameString);
         place.put("Date Visited", "March 2018");
         place.put("URL", URL);
 
@@ -266,8 +267,6 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         if (placeName != null) {
             searchString = placeName;
-            URL url = googleSearch.search(searchString);
-
             // start AsyncTask
             TravelGuideActivity.WikipediaAsyncTask searchTask = new TravelGuideActivity.WikipediaAsyncTask();
             searchTask.execute(placeName);
@@ -283,7 +282,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
                         Log.d("VISION", firebaseVisionCloudLandmarks.get(0).getLandmark());
-                        attractionName.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
+                        landmarkName.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
                         callSearchEngine(firebaseVisionCloudLandmarks.get(0).getLandmark());
                     }
                 });
@@ -310,17 +309,15 @@ public class TravelGuideActivity extends AppCompatActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-
-                attractionName.setText(place.getName());
-                googlePlacesApi.setPhoto(place.getPhotoMetadatas().get(0), attractionImage);
-                placeName = place.getName();
-
                 try {
-                    openingHoursTv.setText(googlePlacesApi.placeOpeningHours(place));
-                    rating.setText(String.valueOf(place.getRating()));
+                    landmarkName.setText(place.getName());
+                    googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkImage);
+                    landmarkNameString = place.getName();
+                    landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
+                    landmarkRating.setText(String.valueOf(place.getRating()));
 
                     if (place.getPriceLevel() != null) {
-                        price.setText(place.getPriceLevel());
+                        landmarkPrice.setText(place.getPriceLevel());
                     }
 
                 } catch (Exception e) {
@@ -330,11 +327,12 @@ public class TravelGuideActivity extends AppCompatActivity {
                 callSearchEngine(place.getName());
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
+
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
+
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+                Log.i(TAG, "Cancelled");
             }
         }
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
@@ -342,10 +340,10 @@ public class TravelGuideActivity extends AppCompatActivity {
                 return;
             }
             try {
-                InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
+                InputStream inputStream = context.getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 getLandmark(bitmap);
-                attractionImage.setImageBitmap(bitmap);
+                landmarkImage.setImageBitmap(bitmap);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -377,38 +375,13 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
-
     /*---------------------------------------------------------------------- Async Task ----------------------------------------------------------------------*/
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            Glide.with(TravelGuideActivity.this).load(result).into(bmImage);
-        }
-    }
-
+    // Wikipedia Async Task
     private class WikipediaAsyncTask extends AsyncTask<String, Integer, String> {
 
         protected void onPreExecute() {
-            Log.d("GOOGLESEARCH", "AsyncTask - onPreExecute");
+            Log.d(TAG, "AsyncTask - onPreExecute");
         }
 
         @Override
@@ -430,9 +403,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                 String responseSB = in.readLine();
                 in.close();
 
-                String result = responseSB.split("extract\":\"")[1];
-
-                return result;
+                return responseSB.split("extract\":\"")[1];
 
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -449,17 +420,18 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
+    // Google Search Async Task
     private class GoogleSearchAsyncTask extends AsyncTask<URL, Integer, String> {
 
         protected void onPreExecute() {
-            Log.d("GOOGLESEARCH", "AsyncTask - onPreExecute");
+            Log.d(TAG, "AsyncTask - onPreExecute");
         }
 
 
         @Override
         protected String doInBackground(URL... urls) {
             URL url = urls[0];
-            Log.d("GOOGLESEARCH", "AsyncTask - doInBackground, url=" + url);
+            Log.d(TAG, "AsyncTask - doInBackground, url=" + url);
 
             // Http connection
             HttpURLConnection conn = null;
@@ -467,14 +439,14 @@ public class TravelGuideActivity extends AppCompatActivity {
                 conn = (HttpURLConnection) url.openConnection();
 
             } catch (IOException e) {
-                Log.e("GOOGLESEARCH", "Http connection ERROR " + e.toString());
+                Log.e(TAG, "Http connection ERROR " + e.toString());
             }
 
             try {
                 responseCode = conn.getResponseCode();
                 responseMessage = conn.getResponseMessage();
             } catch (IOException e) {
-                Log.e("GOOGLESEARCH", "Http getting response code ERROR " + e.toString());
+                Log.e(TAG, "Http getting response code ERROR " + e.toString());
             }
 
             try {
@@ -497,27 +469,27 @@ public class TravelGuideActivity extends AppCompatActivity {
 
                 } else {
                     String errorMsg = "Http ERROR response " + responseMessage + "\n" + "Make sure to replace in code your own Google API key and Search Engine ID";
-                    Log.e("GOOGLESEARCH", errorMsg);
+                    Log.e(TAG, errorMsg);
                     result = errorMsg;
                     return result;
                 }
             } catch (IOException e) {
-                Log.e("GOOGLESEARCH", "Http Response ERROR " + e.toString());
+                Log.e(TAG, "Http Response ERROR " + e.toString());
             }
 
             return null;
         }
 
         protected void onProgressUpdate(Integer... progress) {
-            Log.d("GOOGLESEARCH", "AsyncTask - onProgressUpdate, progress=" + progress);
+            Log.d(TAG, "AsyncTask - onProgressUpdate, progress=" + progress);
         }
 
         protected void onPostExecute(String result) {
 
-            Log.d("GOOGLESEARCHRESULT", "AsyncTask - onPostExecute, result=" + result);
+            Log.d(TAG, "AsyncTask - onPostExecute, result=" + result);
 
             for (int i = 0; i < results.size(); i++) {
-                Log.d("VISION:", results.get(i));
+                Log.d(TAG, results.get(i));
             }
 
 //            StringBuffer sb = new StringBuffer(results.get(1).length());
@@ -528,6 +500,32 @@ public class TravelGuideActivity extends AppCompatActivity {
 //            res = results.get(2).substring(12, results.get(2).length() - 1);
 //            URL = res;
 //            new TravelGuideActivity.DownloadImageTask((ImageView) findViewById(R.id.attractionImage)).execute(res);
+        }
+    }
+
+    // Download Image Async Task
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            Glide.with(TravelGuideActivity.this).load(result).into(bmImage);
         }
     }
 

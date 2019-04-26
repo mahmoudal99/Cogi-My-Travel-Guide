@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">MyTravelGuide</string>
 
+    <string name="logo">Logo</string>
+    <string name="travel_guide">Travel Guide</string>
+
     // Sign In Strings
     <string name="Email">Email</string>
     <string name="Password">Password</string>
@@ -20,22 +23,27 @@
     <string name="America">America</string>
     <string name="Europe">Europe</string>
     <string name="Asia">Asia</string>
-    <string name="Attractions">Attractions</string>
-
 
     // About
     <string name="About">Sed ut perspiciatis unde omnis iste natus dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</string>
 
     // Visited
     <string name="Visited">Visited</string>
+
+    // Landmark
     <string name="PlaceName">Name</string>
+
+    // Home Page Strings
+    <string name="planet">Planet</string>
+    <string name="Attractions">Attractions</string>
+    <string name="camera">Camera</string>
+
     <string name="DateVisited">Date</string>
     <string name="backarrow">Back Arrow</string>
     <string name="place">Place</string>
-    <string name="camera">Camera</string>
+
     <string name="choose_photo">Choose Photo</string>
     <string name="my_location">My Location</string>
-    <string name="logo">Logo</string>
-    <string name="travel_guide">Travel Guide</string>
-    <string name="planet">Planet</string>
+    <string name="Attraction">Attraction</string>
+
 </resources>
