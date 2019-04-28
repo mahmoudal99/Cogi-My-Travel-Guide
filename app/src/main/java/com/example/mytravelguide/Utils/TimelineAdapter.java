@@ -52,7 +52,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
         holder.dateVisited.setText(placeModel.dateVisited);
-        Glide.with(context).load(placeModel.URL).into(holder.placeImage);
+        if(!placeModel.URL.isEmpty()){
+            Glide.with(context).load(placeModel.URL).into(holder.placeImage);
+        }
     }
 
     @Override

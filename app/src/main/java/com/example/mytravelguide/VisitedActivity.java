@@ -101,7 +101,10 @@ public class VisitedActivity extends AppCompatActivity {
                                 place = new VisitedPlaceObject();
                                 place.placeName = document.get("Place Name").toString();
                                 place.dateVisited = document.get("Date Visited").toString();
-                                place.URL = document.get("URL").toString();
+
+                                if(!place.URL.isEmpty()){
+                                    place.URL = document.get("URL").toString();
+                                }
                                 placeObjects.add(place);
                                 mAdapter.notifyDataSetChanged();
                             }
