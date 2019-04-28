@@ -32,7 +32,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     private static final String TAG = "HomePageActivity";
 
-    CardView attractionsCard, travelGuideCard, visitedCard, cameraCard;
+    CardView attractionsCard, travelGuideCard, timelineCard;
     ImageView settings;
 
     GoogleSignInClient googleSignInClient;
@@ -65,10 +65,9 @@ public class HomePageActivity extends AppCompatActivity {
     private void init(){
         attractionsCard = findViewById(R.id.attractionsCard);
         travelGuideCard = findViewById(R.id.travelGuideCard);
-        visitedCard = findViewById(R.id.visitedCard);
+        timelineCard = findViewById(R.id.timelineCard);
         settings = findViewById(R.id.settings);
         authentication = FirebaseAuth.getInstance();
-        cameraCard = findViewById(R.id.attractionsCardCamera);
     }
 
     private void setUpWidgets() {
@@ -88,18 +87,10 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        visitedCard.setOnClickListener(new View.OnClickListener() {
+        timelineCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent visitedIntent = new Intent(HomePageActivity.this, VisitedActivity.class);
-                startActivity(visitedIntent);
-            }
-        });
-
-        cameraCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent visitedIntent = new Intent(HomePageActivity.this, CameraActivity.class);
                 startActivity(visitedIntent);
             }
         });

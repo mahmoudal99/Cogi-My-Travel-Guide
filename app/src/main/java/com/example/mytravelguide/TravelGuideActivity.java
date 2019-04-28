@@ -109,37 +109,31 @@ public class TravelGuideActivity extends AppCompatActivity {
     private static final String encoding = "UTF-8";
 
     // Widgets
-    ImageView backArrow, addLandmark, landmarkImage, searchLandmarkButton;
-    TextView landmarkName, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkInformation;
-    ImageView nearByLocationButton, chooseImageButton, expandInformation, expandAboutImage, nearByImage;
-
-    CardView informationCard;
-    LinearLayout informationLayout;
+    private ImageView backArrow, addLandmark, landmarkImage, searchLandmarkButton;
+    private TextView landmarkName, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkInformation;
+    private ImageView nearByLocationButton, chooseImageButton, expandInformation, expandAboutImage, nearByImage;
+    private CardView informationCard;
+    private LinearLayout informationLayout;
 
     // Variables
     static String result = null;
-    Integer responseCode = null;
-    String responseMessage = "";
-    String searchString, landmarkNameString, imageURL, landmarkInformationResult, placeID;
+    private Integer responseCode = null;
+    private String responseMessage = "";
+    private String searchString, landmarkNameString, landmarkInformationResult, placeID;
 
-    ArrayList<String> results = new ArrayList<>();
-    RecyclerView listView;
-    Map<String, String> placeMap;
-    Map<String, Bitmap> placeImageMap;
+    private ArrayList<String> results = new ArrayList<>();
+    private RecyclerView listView;
+    private Map<String, String> placeMap;
 
     // Firebase
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
-    CloudFirestore cloudFirestore;
+    private CloudFirestore cloudFirestore;
 
     // Google
-    GooglePlacesApi googlePlacesApi;
-    GoogleSearch googleSearch;
-    Place place;
-
-    // Activity
-    VisitedActivity visitedActivity;
+    private GooglePlacesApi googlePlacesApi;
+    private Place place;
 
     boolean expandInfo = false;
     boolean expandAbout = false;
@@ -160,29 +154,32 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
     private void init() {
-        backArrow = findViewById(R.id.backArrow);
-        addLandmark = findViewById(R.id.addPlace);
-        visitedActivity = new VisitedActivity();
-        landmarkImage = findViewById(R.id.attractionImage);
-        nearByLocationButton = findViewById(R.id.location);
-        landmarkName = findViewById(R.id.attractionName);
-        googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
-        chooseImageButton = findViewById(R.id.gallery);
         context = TravelGuideActivity.this;
-        googleSearch = new GoogleSearch();
+
+        backArrow = findViewById(R.id.backArrow);
+        nearByLocationButton = findViewById(R.id.location);
+        addLandmark = findViewById(R.id.addPlace);
         searchLandmarkButton = findViewById(R.id.search);
+        chooseImageButton = findViewById(R.id.gallery);
+
+        landmarkImage = findViewById(R.id.attractionImage);
+        landmarkName = findViewById(R.id.attractionName);
         landmarkOpeningHours = findViewById(R.id.openingHours);
         landmarkRating = findViewById(R.id.rating);
         landmarkPrice = findViewById(R.id.price);
         landmarkInformationResult = "";
-        informationCard = findViewById(R.id.infoCard);
         landmarkInformation = findViewById(R.id.landmarkInformation);
+
+        googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
+
+        informationCard = findViewById(R.id.infoCard);
+
         informationLayout = findViewById(R.id.informationList);
         expandInformation = findViewById(R.id.expandInformation);
         expandAboutImage = findViewById(R.id.expandAbout);
         nearByImage = findViewById(R.id.expandNearByImage);
+
         placeMap = new HashMap<>();
-        placeImageMap = new HashMap<>();
     }
 
     private void setUpWidgets() {
@@ -338,7 +335,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         cloudFirestore.addPlace();
     }
 
-    public void callSearchEngine(String placeName) {
+    private void callSearchEngine(String placeName) {
 
         if (placeName != null) {
             searchString = placeName;
@@ -349,7 +346,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
-    public void getLandmark(Bitmap bitmap) {
+    private void getLandmark(Bitmap bitmap) {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
         detector.detectInImage(image)
@@ -377,16 +374,13 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
     private void openList(LinearLayout linearLayout) {
-        // Gets the layout params that will allow you to resize the layout
         ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         linearLayout.setLayoutParams(params);
     }
 
     private void closeList(LinearLayout linearLayout) {
-        // Gets the layout params that will allow you to resize the layout
         ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-        // Changes the height and width to the specified *pixels*
         params.height = 200;
         linearLayout.setLayoutParams(params);
     }

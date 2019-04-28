@@ -35,21 +35,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class VisitedActivity extends AppCompatActivity {
 
     private static final String TAG = "TimetableActivity";
     private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
 
-    ImageView backArrow;
-    RecyclerView listView;
+    // Widgets
+    private ImageView backArrow;
+    private RecyclerView listView;
 
-    // Variables
     Context context;
 
-    VisitedPlaceObject place1;
-    PlacesClient placesClient;
+    private VisitedPlaceObject landmark;
+    private PlacesClient placesClient;
 
+    private ArrayList<VisitedPlaceObject> landmarksList;
     private RecyclerView.Adapter mAdapter;
 
     // Firebase
@@ -63,9 +65,10 @@ public class VisitedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visited);
 
         init();
+        setUpListView();
         setUpWidgets();
         setUpFirebaseAuthentication();
-        addPlaceToTimeline();
+        setUpTimeline();
     }
 
     private void init() {
@@ -74,6 +77,10 @@ public class VisitedActivity extends AppCompatActivity {
         listView = findViewById(R.id.list);
         Places.initialize(context, API_KEY);
         placesClient = Places.createClient(context);
+        landmarksList = new ArrayList<>();
+        mAdapter = new TimelineAdapter(landmarksList, VisitedActivity.this);
+        listView = (RecyclerView) findViewById(R.id.list);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private void setUpWidgets() {
@@ -87,23 +94,14 @@ public class VisitedActivity extends AppCompatActivity {
 
     }
 
-    /// Time Line
-
-    public void addPlaceToTimeline() {
-
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        final ArrayList<VisitedPlaceObject> placeObjects = new ArrayList<>();
-
-        listView = (RecyclerView) findViewById(R.id.list);
-
-        mAdapter = new TimelineAdapter(placeObjects, VisitedActivity.this);
+    private void setUpListView() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
         listView.setAdapter(mAdapter);
+    }
 
-        // Read Data from Database
+    private void setUpTimeline() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
                 .get()
@@ -111,37 +109,14 @@ public class VisitedActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("GOT IT", document.getId() + " => " + document.getData());
-                                place1 = new VisitedPlaceObject();
-                                place1.placeName = document.get("Place Name").toString();
-                                place1.dateVisited = document.get("Date Visited").toString();
-                                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(VisitedActivity.this);
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
 
-                                // Specify the fields to return (in this example all fields are returned).
-                                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
+                                landmark = new VisitedPlaceObject();
+                                landmark.placeName = Objects.requireNonNull(document.get("Place Name")).toString();
+                                landmark.dateVisited = Objects.requireNonNull(document.get("Date Visited")).toString();
+                                String id = Objects.requireNonNull(document.get("ID")).toString();
 
-                                String id = document.get("ID").toString();
-
-
-                                // Construct a request object, passing the place ID and fields array.
-                                FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
-
-                                placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-                                    Place place = response.getPlace();
-                                    Log.i("BOXX", "Place found: " + place.getName());
-                                    place1.photoMetadata = place.getPhotoMetadatas().get(0);
-                                    placeObjects.add(place1);
-                                    mAdapter.notifyDataSetChanged();
-
-                                }).addOnFailureListener((exception) -> {
-                                    if (exception instanceof ApiException) {
-                                        ApiException apiException = (ApiException) exception;
-                                        // Handle error with given status code.
-                                        Log.e("BOXX", "Place not found: " + exception.getMessage());
-                                    }
-                                });
-
+                                getLandmarkImage(id);
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -151,6 +126,22 @@ public class VisitedActivity extends AppCompatActivity {
 
     }
 
+    private void getLandmarkImage(String id) {
+
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
+        FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
+        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+            Place place = response.getPlace();
+            landmark.photoMetadata = Objects.requireNonNull(place.getPhotoMetadatas()).get(0);
+            landmarksList.add(landmark);
+            mAdapter.notifyDataSetChanged();
+
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+            }
+        });
+    }
 
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {

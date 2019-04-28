@@ -20,9 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".CameraActivity">
-
-        </activity>
         <activity android:name=".Attractions.ContinentAttractionsActivity" />
         <activity android:name=".VisitedActivity" />
         <activity android:name=".TravelGuideActivity" />
