@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.example.mytravelguide.Attractions.ContinentAttractionsActivity;
 import com.example.mytravelguide.Models.AttractionObject;
 import com.example.mytravelguide.Models.VisitedPlaceObject;
+import com.example.mytravelguide.Utils.CloudFirestore;
 import com.example.mytravelguide.Utils.GooglePlacesApi;
 import com.example.mytravelguide.Utils.GoogleSearch;
 import com.example.mytravelguide.Utils.ImagePicker;
@@ -130,6 +131,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
+    CloudFirestore cloudFirestore;
 
     // Google
     GooglePlacesApi googlePlacesApi;
@@ -331,53 +333,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         placeMap.put("Place Name", landmarkNameString);
         placeMap.put("Date Visited", "March 2018");
 
-
-        // Access a Cloud Firestore instance from your Activity
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Add a new document with a generated ID
-        db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces").add(placeMap)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: ");
-                        addImage();
-                    }
-                });
-
-
-    }
-
-    private void addImage() {
-        // Access a Cloud Firestore instance from your Activity
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("GOT IT", document.getId() + " => " + document.getData());
-
-                                String name = document.get("Place Name").toString();
-                                if (name.equals(landmarkNameString)) {
-
-                                    // Add a new document with a generated ID
-                                    db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces").document(document.getId()).collection("Place Image").add(placeImageMap)
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                    Log.d(TAG, "DocumentSnapshot added with ID: ");
-                                                }
-                                            });
-                                }
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+        cloudFirestore = new CloudFirestore(placeMap, placeImageMap, currentUser);
     }
 
     public void callSearchEngine(String placeName) {
