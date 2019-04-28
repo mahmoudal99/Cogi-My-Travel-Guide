@@ -14,20 +14,32 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.mytravelguide.Models.VisitedPlaceObject;
+import com.example.mytravelguide.Utils.GooglePlacesApi;
 import com.example.mytravelguide.Utils.TimelineAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.errors.ApiException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class VisitedActivity extends AppCompatActivity {
 
     private static final String TAG = "TimetableActivity";
+    private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
 
     ImageView backArrow;
     RecyclerView listView;
@@ -35,7 +47,8 @@ public class VisitedActivity extends AppCompatActivity {
     // Variables
     Context context;
 
-    VisitedPlaceObject place;
+    VisitedPlaceObject place1;
+    PlacesClient placesClient;
 
     private RecyclerView.Adapter mAdapter;
 
@@ -59,6 +72,8 @@ public class VisitedActivity extends AppCompatActivity {
         backArrow = findViewById(R.id.backArrow);
         context = VisitedActivity.this;
         listView = findViewById(R.id.list);
+        Places.initialize(context, API_KEY);
+        placesClient = Places.createClient(context);
     }
 
     private void setUpWidgets() {
@@ -98,15 +113,35 @@ public class VisitedActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("GOT IT", document.getId() + " => " + document.getData());
-                                place = new VisitedPlaceObject();
-                                place.placeName = document.get("Place Name").toString();
-                                place.dateVisited = document.get("Date Visited").toString();
+                                place1 = new VisitedPlaceObject();
+                                place1.placeName = document.get("Place Name").toString();
+                                place1.dateVisited = document.get("Date Visited").toString();
+                                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(VisitedActivity.this);
 
-                                if(!place.URL.isEmpty()){
-                                    place.URL = document.get("URL").toString();
-                                }
-                                placeObjects.add(place);
-                                mAdapter.notifyDataSetChanged();
+                                // Specify the fields to return (in this example all fields are returned).
+                                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
+
+                                String id = document.get("ID").toString();
+
+
+                                // Construct a request object, passing the place ID and fields array.
+                                FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
+
+                                placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                                    Place place = response.getPlace();
+                                    Log.i("BOXX", "Place found: " + place.getName());
+                                    place1.photoMetadata = place.getPhotoMetadatas().get(0);
+                                    placeObjects.add(place1);
+                                    mAdapter.notifyDataSetChanged();
+
+                                }).addOnFailureListener((exception) -> {
+                                    if (exception instanceof ApiException) {
+                                        ApiException apiException = (ApiException) exception;
+                                        // Handle error with given status code.
+                                        Log.e("BOXX", "Place not found: " + exception.getMessage());
+                                    }
+                                });
+
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -115,6 +150,7 @@ public class VisitedActivity extends AppCompatActivity {
                 });
 
     }
+
 
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {

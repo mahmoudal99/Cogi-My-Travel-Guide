@@ -20,6 +20,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
 
     private ArrayList<VisitedPlaceObject> places;
     Context context;
+    GooglePlacesApi googlePlacesApi;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView placeName, dateVisited;
@@ -52,9 +53,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
         holder.dateVisited.setText(placeModel.dateVisited);
-        if(!placeModel.URL.isEmpty()){
-            Glide.with(context).load(placeModel.URL).into(holder.placeImage);
-        }
+        googlePlacesApi = new GooglePlacesApi(context);
+        googlePlacesApi.setPhoto(placeModel.photoMetadata, holder.placeImage);
     }
 
     @Override

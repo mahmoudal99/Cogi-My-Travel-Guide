@@ -1,5 +1,6 @@
 package com.example.mytravelguide.Utils;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,12 +19,11 @@ import java.util.Map;
 public class CloudFirestore {
 
     Map<String, String> placeMap;
-    Map<String, PhotoMetadata> placeImageMap;
+    Map<String, Bitmap> placeImageMap;
     private FirebaseUser currentUser;
 
-    public CloudFirestore(Map<String, String> placeMap, Map<String, PhotoMetadata> placeImageMap, FirebaseUser currentUser) {
+    public CloudFirestore(Map<String, String> placeMap, FirebaseUser currentUser) {
         this.placeMap = placeMap;
-        this.placeImageMap = placeImageMap;
         this.currentUser = currentUser;
     }
 
@@ -36,7 +36,7 @@ public class CloudFirestore {
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        addImage();
+
                     }
                 });
     }

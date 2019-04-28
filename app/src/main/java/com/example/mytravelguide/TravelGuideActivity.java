@@ -120,12 +120,12 @@ public class TravelGuideActivity extends AppCompatActivity {
     static String result = null;
     Integer responseCode = null;
     String responseMessage = "";
-    String searchString, landmarkNameString, imageURL, landmarkInformationResult;
+    String searchString, landmarkNameString, imageURL, landmarkInformationResult, placeID;
 
     ArrayList<String> results = new ArrayList<>();
     RecyclerView listView;
     Map<String, String> placeMap;
-    Map<String, PhotoMetadata> placeImageMap;
+    Map<String, Bitmap> placeImageMap;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -332,8 +332,10 @@ public class TravelGuideActivity extends AppCompatActivity {
         // Create a new user with a first and last name
         placeMap.put("Place Name", landmarkNameString);
         placeMap.put("Date Visited", "March 2018");
+        placeMap.put("ID", placeID);
 
-        cloudFirestore = new CloudFirestore(placeMap, placeImageMap, currentUser);
+        cloudFirestore = new CloudFirestore(placeMap, currentUser);
+        cloudFirestore.addPlace();
     }
 
     public void callSearchEngine(String placeName) {
@@ -403,13 +405,11 @@ public class TravelGuideActivity extends AppCompatActivity {
                     landmarkNameString = place.getName();
                     landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
                     landmarkRating.setText(String.valueOf(place.getRating()));
+                    placeID = place.getId();
 
                     if (place.getPriceLevel() != null) {
                         landmarkPrice.setText(place.getPriceLevel());
                     }
-
-                    placeImageMap.put(place.getName(), place.getPhotoMetadatas().get(0));
-
 
                 } catch (Exception e) {
                     e.printStackTrace();

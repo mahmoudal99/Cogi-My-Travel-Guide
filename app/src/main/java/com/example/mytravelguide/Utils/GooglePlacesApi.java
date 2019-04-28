@@ -21,6 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mytravelguide.CameraActivity;
 import com.example.mytravelguide.Models.AttractionObject;
 import com.example.mytravelguide.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.LocalTime;
 import com.google.android.libraries.places.api.model.OpeningHours;
@@ -31,6 +34,7 @@ import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -56,6 +60,10 @@ public class GooglePlacesApi {
     PlacesClient placesClient;
     private Context context;
     Place place;
+
+    Bitmap bitmap;
+
+    PhotoMetadata photoMetadata;
 
     public GooglePlacesApi(Context context) {
         this.context = context;
@@ -103,7 +111,7 @@ public class GooglePlacesApi {
                 .build();
 
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-            Bitmap bitmap = fetchPhotoResponse.getBitmap();
+            bitmap = fetchPhotoResponse.getBitmap();
             imageView.setImageBitmap(bitmap);
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
@@ -112,6 +120,7 @@ public class GooglePlacesApi {
                 Log.e("MAHMOUD", "Place not found: " + exception.getMessage());
             }
         });
+
     }
 
     public String placeOpeningHours(Place place) {
