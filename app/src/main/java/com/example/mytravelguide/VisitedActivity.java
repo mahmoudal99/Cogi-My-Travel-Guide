@@ -50,6 +50,7 @@ public class VisitedActivity extends AppCompatActivity {
 
     private VisitedPlaceObject landmark;
     private PlacesClient placesClient;
+    PhotoMetadata photoMetadata;
 
     private ArrayList<VisitedPlaceObject> landmarksList;
     private RecyclerView.Adapter mAdapter;
@@ -111,36 +112,35 @@ public class VisitedActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
 
-                                landmark = new VisitedPlaceObject();
-                                landmark.placeName = Objects.requireNonNull(document.get("Place Name")).toString();
-                                landmark.dateVisited = Objects.requireNonNull(document.get("Date Visited")).toString();
-                                String id = Objects.requireNonNull(document.get("ID")).toString();
+                                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
 
-                                getLandmarkImage(id);
+                                String id = Objects.requireNonNull(document.get("ID")).toString();
+                                FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
+                                placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                                    Place place = response.getPlace();
+                                    callAdapter(document.get("Place Name").toString(), document.get("Date Visited").toString(), place.getPhotoMetadatas().get(0));
+                                }).addOnFailureListener((exception) -> {
+                                    if (exception instanceof ApiException) {
+                                        ApiException apiException = (ApiException) exception;
+                                    }
+                                });
+
+
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
                 });
-
     }
 
-    private void getLandmarkImage(String id) {
-
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
-        FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
-        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-            Place place = response.getPlace();
-            landmark.photoMetadata = Objects.requireNonNull(place.getPhotoMetadatas()).get(0);
-            landmarksList.add(landmark);
-            mAdapter.notifyDataSetChanged();
-
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                ApiException apiException = (ApiException) exception;
-            }
-        });
+    private void callAdapter(String name, String dateVisited, PhotoMetadata photoMetadata){
+        landmark = new VisitedPlaceObject();
+        landmark.placeName = name;
+        landmark.dateVisited = dateVisited;
+        landmark.photoMetadata = photoMetadata;
+        landmarksList.add(landmark);
+        mAdapter.notifyDataSetChanged();
     }
 
     //---------- Firebase ----------//

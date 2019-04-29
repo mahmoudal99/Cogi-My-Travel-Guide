@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -138,8 +139,13 @@ public class TravelGuideActivity extends AppCompatActivity {
     boolean expandInfo = false;
     boolean expandAbout = false;
     boolean expandNearBy = false;
+    boolean landmarkAdded = false;
 
     Context context;
+
+    // Shared Preference
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +161,10 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void init() {
         context = TravelGuideActivity.this;
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        editor = pref.edit();
+        editor.apply();
 
         backArrow = findViewById(R.id.backArrow);
         nearByLocationButton = findViewById(R.id.location);
@@ -206,10 +216,11 @@ public class TravelGuideActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (landmarkNameString != null) {
-                    addVisitedPlace();
+                    checkExistingPlaces(landmarkNameString);
                 } else {
                     Toast.makeText(TravelGuideActivity.this, "No Attraction Selected", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
@@ -284,6 +295,36 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     }
 
+    private void checkExistingPlaces(String name) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                if (document.get("Place Name").toString().equals(name)) {
+                                    setAddedTrue();
+                                    Toast.makeText(TravelGuideActivity.this, "Landmark Already Added To Timeline", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            }
+                        }
+
+                        addVisitedPlace();
+                    }
+                });
+    }
+
+    public void setAddedTrue() {
+        landmarkAdded = true;
+    }
+
+    public void setAddedFalse() {
+        landmarkAdded = false;
+    }
+
     private void setUpLinearLayout() {
         LinearLayout infoLayout = findViewById(R.id.informationList);
         closeList(infoLayout);
@@ -326,6 +367,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
     private void addVisitedPlace() {
+
         // Create a new user with a first and last name
         placeMap.put("Place Name", landmarkNameString);
         placeMap.put("Date Visited", "March 2018");
@@ -333,6 +375,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         cloudFirestore = new CloudFirestore(placeMap, currentUser);
         cloudFirestore.addPlace();
+        setAddedTrue();
     }
 
     private void callSearchEngine(String placeName) {
