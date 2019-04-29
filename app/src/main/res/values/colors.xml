@@ -22,4 +22,8 @@
     // Greens
     <color name="Green">#00C853</color>
 
+    // Greys
+    <color name="SettingsBackgroundGrey">#efeff4</color>
+    <color name="identifier_grey">#dddddd</color>
+
 </resources>
