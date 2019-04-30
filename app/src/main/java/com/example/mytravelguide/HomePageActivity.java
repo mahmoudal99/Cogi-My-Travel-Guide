@@ -98,10 +98,6 @@ public class HomePageActivity extends AppCompatActivity {
         settings.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-//                authentication.signOut();
-//                googleSignInClient.signOut();
-//                startActivity(new Intent(HomePageActivity.this, SignInActivity.class));
-
                 startActivity(new Intent(HomePageActivity.this, SettingsActivity.class));
             }
         });

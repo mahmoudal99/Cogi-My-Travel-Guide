@@ -52,6 +52,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/accountLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -98,6 +99,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/locationLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -132,6 +134,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/notificationLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -166,6 +169,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/languageLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -211,6 +215,7 @@
             android:textSize="@dimen/_17sp" />
 
         <LinearLayout
+            android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/White"
@@ -269,6 +274,7 @@
             android:textSize="@dimen/_17sp" />
 
         <LinearLayout
+            android:id="@+id/logoutLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/White"

@@ -136,9 +136,9 @@ public class TravelGuideActivity extends AppCompatActivity {
     private GooglePlacesApi googlePlacesApi;
     private Place place;
 
-    boolean expandInfo = false;
-    boolean expandAbout = false;
-    boolean expandNearBy = false;
+    boolean expandInfo = true;
+    boolean expandAbout = true;
+    boolean expandNearBy = true;
     boolean landmarkAdded = false;
 
     Context context;
@@ -201,7 +201,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             }
         });
 
-        landmarkNameString = "Attraction";
+        landmarkNameString = "Landmark";
         landmarkNameString = getIntent().getStringExtra("AttractionName");
         landmarkInformation.setText(landmarkInformationResult);
 
@@ -218,7 +218,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                 if (landmarkNameString != null) {
                     checkExistingPlaces(landmarkNameString);
                 } else {
-                    Toast.makeText(TravelGuideActivity.this, "No Attraction Selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
                 }
 
             }
