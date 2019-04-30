@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    // Sign In Layout Dimens
-    <dimen name="EditTextMargin">40px</dimen>
-    <dimen name="EditTextHeight">180px</dimen>
+    //--------------- Sign In Page Dimens ---------------//
 
-    // Image Dimens
+    // Sign In Edit Text Layout Dimens
+    <dimen name="EditTextMargin">10dp</dimen>
+    <dimen name="EditTextHeight">50dp</dimen>
+
+    // Create Account Layout Dimens
+    <dimen name="createAccountTop">120dp</dimen>
+    <dimen name="createAccontTvHeight">55dp</dimen>
+    <dimen name="createAccontTvWidth">240dp</dimen>
+
+    // Log In Button Dimens
+    <dimen name="logInButtonWidth">140dp</dimen>
+
+    // Logo Image Dimens
     <dimen name="LogoWidth">250dp</dimen>
     <dimen name="LogoHeight">210dp</dimen>
+
+    //--------------- Home Page Page Dimens ---------------//
+
+    // Home Page Images Dimens
+    <dimen name="travelGuidePageImage">120dp</dimen>
+    <dimen name="attractionsPageImage">140dp</dimen>
+    <dimen name="timelinePageImageHeight">140dp</dimen>
+
+    // Home Page Dimens
+    <dimen name="settingsIcon">32dp</dimen>
+    <dimen name="homeRelativeLayoutHeight">250dp</dimen>
+    <dimen name="cardViewHeight">200dp</dimen>
+
+    //--------------- Trave Guide Page Dimens ---------------//
+    <dimen name="landmarkImageHeight">260dp</dimen>
+    <dimen name="galleryImageDimens">55dp</dimen>
+    <dimen name="locationImageDimens">40dp</dimen>
+    <dimen name="searchImageDimens">35dp</dimen>
+    <dimen name="dropDownButtonDimens">30dp</dimen>
+
+
+    //--------------- Tab Dimens ---------------//
+    <dimen name="backArrowDimens">30dp</dimen>
 
     // Text Size
     <dimen name="_15sp">15sp</dimen>
@@ -18,6 +51,12 @@
     <dimen name="_25sp">25sp</dimen>
     <dimen name="_28sp">28sp</dimen>
     <dimen name="_30sp">30sp</dimen>
+
+    // Margin Values
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_25dp">25dp</dimen>
+    <dimen name="margin_30dp">30dp</dimen>
 
     // Logo Splash Position
     <dimen name="LogoMarginTop">600px</dimen>

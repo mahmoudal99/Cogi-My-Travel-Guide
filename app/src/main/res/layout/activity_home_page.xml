@@ -14,32 +14,32 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="@dimen/homeRelativeLayoutHeight"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/home_bg_round">
 
             <ImageView
                 android:id="@+id/settings"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/settingsIcon"
+                android:layout_height="@dimen/settingsIcon"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="@dimen/margin_10dp"
+                android:layout_marginLeft="@dimen/margin_10dp"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:layout_marginEnd="@dimen/margin_10dp"
+                android:layout_marginRight="@dimen/margin_10dp"
+                android:layout_marginBottom="@dimen/margin_10dp"
                 android:src="@drawable/settings" />
 
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="180dp"
+                android:layout_width="@dimen/LogoWidth"
+                android:layout_height="@dimen/LogoHeight"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:contentDescription="@string/logo"
                 android:src="@drawable/logo_white" />
 
@@ -48,7 +48,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
@@ -62,9 +62,9 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/travelGuideCard"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="@dimen/cardViewHeight"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp"
+                    android:layout_margin="@dimen/margin_10dp"
                     android:background="@drawable/cardview_bg"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="10dp">
@@ -77,11 +77,11 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
+                            android:layout_width="@dimen/travelGuidePageImage"
+                            android:layout_height="@dimen/travelGuidePageImage"
                             android:layout_gravity="center|bottom"
-                            android:layout_marginTop="25dp"
-                            android:layout_marginBottom="25dp"
+                            android:layout_marginTop="@dimen/margin_25dp"
+                            android:layout_marginBottom="@dimen/margin_25dp"
                             android:src="@drawable/options" />
 
                         <TextView
@@ -110,7 +110,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/attractionsCard"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="@dimen/cardViewHeight"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
                     android:background="@drawable/cardview_bg"
@@ -125,11 +125,11 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
+                            android:layout_width="@dimen/attractionsPageImage"
+                            android:layout_height="@dimen/attractionsPageImage"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="30dp"
-                            android:src="@drawable/pyramids"/>
+                            android:layout_marginBottom="@dimen/margin_30dp"
+                            android:src="@drawable/pyramids" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -152,11 +152,11 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/timelineCard"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="@dimen/cardViewHeight"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@drawable/cardview_bg_white"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="@dimen/margin_10dp"
             app:cardElevation="10dp">
 
             <LinearLayout
@@ -168,9 +168,9 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="@dimen/timelinePageImageHeight"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
                     android:contentDescription="@string/planet"
                     android:src="@drawable/timeline" />
 
