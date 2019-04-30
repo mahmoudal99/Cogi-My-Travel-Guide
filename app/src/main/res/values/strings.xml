@@ -46,4 +46,17 @@
     <string name="my_location">My Location</string>
     <string name="Attraction">Attraction</string>
 
+    <string name="near_by">Near By Location</string>
+    <string name="information">Information</string>
+    <string name="opening_hours">Opening Hours:</string>
+    <string name="price">Price:</string>
+    <string name="rating">Rating:</string>
+    <string name="about">About</string>
+    <string name="language">Language</string>
+    <string name="password_capital">PASSWORD</string>
+    <string name="password">Password</string>
+    <string name="log_out_capital">LOG OUT</string>
+    <string name="log_out">Log Out</string>
+    <string name="timeline">Timeline</string>
+
 </resources>

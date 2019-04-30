@@ -33,7 +33,7 @@
             android:fontFamily="@font/rancho"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Attraction"
+            android:text="@string/Attraction"
             android:textColor="@color/black"
             android:textSize="@dimen/_20sp"
             android:textStyle="bold"

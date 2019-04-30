@@ -182,7 +182,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
                     android:paddingBottom="10dp"
-                    android:text="Language"
+                    android:text="@string/language"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20sp" />
 
@@ -211,7 +211,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:text="PASSWORD"
+            android:text="@string/password_capital"
             android:textSize="@dimen/_17sp" />
 
         <LinearLayout
@@ -234,7 +234,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="50dp"
                     android:paddingBottom="10dp"
-                    android:text="Password"
+                    android:text="@string/password"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20sp" />
 
@@ -270,7 +270,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:text="LOG OUT"
+            android:text="@string/log_out_capital"
             android:textSize="@dimen/_17sp" />
 
         <LinearLayout
@@ -293,7 +293,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="70dp"
                     android:paddingBottom="10dp"
-                    android:text="Log Out"
+                    android:text="@string/log_out"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20sp" />
 

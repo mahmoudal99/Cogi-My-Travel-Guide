@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_horizontal"
-                android:text="Travel Guide"
+                android:text="@string/travel_guide"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_28sp"
                 app:fontFamily="@font/rancho" />
@@ -44,9 +44,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="30dp"
-            app:cardElevation="10dp"
             android:background="@drawable/cardview_bg_white"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                                 android:layout_weight="6"
                                 android:fontFamily="@font/rancho"
                                 android:padding="10dp"
-                                android:text="Near By Locations"
+                                android:text="@string/near_by"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp" />
 
@@ -205,7 +205,7 @@
                                 android:layout_weight="6"
                                 android:fontFamily="@font/rancho"
                                 android:padding="10dp"
-                                android:text="Information"
+                                android:text="@string/information"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp" />
 
@@ -230,7 +230,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/rancho"
                                 android:padding="10dp"
-                                android:text="Opening Hours: "
+                                android:text="@string/opening_hours"
                                 android:textColor="@color/Red"
                                 android:textSize="@dimen/_20sp" />
 
@@ -258,7 +258,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/rancho"
                                 android:padding="10dp"
-                                android:text="Price: "
+                                android:text="@string/price"
                                 android:textColor="@color/LightBlue"
                                 android:textSize="@dimen/_20sp" />
 
@@ -284,7 +284,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/rancho"
                                 android:padding="10dp"
-                                android:text="Rating:"
+                                android:text="@string/rating"
                                 android:textColor="@color/Green"
                                 android:textSize="@dimen/_20sp" />
 
@@ -331,13 +331,13 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="6"
                                 android:fontFamily="@font/rancho"
                                 android:paddingLeft="5dp"
                                 android:paddingTop="5dp"
-                                android:text="About"
+                                android:text="@string/about"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp" />
 

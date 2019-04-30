@@ -179,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
-                    android:text="Timeline"
+                    android:text="@string/timeline"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_24sp"
                     app:fontFamily="@font/rancho" />
