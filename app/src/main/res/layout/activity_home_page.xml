@@ -80,7 +80,7 @@
                             android:layout_width="@dimen/travelGuidePageImage"
                             android:layout_height="@dimen/travelGuidePageImage"
                             android:layout_gravity="center|bottom"
-                            android:layout_marginTop="@dimen/margin_25dp"
+                            android:layout_marginTop="@dimen/image_margin_bottom_20dp"
                             android:layout_marginBottom="@dimen/margin_25dp"
                             android:src="@drawable/options" />
 
@@ -128,7 +128,7 @@
                             android:layout_width="@dimen/attractionsPageImage"
                             android:layout_height="@dimen/attractionsPageImage"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/margin_30dp"
+                            android:layout_marginBottom="@dimen/image_margin_bottom_30dp"
                             android:src="@drawable/pyramids" />
 
                         <TextView

@@ -229,7 +229,10 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void openHomePage() {
-        startActivity(new Intent(SignInActivity.this, HomePageActivity.class));
+        intent = new Intent(SignInActivity.this, HomePageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     // Authentication Credentials

@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("firstTime", true);
             editor.commit();
         }else {
-            startActivity(new Intent(MainActivity.this, SignInActivity.class));
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
     }

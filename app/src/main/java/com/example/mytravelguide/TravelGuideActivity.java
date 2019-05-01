@@ -193,12 +193,9 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
     private void setUpWidgets() {
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backIntent = new Intent(TravelGuideActivity.this, HomePageActivity.class);
-                startActivity(backIntent);
-            }
+        backArrow.setOnClickListener(v -> {
+            Intent backIntent = new Intent(TravelGuideActivity.this, HomePageActivity.class);
+            startActivity(backIntent);
         });
 
         landmarkNameString = "Landmark";
@@ -211,85 +208,58 @@ public class TravelGuideActivity extends AppCompatActivity {
             landmarkName.setText(getString(R.string.Attraction));
         }
 
-        addLandmark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        addLandmark.setOnClickListener(v -> {
 
-                if (landmarkNameString != null) {
-                    checkExistingPlaces(landmarkNameString);
-                } else {
-                    Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
-                }
+            if (landmarkNameString != null) {
+                checkExistingPlaces(landmarkNameString);
+            } else {
+                Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
+            }
 
+        });
+
+        nearByLocationButton.setOnClickListener(v -> loadNearByLocations());
+
+        chooseImageButton.setOnClickListener(v -> openGallery());
+
+        searchLandmarkButton.setOnClickListener(v -> placePicker());
+
+        expandInformation.setOnClickListener(v -> {
+
+            if (expandInfo) {
+                LinearLayout layout = findViewById(R.id.informationList);
+                openList(layout);
+                expandInfo = false;
+            } else if (!expandInfo) {
+                LinearLayout layout = findViewById(R.id.informationList);
+                closeList(layout);
+                expandInfo = true;
             }
         });
 
-        nearByLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadNearByLocations();
+        expandAboutImage.setOnClickListener(v -> {
+
+            if (expandAbout) {
+                LinearLayout layout = findViewById(R.id.aboutList);
+                openList(layout);
+                expandAbout = false;
+            } else if (!expandAbout) {
+                LinearLayout layout = findViewById(R.id.aboutList);
+                closeList(layout);
+                expandAbout = true;
             }
         });
 
-        chooseImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
+        nearByImage.setOnClickListener(v -> {
 
-        searchLandmarkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                placePicker();
-            }
-        });
-
-        expandInformation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (expandInfo) {
-                    LinearLayout layout = findViewById(R.id.informationList);
-                    openList(layout);
-                    expandInfo = false;
-                } else if (!expandInfo) {
-                    LinearLayout layout = findViewById(R.id.informationList);
-                    closeList(layout);
-                    expandInfo = true;
-                }
-            }
-        });
-
-        expandAboutImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (expandAbout) {
-                    LinearLayout layout = findViewById(R.id.aboutList);
-                    openList(layout);
-                    expandAbout = false;
-                } else if (!expandAbout) {
-                    LinearLayout layout = findViewById(R.id.aboutList);
-                    closeList(layout);
-                    expandAbout = true;
-                }
-            }
-        });
-
-        nearByImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (expandNearBy) {
-                    LinearLayout layout = findViewById(R.id.nearByLocationsList);
-                    openList(layout);
-                    expandNearBy = false;
-                } else if (!expandNearBy) {
-                    LinearLayout layout = findViewById(R.id.nearByLocationsList);
-                    closeList(layout);
-                    expandNearBy = true;
-                }
+            if (expandNearBy) {
+                LinearLayout layout = findViewById(R.id.nearByLocationsList);
+                openList(layout);
+                expandNearBy = false;
+            } else if (!expandNearBy) {
+                LinearLayout layout = findViewById(R.id.nearByLocationsList);
+                closeList(layout);
+                expandNearBy = true;
             }
         });
 
@@ -299,30 +269,23 @@ public class TravelGuideActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                if (document.get("Place Name").toString().equals(name)) {
-                                    setAddedTrue();
-                                    Toast.makeText(TravelGuideActivity.this, "Landmark Already Added To Timeline", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            if (document.get("Place Name").toString().equals(name)) {
+                                setAddedTrue();
+                                Toast.makeText(TravelGuideActivity.this, "Landmark Already Added To Timeline", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                         }
-
-                        addVisitedPlace();
                     }
+
+                    addVisitedPlace();
                 });
     }
 
     public void setAddedTrue() {
         landmarkAdded = true;
-    }
-
-    public void setAddedFalse() {
-        landmarkAdded = false;
     }
 
     private void setUpLinearLayout() {
@@ -354,7 +317,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     private void loadNearByLocations() {
         ArrayList<AttractionObject> nearByLocationsArray = new ArrayList<>();
 
-        listView = (RecyclerView) findViewById(R.id.list);
+        listView = findViewById(R.id.list);
         listView.setVisibility(View.VISIBLE);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(nearByLocationsArray, TravelGuideActivity.this);
@@ -382,10 +345,8 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         if (placeName != null) {
             searchString = placeName;
-            // start AsyncTask
             TravelGuideActivity.WikipediaAsyncTask searchTask = new TravelGuideActivity.WikipediaAsyncTask();
             searchTask.execute(placeName);
-
         }
     }
 
@@ -393,13 +354,10 @@ public class TravelGuideActivity extends AppCompatActivity {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
         detector.detectInImage(image)
-                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionCloudLandmark>>() {
-                    @Override
-                    public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
-                        Log.d("VISION", firebaseVisionCloudLandmarks.get(0).getLandmark());
-                        landmarkName.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
-                        callSearchEngine(firebaseVisionCloudLandmarks.get(0).getLandmark());
-                    }
+                .addOnSuccessListener(firebaseVisionCloudLandmarks -> {
+                    Log.d("VISION", firebaseVisionCloudLandmarks.get(0).getLandmark());
+                    landmarkName.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
+                    callSearchEngine(firebaseVisionCloudLandmarks.get(0).getLandmark());
                 });
     }
 
@@ -412,7 +370,6 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
@@ -424,7 +381,8 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void closeList(LinearLayout linearLayout) {
         ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-        params.height = 200;
+        float height = getResources().getDimension(R.dimen.list_height);
+        params.height = (int) height;
         linearLayout.setLayoutParams(params);
     }
 
@@ -516,7 +474,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                 Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
                 String wikipediaURL = google.getElementsByTag("cite").get(0).text();
                 String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
-                        + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
+                        + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1), encoding);
 
                 HttpURLConnection httpcon = (HttpURLConnection) new URL(wikipediaApiJSON).openConnection();
                 httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
@@ -535,7 +493,8 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            String wikipediaResult = result.substring(0, result.length() - 5);
+            result = result.substring(0, result.length() - 5);
+            String wikipediaResult = result.replaceAll("[-+.^:,;()]", "");
             landmarkInformation.setText(wikipediaResult);
         }
     }

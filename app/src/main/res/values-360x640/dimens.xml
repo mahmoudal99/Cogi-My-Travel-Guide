@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    //--------------- Sign In Page Dimens ---------------//
+
+    // Sign In Edit Text Layout Dimens
+    <dimen name="EditTextMargin">10dp</dimen>
+    <dimen name="EditTextHeight">50dp</dimen>
+
+    // Create Account Layout Dimens
+    <dimen name="createAccountTop">50dp</dimen>
+    <dimen name="createAccontTvHeight">55dp</dimen>
+    <dimen name="createAccontTvWidth">240dp</dimen>
+
+    // Log In Button Dimens
+    <dimen name="logInButtonWidth">140dp</dimen>
+
+    // Logo Image Dimens
+    <dimen name="LogoWidth">200dp</dimen>
+    <dimen name="LogoHeight">170dp</dimen>
+
+    //--------------- Home Page Page Dimens ---------------//
+
+    // Home Page Images Dimens
+    <dimen name="travelGuidePageImage">100dp</dimen>
+    <dimen name="attractionsPageImage">110dp</dimen>
+    <dimen name="timelinePageImageHeight">110dp</dimen>
+
+    <dimen name="image_margin_bottom_10dp">10dp</dimen>
+    <dimen name="image_margin_bottom_20dp">5dp</dimen>
+    <dimen name="image_margin_bottom_25dp">25dp</dimen>
+    <dimen name="image_margin_bottom_30dp">15dp</dimen>
+
+    // Home Page Dimens
+    <dimen name="settingsIcon">24dp</dimen>
+    <dimen name="homeRelativeLayoutHeight">220dp</dimen>
+    <dimen name="cardViewHeight">150dp</dimen>
+
+    //--------------- Trave Guide Page Dimens ---------------//
+    <dimen name="landmarkImageHeight">230dp</dimen>
+    <dimen name="galleryImageDimens">45dp</dimen>
+    <dimen name="locationImageDimens">30dp</dimen>
+    <dimen name="searchImageDimens">25dp</dimen>
+    <dimen name="dropDownButtonDimens">18dp</dimen>
+
+    <dimen name="cardview_margin_top_10dp">10dp</dimen>
+    <dimen name="cardview_margin_top_20dp">10dp</dimen>
+    <dimen name="cardview_margin_top_25dp">25dp</dimen>
+    <dimen name="cardview_margin_top_30dp">25dp</dimen>
+
+    <dimen name="information_padding_10dp">7dp</dimen>
+
+    <dimen name="list_height">45dp</dimen>
+
+    //--------------- Tab Dimens ---------------//
+    <dimen name="backArrowDimens">25dp</dimen>
+
+    // Text Size
+    <dimen name="_15sp">15sp</dimen>
+    <dimen name="_17sp">17sp</dimen>
+    <dimen name="_18sp">16sp</dimen>
+    <dimen name="_20sp">17sp</dimen>
+    <dimen name="_24sp">20sp</dimen>
+    <dimen name="_25sp">25sp</dimen>
+    <dimen name="_28sp">28sp</dimen>
+    <dimen name="_30sp">30sp</dimen>
+
+    // Margin Values
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_20dp">15dp</dimen>
+    <dimen name="margin_25dp">20dp</dimen>
+    <dimen name="margin_30dp">25dp</dimen>
+
+    // Logo Splash Position
+    <dimen name="LogoMarginTop">600px</dimen>
+</resources>

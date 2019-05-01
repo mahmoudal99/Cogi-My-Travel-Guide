@@ -26,11 +26,6 @@
     <dimen name="attractionsPageImage">140dp</dimen>
     <dimen name="timelinePageImageHeight">140dp</dimen>
 
-    <dimen name="image_margin_bottom_10dp">10dp</dimen>
-    <dimen name="image_margin_bottom_20dp">20dp</dimen>
-    <dimen name="image_margin_bottom_25dp">25dp</dimen>
-    <dimen name="image_margin_bottom_30dp">30dp</dimen>
-
     // Home Page Dimens
     <dimen name="settingsIcon">32dp</dimen>
     <dimen name="homeRelativeLayoutHeight">250dp</dimen>
@@ -43,15 +38,6 @@
     <dimen name="searchImageDimens">35dp</dimen>
     <dimen name="dropDownButtonDimens">30dp</dimen>
 
-
-    <dimen name="cardview_margin_top_10dp">10dp</dimen>
-    <dimen name="cardview_margin_top_20dp">20dp</dimen>
-    <dimen name="cardview_margin_top_25dp">25dp</dimen>
-    <dimen name="cardview_margin_top_30dp">30dp</dimen>
-
-    <dimen name="information_padding_10dp">10dp</dimen>
-
-    <dimen name="list_height">200dp</dimen>
 
     //--------------- Tab Dimens ---------------//
     <dimen name="backArrowDimens">30dp</dimen>

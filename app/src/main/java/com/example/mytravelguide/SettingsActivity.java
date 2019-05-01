@@ -72,7 +72,9 @@ public class SettingsActivity extends AppCompatActivity {
     private void logout(){
         authentication.signOut();
         googleSignInClient.signOut();
-        startActivity(new Intent(SettingsActivity.this, SignInActivity.class));
+        Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     //---------- Firebase ----------//
