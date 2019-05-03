@@ -114,7 +114,7 @@
                 android:gravity="center"
                 android:text="@string/CreateAccount"
                 android:textColor="@color/Grey"
-                android:textSize="@dimen/_17sp" />
+                android:textSize="@dimen/_18sp" />
 
             <View
                 android:id="@+id/divider"
@@ -133,7 +133,7 @@
                 android:gravity="center"
                 android:text="@string/ContactUs"
                 android:textColor="@color/Grey"
-                android:textSize="@dimen/_17sp" />
+                android:textSize="@dimen/_18sp" />
 
         </RelativeLayout>
 

@@ -26,12 +26,12 @@
                 android:layout_height="@dimen/settingsIcon"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginStart="@dimen/margin_10dp"
-                android:layout_marginLeft="@dimen/margin_10dp"
-                android:layout_marginTop="@dimen/margin_10dp"
-                android:layout_marginEnd="@dimen/margin_10dp"
-                android:layout_marginRight="@dimen/margin_10dp"
-                android:layout_marginBottom="@dimen/margin_10dp"
+                android:layout_marginStart="@dimen/settings_padding"
+                android:layout_marginLeft="@dimen/settings_padding"
+                android:layout_marginTop="@dimen/settings_padding"
+                android:layout_marginEnd="@dimen/settings_padding"
+                android:layout_marginRight="@dimen/settings_padding"
+                android:layout_marginBottom="@dimen/settings_padding"
                 android:src="@drawable/settings" />
 
             <ImageView
@@ -39,7 +39,7 @@
                 android:layout_height="@dimen/LogoHeight"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/logo_margin_top"
                 android:contentDescription="@string/logo"
                 android:src="@drawable/logo_white" />
 

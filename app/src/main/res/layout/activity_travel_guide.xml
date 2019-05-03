@@ -37,8 +37,8 @@
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/landmark_image_height"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:layout_marginTop="@dimen/margin_20dp"
@@ -336,8 +336,8 @@
                                 android:textSize="@dimen/_24sp" />
 
                             <ImageView
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
+                                android:layout_width="@dimen/microphone_dimens"
+                                android:layout_height="@dimen/microphone_dimens"
                                 android:layout_gravity="center"
                                 android:src="@drawable/microphone" />
 
@@ -359,7 +359,7 @@
                             android:padding="10dp"
                             android:text="@string/About"
                             android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/_15sp" />
 
                     </LinearLayout>
 
