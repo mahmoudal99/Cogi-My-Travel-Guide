@@ -116,6 +116,11 @@
 
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/information_btn"
+                    android:layout_width="@dimen/microphone_dimens"
+                    android:layout_height="@dimen/microphone_dimens"
+                    android:src="@drawable/information"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"

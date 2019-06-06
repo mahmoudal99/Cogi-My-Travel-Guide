@@ -16,7 +16,8 @@ import com.example.mytravelguide.Authentication.SignInActivity;
 public class MainActivity extends AppCompatActivity {
 
     ImageView companyLogo;
-    Animation fromTop;
+    Animation fromTopAnimation;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,33 +26,60 @@ public class MainActivity extends AppCompatActivity {
 
         setUpAnimation();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!prefs.getBoolean("firstTime", false)) {
-            // <---- run your one time code here
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    // yourMethod();
-                    Intent signInIntent = new Intent(MainActivity.this, SignInActivity.class);
-                    startActivity(signInIntent);
-                }
-            }, 10000);
-
-            // mark first time has ran.
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean("firstTime", true);
-            editor.commit();
-        }else {
-            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        }
-
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        startAnimation();
     }
 
     private void setUpAnimation() {
         companyLogo = findViewById(R.id.company_logo);
-        fromTop = AnimationUtils.loadAnimation(this, R.anim.fromtop);
-        companyLogo.setAnimation(fromTop);
+        fromTopAnimation = AnimationUtils.loadAnimation(this, R.anim.fromtop);
+        companyLogo.setAnimation(fromTopAnimation);
+    }
+
+    private void openSignInPage() {
+        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    private void startAnimation() {
+
+        if (!sharedPreferences.getBoolean("animationLoaded", false)) {
+
+            Handler handler = new Handler();
+            handler.postDelayed(this::openSignInPage, 10000);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("animationLoaded", true);
+            editor.commit();
+
+        } else {
+            openSignInPage();
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

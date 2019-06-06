@@ -13,29 +13,18 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.mytravelguide.Attractions.AttractionsActivity;
-import com.example.mytravelguide.Authentication.SignInActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.protobuf.ByteString;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
 
     private static final String TAG = "HomePageActivity";
 
-    CardView attractionsCard, travelGuideCard, timelineCard;
-    ImageView settings;
-
-    GoogleSignInClient googleSignInClient;
+    private CardView attractionsCard, travelGuideCard, timelineCard;
+    private ImageView settings;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -54,15 +43,14 @@ public class HomePageActivity extends AppCompatActivity {
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         init();
         setUpWidgets();
         setUpFirebaseAuthentication();
     }
 
-    private void init(){
+    private void init() {
         attractionsCard = findViewById(R.id.attractionsCard);
         travelGuideCard = findViewById(R.id.travelGuideCard);
         timelineCard = findViewById(R.id.timelineCard);
@@ -105,6 +93,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {
+
         authentication = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override

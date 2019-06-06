@@ -19,8 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    ImageView backArrow;
-    LinearLayout logoutLayout;
+    private ImageView backArrow;
+    private LinearLayout logoutLinearLayout;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -28,7 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     // Google
-    GoogleSignInClient googleSignInClient;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,6 @@ public class SettingsActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        // Build a GoogleSignInClient with the options specified by gso.
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         init();
@@ -48,12 +47,12 @@ public class SettingsActivity extends AppCompatActivity {
         setUpFirebaseAuthentication();
     }
 
-    private void init(){
+    private void init() {
         backArrow = findViewById(R.id.backArrow);
-        logoutLayout = findViewById(R.id.logoutLayout);
+        logoutLinearLayout = findViewById(R.id.logoutLayout);
     }
 
-    private void setupWidgets(){
+    private void setupWidgets() {
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        logoutLayout.setOnClickListener(new View.OnClickListener() {
+        logoutLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logout();
@@ -69,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    private void logout(){
+    private void logout() {
         authentication.signOut();
         googleSignInClient.signOut();
         Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
