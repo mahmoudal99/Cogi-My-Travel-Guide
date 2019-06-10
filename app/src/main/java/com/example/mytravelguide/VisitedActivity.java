@@ -48,12 +48,10 @@ public class VisitedActivity extends AppCompatActivity {
 
     Context context;
 
-    private VisitedPlaceObject landmark;
     private PlacesClient placesClient;
-    PhotoMetadata photoMetadata;
 
     private ArrayList<VisitedPlaceObject> landmarksList;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter timelineAdapter;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -79,82 +77,74 @@ public class VisitedActivity extends AppCompatActivity {
         Places.initialize(context, API_KEY);
         placesClient = Places.createClient(context);
         landmarksList = new ArrayList<>();
-        mAdapter = new TimelineAdapter(landmarksList, VisitedActivity.this);
-        listView = (RecyclerView) findViewById(R.id.list);
+        timelineAdapter = new TimelineAdapter(landmarksList, VisitedActivity.this);
+        listView = findViewById(R.id.list);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private void setUpWidgets() {
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backIntent = new Intent(VisitedActivity.this, HomePageActivity.class);
-                startActivity(backIntent);
-            }
+        backArrow.setOnClickListener(v -> {
+            Intent backIntent = new Intent(VisitedActivity.this, HomePageActivity.class);
+            startActivity(backIntent);
         });
-
     }
 
     private void setUpListView() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(mAdapter);
+        listView.setAdapter(timelineAdapter);
     }
 
     private void setUpTimeline() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
 
-                                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
+                            List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
 
-                                String id = Objects.requireNonNull(document.get("ID")).toString();
-                                FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
-                                placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-                                    Place place = response.getPlace();
-                                    callAdapter(document.get("Place Name").toString(), document.get("Date Visited").toString(), place.getPhotoMetadatas().get(0));
-                                }).addOnFailureListener((exception) -> {
-                                    if (exception instanceof ApiException) {
-                                        ApiException apiException = (ApiException) exception;
-                                    }
-                                });
+                            String id = Objects.requireNonNull(document.get("ID")).toString();
+                            FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
 
+                            placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                                Place place = response.getPlace();
+                                callAdapter(Objects.requireNonNull(document.get("Place Name")).toString(), Objects.requireNonNull(document.get("Date Visited")).toString(), Objects.requireNonNull(place.getPhotoMetadatas()).get(0));
 
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            }).addOnFailureListener((exception) -> {
+                                if (exception instanceof ApiException) {
+                                    ApiException apiException = (ApiException) exception;
+                                    Log.e(TAG, apiException.getMessage());
+                                }
+                            });
                         }
+
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
     }
 
-    private void callAdapter(String name, String dateVisited, PhotoMetadata photoMetadata){
-        landmark = new VisitedPlaceObject();
+    private void callAdapter(String name, String dateVisited, PhotoMetadata photoMetadata) {
+        VisitedPlaceObject landmark = new VisitedPlaceObject();
         landmark.placeName = name;
         landmark.dateVisited = dateVisited;
         landmark.photoMetadata = photoMetadata;
         landmarksList.add(landmark);
-        mAdapter.notifyDataSetChanged();
+        timelineAdapter.notifyDataSetChanged();
     }
 
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {
         authentication = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
-                    Log.d(TAG, "Success");
-                } else {
-                    Log.d(TAG, "signed out");
-                }
+        authStateListener = firebaseAuth -> {
+            currentUser = firebaseAuth.getCurrentUser();
+            if (currentUser != null) {
+                Log.d(TAG, "Success");
+            } else {
+                Log.d(TAG, "signed out");
             }
         };
     }

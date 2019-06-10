@@ -53,19 +53,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupWidgets() {
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingsActivity.this, HomePageActivity.class));
-            }
-        });
+        backArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HomePageActivity.class)));
 
-        logoutLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
+        logoutLinearLayout.setOnClickListener(v -> logout());
     }
 
     private void logout() {

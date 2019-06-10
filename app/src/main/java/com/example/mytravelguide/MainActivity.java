@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("animationLoaded", true);
-            editor.commit();
+            editor.apply();
 
         } else {
             openSignInPage();

@@ -41,7 +41,7 @@
     <dimen name="logo_margin_top">20dp</dimen>
 
     //--------------- Trave Guide Page Dimens ---------------//
-    <dimen name="landmarkImageHeight">260dp</dimen>
+    <dimen name="landmarkImageHeight">280dp</dimen>
     <dimen name="galleryImageDimens">55dp</dimen>
     <dimen name="locationImageDimens">40dp</dimen>
     <dimen name="searchImageDimens">35dp</dimen>
