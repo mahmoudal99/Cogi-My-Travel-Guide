@@ -70,7 +70,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class TravelGuideActivity extends AppCompatActivity {
 
     private static final String TAG = "TravelGuideActivity";
-    private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
+    private static final String API_KEY = BuildConfig.APIKEY;
     private final static int LOCATION = 3;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;

@@ -20,14 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.MyViewHolder>  {
 
     private ArrayList<AttractionObject> attractionObjects;
-    Context context;
+    private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView placeName;
 
         public MyViewHolder(View view) {
             super(view);
-            placeName = (TextView) view.findViewById(R.id.place_name);
+            placeName = view.findViewById(R.id.place_name);
 
         }
     }
@@ -51,14 +51,11 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
         AttractionObject placeModel = attractionObjects.get(position);
         holder.placeName.setText(placeModel.placeName);
 
-        holder.placeName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, TravelGuideActivity.class);
-                intent.putExtra("AttractionName", holder.placeName.getText());
-                context.startActivity(intent);
+        holder.placeName.setOnClickListener(v -> {
+            Intent intent = new Intent(context, TravelGuideActivity.class);
+            intent.putExtra("AttractionName", holder.placeName.getText());
+            context.startActivity(intent);
 
-            }
         });
     }
 

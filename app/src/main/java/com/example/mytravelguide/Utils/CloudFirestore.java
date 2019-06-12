@@ -15,11 +15,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class CloudFirestore {
 
-    Map<String, String> placeMap;
-    Map<String, Bitmap> placeImageMap;
+    private Map<String, String> placeMap;
+    private Map<String, Bitmap> placeImageMap;
     private FirebaseUser currentUser;
 
     public CloudFirestore(Map<String, String> placeMap, FirebaseUser currentUser) {
@@ -32,12 +33,10 @@ public class CloudFirestore {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Add a new document with a generated ID
-        db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces").add(placeMap)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-
-                    }
+        db.collection("VisitedPlaces")
+                .document(currentUser.getUid())
+                .collection("MyPlaces").add(placeMap)
+                .addOnCompleteListener(task -> {
                 });
     }
 
@@ -46,27 +45,20 @@ public class CloudFirestore {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("GOT IT", document.getId() + " => " + document.getData());
-
-                                String name = document.get("Place Name").toString();
-                                if (name.equals(placeMap.get("Place Name"))) {
-                                    db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces").document(document.getId()).collection("Place Image").add(placeImageMap)
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                    Log.d("Firestore", "DocumentSnapshot added with ID: ");
-                                                }
-                                            });
-                                }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            String name = Objects.requireNonNull(document.get("Place Name")).toString();
+                            if (name.equals(placeMap.get("Place Name"))) {
+                                db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
+                                        .document(document.getId())
+                                        .collection("Place Image")
+                                        .add(placeImageMap)
+                                        .addOnCompleteListener(task1 -> Log.d("Firestore", "DocumentSnapshot added with ID: "));
                             }
-                        } else {
-                            Log.w("Firestore", "Error getting documents.", task.getException());
                         }
+                    } else {
+                        Log.w("Firestore", "Error getting documents.", task.getException());
                     }
                 });
     }

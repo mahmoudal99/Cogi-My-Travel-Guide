@@ -6,9 +6,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.example.mytravelguide.TravelGuideActivity;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

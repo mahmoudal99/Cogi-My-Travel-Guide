@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.mytravelguide.Authentication.SignInActivity;
+import com.example.mytravelguide.Utils.FirebaseMethods;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -26,21 +27,12 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
-
-    // Google
-    private GoogleSignInClient googleSignInClient;
+    private FirebaseMethods firebaseMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         init();
         setupWidgets();
@@ -50,21 +42,15 @@ public class SettingsActivity extends AppCompatActivity {
     private void init() {
         backArrow = findViewById(R.id.backArrow);
         logoutLinearLayout = findViewById(R.id.logoutLayout);
+        firebaseMethods = new FirebaseMethods(SettingsActivity.this);
     }
 
     private void setupWidgets() {
         backArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HomePageActivity.class)));
 
-        logoutLinearLayout.setOnClickListener(v -> logout());
+        logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
     }
 
-    private void logout() {
-        authentication.signOut();
-        googleSignInClient.signOut();
-        Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
 
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {

@@ -19,18 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyViewHolder>  {
 
     private ArrayList<VisitedPlaceObject> places;
-    Context context;
-    GooglePlacesApi googlePlacesApi;
+    private Context context;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView placeName, dateVisited;
-        public ImageView placeImage;
-
-        public MyViewHolder(View view) {
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView placeName, dateVisited;
+        ImageView placeImage;
+        MyViewHolder(View view) {
             super(view);
-            placeName = (TextView) view.findViewById(R.id.placeName);
-            dateVisited = (TextView) view.findViewById(R.id.date);
-            placeImage = (ImageView) view.findViewById(R.id.placeImage);
+            placeName = view.findViewById(R.id.placeName);
+            dateVisited = view.findViewById(R.id.date);
+            placeImage = view.findViewById(R.id.placeImage);
         }
     }
 
@@ -44,7 +42,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.timeline_item, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -53,7 +50,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
         holder.dateVisited.setText(placeModel.dateVisited);
-        googlePlacesApi = new GooglePlacesApi(context);
+        GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);
         googlePlacesApi.setPhoto(placeModel.photoMetadata, holder.placeImage);
     }
 

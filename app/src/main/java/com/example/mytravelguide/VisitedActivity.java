@@ -1,6 +1,5 @@
 package com.example.mytravelguide;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,10 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.mytravelguide.Models.VisitedPlaceObject;
-import com.example.mytravelguide.Utils.GooglePlacesApi;
 import com.example.mytravelguide.Utils.TimelineAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
@@ -25,22 +21,19 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.errors.ApiException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class VisitedActivity extends AppCompatActivity {
 
     private static final String TAG = "TimetableActivity";
-    private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
+    private static final String API_KEY = BuildConfig.APIKEY;
 
     // Widgets
     private ImageView backArrow;

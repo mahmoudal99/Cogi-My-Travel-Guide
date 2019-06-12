@@ -15,21 +15,19 @@ import com.example.mytravelguide.TravelGuideActivity;
 
 import java.util.ArrayList;
 
-public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocationsAdapter.MyViewHolder>  {
+public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocationsAdapter.MyViewHolder> {
 
     private ArrayList<AttractionObject> attractionObjects;
-    Context context;
+    private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView placeName;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
-            placeName = (TextView) view.findViewById(R.id.place_name);
-
+            placeName = view.findViewById(R.id.place_name);
         }
     }
-
 
     public NearByLocationsAdapter(ArrayList<AttractionObject> places, Context context) {
         this.attractionObjects = places;
@@ -40,7 +38,6 @@ public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocations
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.near_by_location_item, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -49,14 +46,10 @@ public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocations
         AttractionObject placeModel = attractionObjects.get(position);
         holder.placeName.setText(placeModel.placeName);
 
-        holder.placeName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, TravelGuideActivity.class);
-                intent.putExtra("AttractionName", holder.placeName.getText());
-                context.startActivity(intent);
-
-            }
+        holder.placeName.setOnClickListener(v -> {
+            Intent intent = new Intent(context, TravelGuideActivity.class);
+            intent.putExtra("AttractionName", holder.placeName.getText());
+            context.startActivity(intent);
         });
     }
 

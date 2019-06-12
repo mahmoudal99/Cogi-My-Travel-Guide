@@ -1,92 +1,78 @@
 package com.example.mytravelguide.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.mytravelguide.Authentication.SignInActivity;
+import com.example.mytravelguide.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import androidx.annotation.NonNull;
+import java.util.Objects;
 
 public class FirebaseMethods {
 
     private static final String TAG = "FirebaseMethods";
 
-    private FirebaseAuth mAuth;
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private String userID;
+    private FirebaseAuth authentication;
+    private GoogleSignInClient googleSignInClient;
+    private Context context;
 
     public FirebaseMethods(Context context) {
-        auth = FirebaseAuth.getInstance();
+        this.context = context;
+        authentication = FirebaseAuth.getInstance();
 
-        if (auth.getCurrentUser() != null) {
-            userID = auth.getCurrentUser().getUid();
-        }
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
+        googleSignInClient = GoogleSignIn.getClient(this.context, gso);
     }
 
     public void registerNewEmail(final String email, String password, final String firstname, final String lastname) {
+        authentication.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
 
-        auth.createUserWithEmailAndPassword(email, password)
-
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-
-                    @Override
-
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-
-                        } else if (task.isSuccessful()) {
-                            //send verificaton email
-
-                            FirebaseUser user = auth.getCurrentUser();
-                            String id = user.getUid();
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = authentication.getCurrentUser();
+                        String id = Objects.requireNonNull(user).getUid();
 
 //                            addUser(id, firstname, lastname, email);
-                            user = FirebaseAuth.getInstance().getCurrentUser();
+                        user = FirebaseAuth.getInstance().getCurrentUser();
 
-                            if (user != null) {
-                                // User is signed in
-                                auth = FirebaseAuth.getInstance();
-                                auth.signOut();
-
-                            } else {
-                                // User is signed out
-                                Log.d(TAG, "NO USER");
-                            }
+                        if (user != null) {
+                            authentication = FirebaseAuth.getInstance();
+                            authentication.signOut();
+                        } else {
+                            Log.d(TAG, "NO USER");
                         }
                     }
-
                 });
+    }
+
+    public void logout() {
+        authentication.signOut();
+        googleSignInClient.signOut();
+        Intent intent = new Intent(this.context, SignInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.context.startActivity(intent);
     }
 
     public void sendVerificationEmail() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         if (user != null) {
             user.sendEmailVerification()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                        @Override
-
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "Success");
-                            } else {
-                                Log.d(TAG, "Fail");
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Success");
+                        } else {
+                            Log.d(TAG, "Fail");
                         }
-
                     });
         }
     }

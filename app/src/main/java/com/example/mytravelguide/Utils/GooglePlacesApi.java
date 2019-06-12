@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mytravelguide.BuildConfig;
 import com.example.mytravelguide.Models.AttractionObject;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.LocalTime;
@@ -29,12 +30,13 @@ import com.google.maps.errors.ApiException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class GooglePlacesApi {
 
-    private static final String API_KEY = "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q";
+    private static final String API_KEY = BuildConfig.APIKEY;
 
     private PlacesClient placesClient;
     private Context context;
@@ -50,6 +52,7 @@ public class GooglePlacesApi {
 
         List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ID, Place.Field.PHOTO_METADATAS);
         FindCurrentPlaceRequest request = FindCurrentPlaceRequest.builder(placeFields).build();
+
         if (ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             placesClient.findCurrentPlace(request).addOnSuccessListener(((response) -> {
@@ -59,12 +62,12 @@ public class GooglePlacesApi {
                     attractionObject.placeName = placeLikelihood.getPlace().getName();
                     attractionObjects.add(attractionObject);
                     mAdapter.notifyDataSetChanged();
-
                 }
 
             })).addOnFailureListener((exception) -> {
                 if (exception instanceof ApiException) {
                     ApiException apiException = (ApiException) exception;
+                    Log.d("Gooogle Places Api", apiException.getMessage());
                 }
             });
         } else {
@@ -76,8 +79,7 @@ public class GooglePlacesApi {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setPhoto(PhotoMetadata photo, ImageView imageView) {
 
-        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo)
-                .build();
+        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
 
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
@@ -96,16 +98,14 @@ public class GooglePlacesApi {
         // Opening Hours
         OpeningHours openingHours;
         openingHours = place.getOpeningHours();
-        List<Period> periods = openingHours.getPeriods();
+        List<Period> periods = Objects.requireNonNull(openingHours).getPeriods();
         Period period = periods.get(0);
         TimeOfWeek timeOfWeekOpen = period.getOpen();
         TimeOfWeek timeOfWeekClose = period.getClose();
-        LocalTime localTimeOpen = timeOfWeekOpen.getTime();
-        LocalTime localTimeClose = timeOfWeekClose.getTime();
+        LocalTime localTimeOpen = Objects.requireNonNull(timeOfWeekOpen).getTime();
+        LocalTime localTimeClose = Objects.requireNonNull(timeOfWeekClose).getTime();
 
-        String openingHoursString = localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00";
-
-        return openingHoursString;
+        return localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00";
     }
 
 }
