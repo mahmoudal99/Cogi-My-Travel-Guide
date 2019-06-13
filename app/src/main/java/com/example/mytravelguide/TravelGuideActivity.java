@@ -82,7 +82,6 @@ public class TravelGuideActivity extends AppCompatActivity {
     private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow;
 
     private String landmarkNameString;
-    private String landmarkInformationResult;
     private String placeID;
 
     private Map<String, String> placeMap;
@@ -135,7 +134,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkOpeningHours = findViewById(R.id.openingHours);
         landmarkRating = findViewById(R.id.rating);
         landmarkPrice = findViewById(R.id.price);
-        landmarkInformationResult = "";
+        String landmarkInformationResult = "";
         landmarkNameString = "Landmark";
         landmarkNameString = getIntent().getStringExtra("AttractionName");
 
