@@ -7,8 +7,11 @@
     <dimen name="EditTextMargin">10dp</dimen>
     <dimen name="EditTextHeight">50dp</dimen>
 
+    // Change Password Activity
+    <dimen name="PasswordEditTextHeight">40dp</dimen>
+
     // Create Account Layout Dimens
-    <dimen name="createAccountTop">120dp</dimen>
+    <dimen name="createAccountTop">190dp</dimen>
     <dimen name="createAccontTvHeight">55dp</dimen>
     <dimen name="createAccontTvWidth">240dp</dimen>
 

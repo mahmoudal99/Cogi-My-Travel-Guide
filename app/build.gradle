@@ -15,7 +15,7 @@ android {
     }
     buildTypes {
 
-        debug{
+        debug {
             buildConfigField('String', "APIKEY", GOOGLE_API_KEY)
         }
 

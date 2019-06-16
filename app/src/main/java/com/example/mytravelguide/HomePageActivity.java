@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.mytravelguide.Attractions.AttractionsActivity;
+import com.example.mytravelguide.Settings.SettingsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

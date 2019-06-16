@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".Settings.SettingsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,8 +33,8 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_28sp"
                 app:fontFamily="@font/rancho" />
-
         </RelativeLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -247,6 +247,7 @@
 
 
                 <ImageView
+                    android:id="@+id/changePasswordArrow"
                     android:layout_width="24dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"

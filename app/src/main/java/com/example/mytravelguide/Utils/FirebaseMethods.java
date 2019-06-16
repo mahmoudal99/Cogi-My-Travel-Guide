@@ -25,13 +25,6 @@ public class FirebaseMethods {
     public FirebaseMethods(Context context) {
         this.context = context;
         authentication = FirebaseAuth.getInstance();
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        googleSignInClient = GoogleSignIn.getClient(this.context, gso);
     }
 
     public void registerNewEmail(final String email, String password, final String firstname, final String lastname) {
@@ -56,11 +49,21 @@ public class FirebaseMethods {
     }
 
     public void logout() {
+        setUpGooogleSignin();
         authentication.signOut();
         googleSignInClient.signOut();
         Intent intent = new Intent(this.context, SignInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.context.startActivity(intent);
+    }
+
+    private void setUpGooogleSignin() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this.context, gso);
     }
 
     public void sendVerificationEmail() {

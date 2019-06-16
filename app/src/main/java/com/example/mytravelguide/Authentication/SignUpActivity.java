@@ -1,23 +1,19 @@
 package com.example.mytravelguide.Authentication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.mytravelguide.Utils.FirebaseMethods;
 import com.example.mytravelguide.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,14 +22,14 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
 
     // Variables
-    String firstname, surname, email, password;
+    private String firstname, surname, email;
 
     // Widgets
-    TextView alreadyHaveAccount;
-    EditText firstnameET, surnameET, emailET, passwordET;
-    Button signUpBTN;
+    private TextView alreadyHaveAccount;
+    private EditText firstnameET, surnameET, emailET, passwordET;
+    private Button signUpBTN;
 
-    Context context;
+    private Context context;
 
     //firebase
     private FirebaseAuth authentication;
@@ -62,47 +58,47 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setUpWidget() {
-        alreadyHaveAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signInIntent = new Intent(SignUpActivity.this, SignInActivity.class);
-                startActivity(signInIntent);
-            }
+        alreadyHaveAccount.setOnClickListener(v -> {
+            Intent signInIntent = new Intent(SignUpActivity.this, SignInActivity.class);
+            startActivity(signInIntent);
         });
 
-        signUpBTN.setOnClickListener(new View.OnClickListener() {
+        signUpBTN.setOnClickListener(v -> SignUp());
+    }
 
-            @Override
+    private void SignUp() {
+        email = emailET.getText().toString();
+        firstname = firstnameET.getText().toString();
+        surname = surnameET.getText().toString();
 
-            public void onClick(View v) {
+        if (passwordET.getText().toString().length() < 8 && !isValidPassword(passwordET.getText().toString())) {
+            invalidPassword();
+        } else {
+            registerUser();
+            signInPage();
+        }
+    }
 
-                email = emailET.getText().toString();
-                firstname = firstnameET.getText().toString();
-                surname = surnameET.getText().toString();
+    private void invalidPassword() {
+        Toast.makeText(context,
+                "Password must be over 8 characters & contain atleast\n one lowercase, one uppercase, one number & a special character (@!#$)",
+                Toast.LENGTH_SHORT).show();
 
-                if (passwordET.getText().toString().length() < 8 && !isValidPassword(passwordET.getText().toString())) {
-                    Toast.makeText(context,
-                            "Password must be over 8 characters & contain atleast\n one lowercase, one uppercase, one number & a special character (@!#$)",
-                            Toast.LENGTH_SHORT).show();
+        passwordET.getText().clear();
+    }
 
-                    passwordET.getText().clear();
+    private void signInPage() {
+        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
 
-                } else {
-                    password = passwordET.getText().toString();
-
-                    firebaseMethods.registerNewEmail(email, password, firstname, surname);
-                    Toast.makeText(context, "Check your inbox", Toast.LENGTH_SHORT).show();
-
-                    clearWidgets();
-
-                    Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-
-        });
+    private void registerUser() {
+        String password = passwordET.getText().toString();
+        firebaseMethods.registerNewEmail(email, password, firstname, surname);
+        Toast.makeText(context, "Check your inbox", Toast.LENGTH_SHORT).show();
+        clearWidgets();
     }
 
     private void clearWidgets() {
@@ -114,13 +110,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public static boolean isValidPassword(final String password) {
-
         Pattern pattern;
         Matcher matcher;
         final String PASSWORD_PATTERN = "[a-zA-Z0-9\\!\\@\\#\\$]{8,24}";
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
-
         return matcher.matches();
     }
 
@@ -128,17 +122,14 @@ public class SignUpActivity extends AppCompatActivity {
     private void setUpFirebaseAuthentication() {
         authentication = FirebaseAuth.getInstance();
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+        authStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null) {
-                    Log.d(TAG, "Connected");
+            if (user != null) {
+                Log.d(TAG, "Connected");
 
-                } else {
-                    Log.d(TAG, "signed out");
-                }
+            } else {
+                Log.d(TAG, "signed out");
             }
         };
     }
