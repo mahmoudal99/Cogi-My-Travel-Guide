@@ -21,14 +21,12 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Settings.ChangePasswordActivity"></activity>
         <activity android:name=".Settings.SettingsActivity" />
         <activity android:name=".Attractions.ContinentAttractionsActivity" />
         <activity android:name=".VisitedActivity" />
         <activity android:name=".TravelGuideActivity" />
         <activity android:name=".Attractions.AttractionsActivity" />
         <activity android:name=".HomePageActivity" />
-        <activity android:name=".Authentication.SignUpActivity" />
         <activity android:name=".Authentication.SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

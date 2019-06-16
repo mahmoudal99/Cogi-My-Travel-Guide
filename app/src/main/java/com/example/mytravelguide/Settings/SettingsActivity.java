@@ -47,14 +47,12 @@ public class SettingsActivity extends AppCompatActivity {
         logoutLinearLayout = findViewById(R.id.logoutLayout);
         firebaseMethods = new FirebaseMethods(SettingsActivity.this);
         emailTextView = findViewById(R.id.emailTextView);
-        changePasswordArrow = findViewById(R.id.changePasswordArrow);
     }
 
     private void setupWidgets() {
         backArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HomePageActivity.class)));
         logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
         emailTextView.setText(email);
-        changePasswordArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, ChangePasswordActivity.class)));
     }
 
     private void getCurrentUserInstance(){

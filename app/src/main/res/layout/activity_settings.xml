@@ -211,66 +211,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/password_capital"
-            android:textSize="@dimen/_17sp" />
-
-        <LinearLayout
-            android:id="@+id/passwordLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/White"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/passwordTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="50dp"
-                    android:paddingBottom="10dp"
-                    android:text="@string/password"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_20sp" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/password" />
-
-
-                <ImageView
-                    android:id="@+id/changePasswordArrow"
-                    android:layout_width="24dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
-                    android:src="@drawable/arrow_grey" />
-
-                <ImageView
-                    android:layout_width="500dp"
-                    android:layout_height="3dp"
-                    android:layout_alignBottom="@id/passwordTextView"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/divider" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
             android:text="@string/log_out_capital"
             android:textSize="@dimen/_17sp" />
 
