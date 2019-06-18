@@ -13,12 +13,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mytravelguide.Models.AttractionObject;
+import com.example.mytravelguide.Settings.SettingsActivity;
 import com.example.mytravelguide.Utils.CloudFirestore;
 import com.example.mytravelguide.Utils.GooglePlacesApi;
 import com.example.mytravelguide.Utils.NearByLocationsAdapter;
@@ -62,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -107,6 +111,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadLocale();
         setContentView(R.layout.activity_travel_guide);
 
         requestPermission();
@@ -114,6 +119,27 @@ public class TravelGuideActivity extends AppCompatActivity {
         setUpWidgets();
         setUpLinearLayout();
         setUpFirebaseAuthentication();
+    }
+
+    private void setLocale(String lang){
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+
+        // save data
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Language", lang);
+        editor.commit();
+    }
+
+    public void loadLocale(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String language = sharedPreferences.getString("Language", "");
+        Log.d("MAHMOUD", language);
+        setLocale(language);
     }
 
     private void init() {

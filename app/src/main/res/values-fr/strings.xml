@@ -56,7 +56,7 @@
     <string name="password">Password</string>
     <string name="log_out_capital">LOG OUT</string>
     <string name="log_out">Connectez - Out</string>
-    <string name="timeline">Timeline</string>
+    <string name="timeline">Chronologie</string>
 
     <string name="landmark">Bâtiment Historique</string>
     <string name="VisitedPlaces">VisitedPlaces</string>
@@ -66,5 +66,8 @@
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="submit">Submit</string>
+
+    // Settings Layout
+    <string name="settings">Réglages</string>
 
 </resources>
