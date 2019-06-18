@@ -21,7 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private String email;
 
-    private ImageView backArrow, changePasswordArrow;
+    private ImageView backArrow;
     private LinearLayout logoutLinearLayout;
     private TextView emailTextView;
 

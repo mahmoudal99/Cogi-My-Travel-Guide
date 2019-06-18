@@ -6,11 +6,11 @@
 
     // Sign In Strings
     <string name="Email">Email</string>
-    <string name="Password">Password</string>
-    <string name="Login">Login</string>
-    <string name="CreateAccount">Create Account</string>
-    <string name="ContactUs">Contact Us</string>
-    <string name="auth_failed">Incorrect Email or Password</string>
+    <string name="Password">Mot de passe</string>
+    <string name="Login">S\'identifier</string>
+    <string name="CreateAccount">Créer un compte</string>
+    <string name="ContactUs">Contactez nous</string>
+    <string name="auth_failed">Email ou mot de passe incorrect</string>
 
     // Sign Up
     <string name="FirstName">First Name</string>
@@ -18,16 +18,16 @@
     <string name="SignUp">Sign Up</string>
 
     // Continents
-    <string name="Africa">Africa</string>
-    <string name="America">America</string>
-    <string name="Europe">Europe</string>
-    <string name="Asia">Asia</string>
+    <string name="Africa">Afrique</string>
+    <string name="America">Amérique</string>
+    <string name="Europe">L\'Europe</string>
+    <string name="Asia">Asie</string>
 
     // About
     <string name="About">Sed ut perspiciatis unde omnis iste natus dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</string>
 
     // Visited
-    <string name="Visited">Visited</string>
+    <string name="Visited">A visité</string>
 
     // Landmark
     <string name="PlaceName">Name</string>
@@ -45,20 +45,20 @@
     <string name="my_location">My Location</string>
     <string name="Attraction">Attraction</string>
 
-    <string name="near_by">Near By Locations</string>
+    <string name="near_by">Emplacements Proches</string>
     <string name="information">Information</string>
-    <string name="opening_hours">Opening Hours:</string>
-    <string name="price">Price:</string>
-    <string name="rating">Rating:</string>
+    <string name="opening_hours">Heures D\'ouverture:</string>
+    <string name="price">Prix:</string>
+    <string name="rating">Évaluation:</string>
     <string name="about">About</string>
     <string name="language">Language</string>
     <string name="password_capital">PASSWORD</string>
     <string name="password">Password</string>
     <string name="log_out_capital">LOG OUT</string>
-    <string name="log_out">Log Out</string>
+    <string name="log_out">Connectez - Out</string>
     <string name="timeline">Timeline</string>
 
-    <string name="landmark">Landmark</string>
+    <string name="landmark">Bâtiment Historique</string>
     <string name="VisitedPlaces">VisitedPlaces</string>
     <string name="MyPlaces">MyPlaces</string>
     <string name="change_password">Change Password</string>
