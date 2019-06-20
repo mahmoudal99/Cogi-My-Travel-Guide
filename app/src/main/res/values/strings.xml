@@ -67,6 +67,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="submit">Submit</string>
 
+    <string name="history">History</string>
+
     // Settings Layout
     <string name="settings">Settings</string>
 

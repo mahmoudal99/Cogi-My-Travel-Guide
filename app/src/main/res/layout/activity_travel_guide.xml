@@ -95,6 +95,7 @@
                 </LinearLayout>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/nearbyLocationsCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -271,6 +272,64 @@
                                 android:textSize="@dimen/_18sp" />
 
                         </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/landmarkHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/cardview_margin_top_20dp"
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_marginBottom="@dimen/margin_30dp"
+                    android:background="@drawable/cardview_bg_white"
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/landmarkHistoryList"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:fontFamily="@font/rancho"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="History"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_24sp" />
+
+                            <ImageView
+                                android:id="@+id/expandLandmarkHistory"
+                                android:layout_width="@dimen/dropDownButtonDimens"
+                                android:layout_height="@dimen/dropDownButtonDimens"
+                                android:layout_gravity="center"
+                                android:layout_margin="10dp"
+                                android:src="@drawable/ic_expand_more_black_24dp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/landmarkHistoryTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:fontFamily="sans-serif"
+                            android:padding="@dimen/information_padding_10dp"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_24sp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
 

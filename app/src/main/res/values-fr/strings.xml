@@ -2,7 +2,7 @@
     <string name="app_name">My Travel Guide</string>
 
     <string name="logo">Logo</string>
-    <string name="travel_guide">Travel Guide</string>
+    <string name="travel_guide">Guide de voyage</string>
 
     // Sign In Strings
     <string name="Email">Email</string>
@@ -66,6 +66,8 @@
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="submit">Submit</string>
+
+    <string name="history">L\'histoire</string>
 
     // Settings Layout
     <string name="settings">Réglages</string>

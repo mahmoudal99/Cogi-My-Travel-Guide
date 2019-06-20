@@ -2,7 +2,7 @@
     <string name="app_name">My Travel Guide</string>
 
     <string name="logo">Logo</string>
-    <string name="travel_guide">Travel Guide</string>
+    <string name="travel_guide">دليل السفر</string>
 
     // Sign In Strings
     <string name="Email">البريد الإلكتروني</string>
@@ -58,7 +58,7 @@
     <string name="log_out">الخروج</string>
     <string name="timeline">الجدول الزمني</string>
 
-    <string name="landmark">Landmark</string>
+    <string name="landmark">مبنى تاريخي</string>
     <string name="VisitedPlaces">VisitedPlaces</string>
     <string name="MyPlaces">MyPlaces</string>
     <string name="change_password">Change Password</string>
@@ -66,6 +66,7 @@
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="submit">Submit</string>
+    <string name="history">التاريخ</string>
 
     // Settings Layout
     <string name="settings">الإعدادات</string>

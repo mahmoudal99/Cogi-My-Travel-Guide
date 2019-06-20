@@ -3,6 +3,7 @@ package com.example.mytravelguide;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,6 +52,8 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -68,6 +71,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -82,8 +86,9 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
-    private TextView landmarkTextView, landmarkOpeningHours, landmarkPrice, landmarkRating;
-    private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow;
+    private TextView landmarkTextView, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkHistoryTextView;
+    private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory;
+    private CardView informationCardView, nearbyLocationsCardView;
 
     private String landmarkNameString;
     private String placeID;
@@ -101,6 +106,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     boolean expandInfo = true;
     boolean expandNearBy = true;
     boolean landmarkAdded = false;
+    boolean expendHistory = true;
 
     Context context;
 
@@ -121,7 +127,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         setUpFirebaseAuthentication();
     }
 
-    private void setLocale(String lang){
+    private void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
@@ -135,7 +141,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void loadLocale(){
+    public void loadLocale() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String language = sharedPreferences.getString("Language", "");
         Log.d("MAHMOUD", language);
@@ -160,14 +166,19 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkOpeningHours = findViewById(R.id.openingHours);
         landmarkRating = findViewById(R.id.rating);
         landmarkPrice = findViewById(R.id.price);
+        landmarkHistoryTextView = findViewById(R.id.landmarkHistoryTextView);
         String landmarkInformationResult = "";
         landmarkNameString = "Landmark";
         landmarkNameString = getIntent().getStringExtra("AttractionName");
+
+        informationCardView = findViewById(R.id.infoCard);
+        nearbyLocationsCardView = findViewById(R.id.nearbyLocationsCardView);
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
 
         expandLandmarkInformation = findViewById(R.id.expandInformation);
         expandNearByLocationsArrow = findViewById(R.id.expandNearLocationsByArrow);
+        expandLandmarkHistory = findViewById(R.id.expandLandmarkHistory);
 
         placeMap = new HashMap<>();
     }
@@ -218,6 +229,24 @@ public class TravelGuideActivity extends AppCompatActivity {
                 LinearLayout layout = findViewById(R.id.nearByLocationsList);
                 collapseLinearLayout(layout);
                 expandNearBy = true;
+            }
+        });
+
+        expandLandmarkHistory.setOnClickListener(v -> {
+            if (expendHistory) {
+                LinearLayout layout = findViewById(R.id.landmarkHistoryList);
+                expandLinearLayout(layout);
+                expendHistory = false;
+                landmarkHistoryTextView.setVisibility(View.VISIBLE);
+                nearbyLocationsCardView.setVisibility(View.GONE);
+                informationCardView.setVisibility(View.GONE);
+
+            } else if (!expendHistory) {
+                LinearLayout layout = findViewById(R.id.landmarkHistoryList);
+                collapseLinearLayout(layout);
+                expendHistory = true;
+                nearbyLocationsCardView.setVisibility(View.VISIBLE);
+                informationCardView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -345,6 +374,8 @@ public class TravelGuideActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 try {
+
+                    new WikiApi().execute(place.getName());
                     landmarkTextView.setText(place.getName());
                     googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkImage);
                     landmarkNameString = place.getName();
@@ -404,50 +435,48 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
-    /*---------------------------------------------------------------------- Async Task ----------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------- Wikipedia Api ----------------------------------------------------------------------*/
 
-    // Wikipedia Async Task
-    private class WikipediaAsyncTask extends AsyncTask<String, Integer, String> {
-        protected void onPreExecute() {
-            Log.d(TAG, "AsyncTask - onPreExecute");
-        }
-
+    private class WikiApi extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
 
             String keyword = strings[0];
-            String searchText = keyword + " wikipedia";
 
             try {
-                Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
+//                Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
 
-                String wikipediaURL = google.getElementsByTag("a").get(12).text();
+                String wikipediaURL = keyword;
 
                 String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
-                        + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1), encoding);
+                        + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
 
+                //"extract":" the summary of the article
                 HttpURLConnection httpcon = (HttpURLConnection) new URL(wikipediaApiJSON).openConnection();
                 httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
                 BufferedReader in = new BufferedReader(new InputStreamReader(httpcon.getInputStream()));
+
                 String responseSB = in.readLine();
                 in.close();
 
-                return responseSB.split("extract\":\"")[1];
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                String result = responseSB.split("extract\":\"")[1];
+
+//                String textToTell = result.length() > 250 ? result.substring(0, 250) : result;
+
+                return result;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            result = result.substring(0, result.length() - 5);
             String wikipediaResult = result.replaceAll("[-+.^:,;()]", "");
+            landmarkHistoryTextView.setText(wikipediaResult);
         }
     }
-
 
     /*---------------------------------------------------------------------- Firebase ----------------------------------------------------------------------*/
 
