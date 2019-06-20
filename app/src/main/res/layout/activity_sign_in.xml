@@ -14,8 +14,8 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/LogoWidth"
-            android:layout_height="@dimen/LogoHeight"
+            android:layout_width="@dimen/travel_guide_logo_width"
+            android:layout_height="@dimen/travel_guide_logo_height"
             android:layout_gravity="center"
             android:layout_marginTop="-40dp"
             android:src="@drawable/logo_white" />
@@ -23,10 +23,10 @@
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
-            android:layout_width="200dp"
+            android:layout_width="@dimen/googe_sign_width"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="380dp" />
+            android:layout_marginTop="@dimen/google_sign_in_top" />
 
     </LinearLayout>
 

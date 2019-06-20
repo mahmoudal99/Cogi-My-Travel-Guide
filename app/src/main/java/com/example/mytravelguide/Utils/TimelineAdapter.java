@@ -1,6 +1,7 @@
 package com.example.mytravelguide.Utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.example.mytravelguide.TravelGuideActivity;
 
 import java.util.ArrayList;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyViewHolder>  {
@@ -45,13 +47,14 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         return new MyViewHolder(itemView);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
         holder.dateVisited.setText(placeModel.dateVisited);
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);
-        googlePlacesApi.setPhoto(placeModel.photoMetadata, holder.placeImage);
+        googlePlacesApi.setPhotoBitmap(placeModel.photoMetadata, holder.placeImage);
     }
 
     @Override

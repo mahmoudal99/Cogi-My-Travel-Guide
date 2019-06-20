@@ -3,9 +3,12 @@ package com.example.mytravelguide.Utils;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -77,7 +80,26 @@ public class GooglePlacesApi {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void setPhoto(PhotoMetadata photo, ImageView imageView) {
+    public void setPhoto(PhotoMetadata photo, RelativeLayout relativeLayout) {
+
+        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
+
+        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+            bitmap = fetchPhotoResponse.getBitmap();
+            Drawable d = new BitmapDrawable(context.getResources(), bitmap);
+            relativeLayout.setBackground(d);
+
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                Log.e("Error", "Place not found: " + apiException.getMessage());
+            }
+        });
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void setPhotoBitmap(PhotoMetadata photo, ImageView imageView) {
 
         FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
 

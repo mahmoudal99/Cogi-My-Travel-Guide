@@ -90,7 +90,6 @@ public class HomePageActivity extends AppCompatActivity {
     public void loadLocale(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String language = sharedPreferences.getString("Language", "");
-        Log.d("MAHMOUD", language);
         setLocale(language);
     }
 

@@ -36,15 +36,22 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/landmarkImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/landmark_image_height"
+            android:background="@drawable/blue_mosque">
 
-        <ImageView
-            android:id="@+id/attractionImage"
-            android:layout_width="500dp"
-            android:layout_height="@dimen/landmarkImageHeight"
-            android:layout_gravity="center|bottom"
-            android:layout_marginTop="@dimen/margin_10dp"
-            android:layout_marginBottom="@dimen/image_margin_bottom_10dp"
-            android:src="@drawable/blue_mosque" />
+            <!--<ImageView-->
+                <!--android:id="@+id/attractionImage"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/landmarkImageHeight"-->
+                <!--android:layout_gravity="center|bottom"-->
+                <!--android:layout_marginTop="@dimen/margin_10dp"-->
+                <!--android:layout_marginBottom="@dimen/image_margin_bottom_10dp"-->
+                <!--android:src="@drawable/blue_mosque" />-->
+
+        </RelativeLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -328,7 +335,7 @@
                             android:padding="@dimen/information_padding_10dp"
                             android:text=""
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_24sp"
+                            android:textSize="@dimen/_18sp"
                             android:visibility="gone" />
 
                     </LinearLayout>

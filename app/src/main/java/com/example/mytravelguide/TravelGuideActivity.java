@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +93,8 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private String landmarkNameString;
     private String placeID;
+
+    private RelativeLayout landmarkRelativeLayout;
 
     private Map<String, String> placeMap;
 
@@ -161,7 +164,8 @@ public class TravelGuideActivity extends AppCompatActivity {
         searchLandmarkButton = findViewById(R.id.search);
         chooseImageButton = findViewById(R.id.gallery);
 
-        landmarkImage = findViewById(R.id.attractionImage);
+//        landmarkImage = findViewById(R.id.attractionImage);
+        landmarkRelativeLayout = findViewById(R.id.landmarkImage);
         landmarkTextView = findViewById(R.id.attractionName);
         landmarkOpeningHours = findViewById(R.id.openingHours);
         landmarkRating = findViewById(R.id.rating);
@@ -322,14 +326,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         setLandmarkAddedTrue();
     }
 
-//    private void callSearchEngine(String placeName) {
-//        if (placeName != null) {
-//            Log.d("Place Come On", placeName);
-//            TravelGuideActivity.WikipediaAsyncTask searchTask = new TravelGuideActivity.WikipediaAsyncTask();
-//            searchTask.execute(placeName);
-//        }
-//    }
-
     private void getLandmark(Bitmap bitmap) {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
@@ -377,7 +373,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
                     new WikiApi().execute(place.getName());
                     landmarkTextView.setText(place.getName());
-                    googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkImage);
+                    googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
                     landmarkNameString = place.getName();
                     landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
                     landmarkRating.setText(String.valueOf(place.getRating()));
@@ -407,7 +403,6 @@ public class TravelGuideActivity extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 getLandmark(bitmap);
                 landmarkImage.setImageBitmap(bitmap);
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -440,14 +435,11 @@ public class TravelGuideActivity extends AppCompatActivity {
     private class WikiApi extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-
             String keyword = strings[0];
-
             try {
 //                Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
 
                 String wikipediaURL = keyword;
-
                 String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
                         + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
 
@@ -460,20 +452,18 @@ public class TravelGuideActivity extends AppCompatActivity {
                 in.close();
 
                 String result = responseSB.split("extract\":\"")[1];
-
 //                String textToTell = result.length() > 250 ? result.substring(0, 250) : result;
-
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            String wikipediaResult = result.replaceAll("[-+.^:,;()]", "");
+            String wikipediaResult = result.replaceAll("[-+.^:,;(){}\']", "");
+            wikipediaResult = wikipediaResult.replaceAll("\\\\", "");
             landmarkHistoryTextView.setText(wikipediaResult);
         }
     }

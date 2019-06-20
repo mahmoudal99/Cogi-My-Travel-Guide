@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="yDelta">65%p</dimen>
+
+    <dimen name="travel_guide_logo_width">220dp</dimen>
+    <dimen name="travel_guide_logo_height">180dp</dimen>
+
     //--------------- Sign In Page Dimens ---------------//
+
+    // Google Sign In
+    <dimen name="google_sign_in_top">370dp</dimen>
+    <dimen name="googe_sign_width">160dp</dimen>
 
     // Sign In Edit Text Layout Dimens
     <dimen name="EditTextMargin">10dp</dimen>
