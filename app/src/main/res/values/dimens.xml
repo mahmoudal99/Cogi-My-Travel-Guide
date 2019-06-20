@@ -10,7 +10,7 @@
     //--------------- Sign In Page Dimens ---------------//
 
     // Google Sign In
-    <dimen name="google_sign_in_top">380dp</dimen>
+    <dimen name="google_sign_in_top">350dp</dimen>
     <dimen name="googe_sign_width">200dp</dimen>
 
     // Sign In Edit Text Layout Dimens

@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">My Travel Guide</string>
 
+    // Facebook
+    <string name="facebook_app_id" translatable="false">2519286871435597</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb2519286871435597</string>
+
     <string name="logo">Logo</string>
     <string name="travel_guide">Travel Guide</string>
 

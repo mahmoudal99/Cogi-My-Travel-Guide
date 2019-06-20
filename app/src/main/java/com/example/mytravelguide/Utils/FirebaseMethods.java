@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.mytravelguide.Authentication.SignInActivity;
 import com.example.mytravelguide.R;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -50,7 +51,9 @@ public class FirebaseMethods {
 
     public void logout() {
         setUpGooogleSignin();
-        authentication.signOut();
+//        authentication.signOut();
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
         googleSignInClient.signOut();
         Intent intent = new Intent(this.context, SignInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
