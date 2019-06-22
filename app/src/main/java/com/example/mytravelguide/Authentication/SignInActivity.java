@@ -1,13 +1,11 @@
 package com.example.mytravelguide.Authentication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.mytravelguide.HomePageActivity;
@@ -26,10 +24,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -80,8 +76,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void init() {
-
-        // Facebook Login
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
 //        loginButton.setReadPermissions("email", "public_profile");
@@ -98,26 +92,24 @@ public class SignInActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> {
 
-            LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile"));
+//            LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("email", "public_profile"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
+
                     handleFacebookAccessToken(loginResult.getAccessToken());
+
                 }
 
                 @Override
-                public void onCancel() {
-                    // App code
-                }
+                public void onCancel() { }
 
                 @Override
-                public void onError(FacebookException exception) {
-                    // App code
-                }
+                public void onError(FacebookException exception) {}
             });
+
+
         });
-
-
     }
 
     /*---------------------------------------------------------------------- Google Sign In ----------------------------------------------------------------------*/
@@ -166,13 +158,16 @@ public class SignInActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = authentication.getCurrentUser();
+                        Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(SignInActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }
-
                 });
     }
 
@@ -186,16 +181,13 @@ public class SignInActivity extends AppCompatActivity {
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {
         authentication = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
-                    Log.d(TAG, "Success");
-                    startActivity(new Intent(SignInActivity.this, HomePageActivity.class));
-                } else {
-                    Log.d(TAG, "signed out");
-                }
+        authStateListener = firebaseAuth -> {
+            currentUser = firebaseAuth.getCurrentUser();
+            if (currentUser != null) {
+                Log.d(TAG, "Success");
+                startActivity(new Intent(SignInActivity.this, HomePageActivity.class));
+            } else {
+                Log.d(TAG, "signed out");
             }
         };
     }
