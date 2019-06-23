@@ -97,20 +97,25 @@ public class VisitedActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
 
                             List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS);
+                            Log.d("WHAT", document.toString());
+                            if (document != null) {
+                                if (document.get("ID") != null) {
+                                    String landmarkID = Objects.requireNonNull(document.get("ID")).toString();
+                                    FetchPlaceRequest request = FetchPlaceRequest.builder(landmarkID, placeFields).build();
 
-                            String id = Objects.requireNonNull(document.get("ID")).toString();
-                            FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
+                                    placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                                        Place place = response.getPlace();
+                                        callAdapter(Objects.requireNonNull(document.get("Place Name")).toString(), Objects.requireNonNull(place.getPhotoMetadatas()).get(0));
 
-                            placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-                                Place place = response.getPlace();
-                                callAdapter(Objects.requireNonNull(document.get("Place Name")).toString(), Objects.requireNonNull(document.get("Date Visited")).toString(), Objects.requireNonNull(place.getPhotoMetadatas()).get(0));
-
-                            }).addOnFailureListener((exception) -> {
-                                if (exception instanceof ApiException) {
-                                    ApiException apiException = (ApiException) exception;
-                                    Log.e(TAG, apiException.getMessage());
+                                    }).addOnFailureListener((exception) -> {
+                                        if (exception instanceof ApiException) {
+                                            ApiException apiException = (ApiException) exception;
+                                            Log.e(TAG, apiException.getMessage());
+                                        }
+                                    });
                                 }
-                            });
+                            }
+
                         }
 
                     } else {
@@ -119,10 +124,9 @@ public class VisitedActivity extends AppCompatActivity {
                 });
     }
 
-    private void callAdapter(String name, String dateVisited, PhotoMetadata photoMetadata) {
+    private void callAdapter(String name, PhotoMetadata photoMetadata) {
         VisitedPlaceObject landmark = new VisitedPlaceObject();
         landmark.placeName = name;
-        landmark.dateVisited = dateVisited;
         landmark.photoMetadata = photoMetadata;
         landmarksList.add(landmark);
         timelineAdapter.notifyDataSetChanged();

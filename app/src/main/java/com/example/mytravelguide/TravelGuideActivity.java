@@ -260,7 +260,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    addVisitedLandmark();
+                    addLandmarkToTimeline();
                 });
     }
 
@@ -306,14 +306,19 @@ public class TravelGuideActivity extends AppCompatActivity {
         nearByLocationsArray = googlePlacesApi.getNearByLocations(nearByLocationsArray, mAdapter);
     }
 
-    private void addVisitedLandmark() {
-        placeMap.put("Place Name", landmarkNameString);
-        placeMap.put("Date Visited", "March 2018");
-        placeMap.put("ID", placeID);
+    private void addLandmarkToTimeline() {
 
-        CloudFirestore cloudFirestore = new CloudFirestore(placeMap, currentUser);
-        cloudFirestore.addPlace();
-        setLandmarkAddedTrue();
+        if(placeID == null){
+            Toast.makeText(this, "Landmark not added: No Id available", Toast.LENGTH_SHORT).show();
+        }else {
+            placeMap.put("Place Name", landmarkNameString);
+            placeMap.put("ID", placeID);
+
+            CloudFirestore cloudFirestore = new CloudFirestore(placeMap, currentUser);
+            cloudFirestore.addPlace();
+            setLandmarkAddedTrue();
+            Toast.makeText(this, "Landmark added to timeline", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void getLandmark(Bitmap bitmap) {
@@ -441,9 +446,13 @@ public class TravelGuideActivity extends AppCompatActivity {
                 String responseSB = in.readLine();
                 in.close();
 
-                String result = responseSB.split("extract\":\"")[1];
-//                String textToTell = result.length() > 250 ? result.substring(0, 250) : result;
-                return result;
+                Log.d("SIZE", String.valueOf(responseSB.split("extract\":\"").length));
+                if(responseSB.split("extract\":\"").length > 1){
+                    String result = responseSB.split("extract\":\"")[1];
+                    return result;
+                }
+
+                return "No information found";
             } catch (IOException e) {
                 e.printStackTrace();
             }

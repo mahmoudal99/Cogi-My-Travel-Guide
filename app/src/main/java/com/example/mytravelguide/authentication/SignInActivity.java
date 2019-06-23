@@ -200,16 +200,15 @@ public class SignInActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void checkTokenExists(String token){
+    private void checkTokenExists(String token) {
         if (token.equals("0")) {
             Log.d(TAG, "No google token saved");
         } else {
             String isLinked = pref.getString(getFacebookUserEmail() + "Linked", "NotLinked");
             if (isLinked.equals("NotLinked")) {
-                Toast.makeText(this, "Accounts not linked", Toast.LENGTH_SHORT).show();
                 deleteUser();
             } else {
-                Toast.makeText(this, "Accounts already linked", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Accounts already linked");
             }
         }
     }
@@ -219,9 +218,8 @@ public class SignInActivity extends AppCompatActivity {
         FirebaseUser user = authentication.getCurrentUser();
 
         String token = pref.getString(email + "Facebook", "");
-        if(!token.equals("")){
+        if (!token.equals("")) {
             AuthCredential credential = FacebookAuthProvider.getCredential(token);
-            Toast.makeText(this, token + email + credential.getProvider(), Toast.LENGTH_LONG).show();
             user.linkWithCredential(credential)
                     .addOnCompleteListener(this,
                             task -> {
