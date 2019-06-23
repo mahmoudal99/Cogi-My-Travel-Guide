@@ -44,13 +44,13 @@
         </activity>
 
 
-        <activity android:name=".Settings.SettingsActivity" />
-        <activity android:name=".Attractions.ContinentAttractionsActivity" />
+        <activity android:name=".settings.SettingsActivity" />
+        <activity android:name=".attractions.ContinentAttractionsActivity" />
         <activity android:name=".VisitedActivity" />
         <activity android:name=".TravelGuideActivity" />
-        <activity android:name=".Attractions.AttractionsActivity" />
+        <activity android:name=".attractions.AttractionsActivity" />
         <activity android:name=".HomePageActivity" />
-        <activity android:name=".Authentication.SignInActivity" />
+        <activity android:name=".authentication.SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package com.example.mytravelguide.Models;
+package com.example.mytravelguide.models;
 
 public class AttractionObject {
     public String placeName = "";

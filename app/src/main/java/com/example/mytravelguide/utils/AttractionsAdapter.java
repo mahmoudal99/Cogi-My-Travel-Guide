@@ -1,4 +1,4 @@
-package com.example.mytravelguide.Utils;
+package com.example.mytravelguide.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,15 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.mytravelguide.Models.AttractionObject;
+import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.TravelGuideActivity;
 
 import java.util.ArrayList;
 
-public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocationsAdapter.MyViewHolder> {
+import androidx.recyclerview.widget.RecyclerView;
+
+public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.MyViewHolder>  {
 
     private ArrayList<AttractionObject> attractionObjects;
     private Context context;
@@ -23,13 +23,15 @@ public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocations
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView placeName;
 
-        MyViewHolder(View view) {
+        public MyViewHolder(View view) {
             super(view);
             placeName = view.findViewById(R.id.place_name);
+
         }
     }
 
-    public NearByLocationsAdapter(ArrayList<AttractionObject> places, Context context) {
+
+    public AttractionsAdapter(ArrayList<AttractionObject> places, Context context) {
         this.attractionObjects = places;
         this.context = context;
     }
@@ -37,7 +39,8 @@ public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocations
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.near_by_location_item, parent, false);
+                .inflate(R.layout.attraction_item, parent, false);
+
         return new MyViewHolder(itemView);
     }
 
@@ -50,6 +53,7 @@ public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocations
             Intent intent = new Intent(context, TravelGuideActivity.class);
             intent.putExtra("AttractionName", holder.placeName.getText());
             context.startActivity(intent);
+
         });
     }
 

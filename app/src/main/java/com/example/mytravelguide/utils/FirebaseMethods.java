@@ -1,10 +1,10 @@
-package com.example.mytravelguide.Utils;
+package com.example.mytravelguide.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.mytravelguide.Authentication.SignInActivity;
+import com.example.mytravelguide.authentication.SignInActivity;
 import com.example.mytravelguide.R;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

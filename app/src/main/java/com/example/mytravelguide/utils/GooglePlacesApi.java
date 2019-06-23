@@ -1,4 +1,4 @@
-package com.example.mytravelguide.Utils;
+package com.example.mytravelguide.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytravelguide.BuildConfig;
-import com.example.mytravelguide.Models.AttractionObject;
+import com.example.mytravelguide.models.AttractionObject;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.LocalTime;
 import com.google.android.libraries.places.api.model.OpeningHours;

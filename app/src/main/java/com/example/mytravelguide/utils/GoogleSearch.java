@@ -1,8 +1,6 @@
-package com.example.mytravelguide.Utils;
+package com.example.mytravelguide.utils;
 
 import android.util.Log;
-
-import com.example.mytravelguide.TravelGuideActivity;
 
 import java.net.MalformedURLException;
 import java.net.URL;

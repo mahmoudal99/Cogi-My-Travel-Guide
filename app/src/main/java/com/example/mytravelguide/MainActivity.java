@@ -11,7 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-import com.example.mytravelguide.Authentication.SignInActivity;
+import com.example.mytravelguide.authentication.SignInActivity;
 
 public class MainActivity extends AppCompatActivity {
 

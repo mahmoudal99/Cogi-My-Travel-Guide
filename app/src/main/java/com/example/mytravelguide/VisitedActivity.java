@@ -9,11 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
-import com.example.mytravelguide.Models.VisitedPlaceObject;
-import com.example.mytravelguide.Utils.TimelineAdapter;
+import com.example.mytravelguide.models.VisitedPlaceObject;
+import com.example.mytravelguide.utils.TimelineAdapter;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;

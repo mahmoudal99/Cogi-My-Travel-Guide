@@ -1,4 +1,4 @@
-package com.example.mytravelguide.Utils;
+package com.example.mytravelguide.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

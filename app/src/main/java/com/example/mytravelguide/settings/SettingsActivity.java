@@ -1,4 +1,4 @@
-package com.example.mytravelguide.Settings;
+package com.example.mytravelguide.settings;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +12,12 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
-import com.example.mytravelguide.Utils.FirebaseMethods;
+import com.example.mytravelguide.utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 
 import java.util.Locale;
 

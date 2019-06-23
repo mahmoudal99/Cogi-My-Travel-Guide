@@ -1,23 +1,21 @@
-package com.example.mytravelguide.Utils;
+package com.example.mytravelguide.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.mytravelguide.Models.AttractionObject;
-import com.example.mytravelguide.Models.VisitedPlaceObject;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.TravelGuideActivity;
 
 import java.util.ArrayList;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.MyViewHolder>  {
+public class NearByLocationsAdapter extends RecyclerView.Adapter<NearByLocationsAdapter.MyViewHolder> {
 
     private ArrayList<AttractionObject> attractionObjects;
     private Context context;
@@ -25,15 +23,13 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView placeName;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             placeName = view.findViewById(R.id.place_name);
-
         }
     }
 
-
-    public AttractionsAdapter(ArrayList<AttractionObject> places, Context context) {
+    public NearByLocationsAdapter(ArrayList<AttractionObject> places, Context context) {
         this.attractionObjects = places;
         this.context = context;
     }
@@ -41,8 +37,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.attraction_item, parent, false);
-
+                .inflate(R.layout.near_by_location_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -55,7 +50,6 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
             Intent intent = new Intent(context, TravelGuideActivity.class);
             intent.putExtra("AttractionName", holder.placeName.getText());
             context.startActivity(intent);
-
         });
     }
 

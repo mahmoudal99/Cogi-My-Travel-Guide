@@ -1,4 +1,4 @@
-package com.example.mytravelguide.Utils;
+package com.example.mytravelguide.utils;
 
 import android.content.Context;
 import android.os.Build;
@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.mytravelguide.Models.VisitedPlaceObject;
+import com.example.mytravelguide.models.VisitedPlaceObject;
 import com.example.mytravelguide.R;
-import com.example.mytravelguide.TravelGuideActivity;
 
 import java.util.ArrayList;
 

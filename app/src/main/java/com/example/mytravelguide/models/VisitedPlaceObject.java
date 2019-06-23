@@ -1,4 +1,4 @@
-package com.example.mytravelguide.Models;
+package com.example.mytravelguide.models;
 
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 
