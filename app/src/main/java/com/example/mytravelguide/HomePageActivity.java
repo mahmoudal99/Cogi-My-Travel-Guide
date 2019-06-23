@@ -1,6 +1,7 @@
 package com.example.mytravelguide;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -14,9 +15,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.mytravelguide.Attractions.AttractionsActivity;
 import com.example.mytravelguide.Settings.SettingsActivity;
+import com.facebook.AccessToken;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -42,6 +50,7 @@ public class HomePageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         init();
+
         setUpWidgets();
         setUpFirebaseAuthentication();
     }
@@ -73,7 +82,7 @@ public class HomePageActivity extends AppCompatActivity {
         settings.setOnClickListener(v -> startActivity(new Intent(HomePageActivity.this, SettingsActivity.class)));
     }
 
-    private void setLocale(String lang){
+    private void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
@@ -87,7 +96,7 @@ public class HomePageActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void loadLocale(){
+    public void loadLocale() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String language = sharedPreferences.getString("Language", "");
         setLocale(language);

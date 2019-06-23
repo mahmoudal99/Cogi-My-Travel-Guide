@@ -12,15 +12,16 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.Utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.Locale;
-import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -61,17 +62,18 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupWidgets() {
         backArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HomePageActivity.class)));
         logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
-        emailTextView.setText(email);
+//        emailTextView.setText(email);
         languageArrow.setOnClickListener(v -> showLanguageOptions());
     }
 
     private void getCurrentUserInstance() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        authentication = FirebaseAuth.getInstance();
     }
 
     private void userInformation() {
         getCurrentUserInstance();
-        email = Objects.requireNonNull(currentUser).getEmail();
+//        email = Objects.requireNonNull(currentUser).getEmail();
     }
 
     private void showLanguageOptions() {
@@ -84,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
             } else if (which == 1) {
                 setLocale("fr");
                 recreate();
-            }else if(which == 2){
+            } else if (which == 2) {
                 setLocale("ar");
                 recreate();
             }
@@ -96,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void setLocale(String lang){
+    private void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
@@ -107,13 +109,12 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Language", lang);
-        editor.commit();
+        editor.apply();
     }
 
-    public void loadLocale(){
+    public void loadLocale() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String language = sharedPreferences.getString("Language", "");
-        Log.d("MAHMOUD", language);
         setLocale(language);
     }
 
