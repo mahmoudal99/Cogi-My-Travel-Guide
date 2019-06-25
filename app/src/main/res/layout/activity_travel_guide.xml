@@ -42,15 +42,6 @@
             android:layout_height="@dimen/landmark_image_height"
             android:background="@drawable/blue_mosque">
 
-            <!--<ImageView-->
-                <!--android:id="@+id/attractionImage"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/landmarkImageHeight"-->
-                <!--android:layout_gravity="center|bottom"-->
-                <!--android:layout_marginTop="@dimen/margin_10dp"-->
-                <!--android:layout_marginBottom="@dimen/image_margin_bottom_10dp"-->
-                <!--android:src="@drawable/blue_mosque" />-->
-
         </RelativeLayout>
 
         <ScrollView
@@ -298,9 +289,10 @@
 
                     <LinearLayout
                         android:id="@+id/landmarkHistoryList"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

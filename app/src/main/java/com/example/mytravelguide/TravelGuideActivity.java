@@ -17,9 +17,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -116,29 +118,9 @@ public class TravelGuideActivity extends AppCompatActivity {
         requestPermission();
         init();
         setUpWidgets();
+        loadPreviousLandmark();
         setUpLinearLayout();
         setUpFirebaseAuthentication();
-    }
-
-    private void setLocale(String lang) {
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration configuration = new Configuration();
-        configuration.locale = locale;
-        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
-
-        // save data
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("Language", lang);
-        editor.commit();
-    }
-
-    public void loadLocale() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String language = sharedPreferences.getString("Language", "");
-        Log.d("MAHMOUD", language);
-        setLocale(language);
     }
 
     private void init() {
@@ -243,8 +225,40 @@ public class TravelGuideActivity extends AppCompatActivity {
                 informationCardView.setVisibility(View.VISIBLE);
             }
         });
-
     }
+
+    private void loadPreviousLandmark(){
+        landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
+        landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
+        googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
+        new WikiApi().execute(landmarkTextView.getText().toString());
+    }
+
+
+    /*---------------------------------------------------------------------- Locale ----------------------------------------------------------------------*/
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+
+        // save data
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Language", lang);
+        editor.commit();
+    }
+
+    public void loadLocale() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String language = sharedPreferences.getString("Language", "");
+        Log.d("MAHMOUD", language);
+        setLocale(language);
+    }
+
+    /*---------------------------------------------------------------------- Landmark ----------------------------------------------------------------------*/
 
     private void checkLandmarkAlreadyAdded(String landmarkName) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -268,49 +282,11 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkAdded = true;
     }
 
-    private void setUpLinearLayout() {
-        LinearLayout infoLayout = findViewById(R.id.informationList);
-        collapseLinearLayout(infoLayout);
-
-        LinearLayout nearByLayout = findViewById(R.id.nearByLocationsList);
-        collapseLinearLayout(nearByLayout);
-    }
-
-
-    /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
-    private void landmarkPicker() {
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), API_KEY);
-        }
-
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
-                Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS,
-                Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL);
-
-        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-    }
-
-    private void loadNearByLocations() {
-        ArrayList<AttractionObject> nearByLocationsArray = new ArrayList<>();
-
-        RecyclerView listView = findViewById(R.id.list);
-        listView.setVisibility(View.VISIBLE);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(nearByLocationsArray, TravelGuideActivity.this);
-        listView.setLayoutManager(mLayoutManager);
-        listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(mAdapter);
-
-        googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
-        nearByLocationsArray = googlePlacesApi.getNearByLocations(nearByLocationsArray, mAdapter);
-    }
-
     private void addLandmarkToTimeline() {
 
-        if(placeID == null){
+        if (placeID == null) {
             Toast.makeText(this, "Landmark not added: No Id available", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             placeMap.put("Place Name", landmarkNameString);
             placeMap.put("ID", placeID);
 
@@ -330,6 +306,36 @@ public class TravelGuideActivity extends AppCompatActivity {
                 });
     }
 
+    private void landmarkPicker() {
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), API_KEY);
+        }
+
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
+                Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS,
+                Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL);
+
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
+
+    private void loadNearByLocations() {
+        ArrayList<AttractionObject> nearByLocationsArray = new ArrayList<>();
+
+        RecyclerView listView = findViewById(R.id.list);
+        listView.setVisibility(View.VISIBLE);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(nearByLocationsArray, TravelGuideActivity.this);
+        listView.setLayoutManager(mLayoutManager);
+        listView.setItemAnimator(new DefaultItemAnimator());
+        listView.setAdapter(mAdapter);
+
+        googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
+        nearByLocationsArray = googlePlacesApi.getNearByLocations(nearByLocationsArray, mAdapter);
+    }
+
     private void openGallery() {
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
@@ -340,6 +346,14 @@ public class TravelGuideActivity extends AppCompatActivity {
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
         startActivityForResult(chooserIntent, PICK_IMAGE);
+    }
+
+    private void setUpLinearLayout() {
+        LinearLayout infoLayout = findViewById(R.id.informationList);
+        collapseLinearLayout(infoLayout);
+
+        LinearLayout nearByLayout = findViewById(R.id.nearByLocationsList);
+        collapseLinearLayout(nearByLayout);
     }
 
     private void collapseLinearLayout(LinearLayout linearLayout) {
@@ -365,14 +379,24 @@ public class TravelGuideActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 try {
-
                     new WikiApi().execute(place.getName());
-                    landmarkTextView.setText(place.getName());
+                    if(place.getName().equals("The Blue Mosuqe")){
+                        landmarkTextView.setText(context.getString(R.string.sultan_ahmed_mosque));
+                    }else {
+                        landmarkTextView.setText(place.getName());
+                    }
+
                     googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
                     landmarkNameString = place.getName();
                     landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
                     landmarkRating.setText(String.valueOf(place.getRating()));
                     placeID = place.getId();
+
+                    // Save Landmark Information in Shared Preferences
+                    editor.putString("LandmarkName", landmarkTextView.getText().toString());
+                    editor.putString("LandmarkOpeningHours", landmarkOpeningHours.getText().toString());
+                    editor.putString("LandamrkInformation", landmarkHistoryTextView.getText().toString());
+                    editor.apply();
 
                     if (place.getPriceLevel() != null) {
                         landmarkPrice.setText(place.getPriceLevel());
@@ -381,7 +405,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                callSearchEngine(place.getName());
+
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
@@ -434,6 +458,10 @@ public class TravelGuideActivity extends AppCompatActivity {
             try {
 //                Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
 
+                if (keyword.equals("The Blue Mosque")){
+                    keyword = "Sultan Ahmed Mosque";
+                }
+
                 String wikipediaURL = keyword;
                 String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
                         + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
@@ -444,10 +472,10 @@ public class TravelGuideActivity extends AppCompatActivity {
                 BufferedReader in = new BufferedReader(new InputStreamReader(httpcon.getInputStream()));
 
                 String responseSB = in.readLine();
-                in.close();
 
-                Log.d("SIZE", String.valueOf(responseSB.split("extract\":\"").length));
-                if(responseSB.split("extract\":\"").length > 1){
+                in.close();
+                Log.d("WIKI", responseSB);
+                if (responseSB.split("extract\":\"").length > 1) {
                     String result = responseSB.split("extract\":\"")[1];
                     return result;
                 }

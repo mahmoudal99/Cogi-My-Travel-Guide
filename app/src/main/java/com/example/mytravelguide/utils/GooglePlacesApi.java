@@ -3,9 +3,12 @@ package com.example.mytravelguide.utils;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -30,6 +33,11 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.maps.errors.ApiException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -83,18 +91,39 @@ public class GooglePlacesApi {
     public void setPhoto(PhotoMetadata photo, RelativeLayout relativeLayout) {
 
         FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
-
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
-            Drawable d = new BitmapDrawable(context.getResources(), bitmap);
-            relativeLayout.setBackground(d);
 
+            saveImageBitmap(bitmap);
+
+            Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+            relativeLayout.setBackground(drawable);
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
                 ApiException apiException = (ApiException) exception;
                 Log.e("Error", "Place not found: " + apiException.getMessage());
             }
         });
+    }
+
+    private void saveImageBitmap(Bitmap bitmap) {
+        String path = Environment.getExternalStorageDirectory().toString();
+        OutputStream outputStream = null;
+        File file = new File(path, "image" + ".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
+        try {
+            outputStream = new FileOutputStream(file);
+
+            Bitmap pictureBitmap = bitmap;
+            pictureBitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -102,7 +131,6 @@ public class GooglePlacesApi {
     public void setPhotoBitmap(PhotoMetadata photo, ImageView imageView) {
 
         FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
-
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
             imageView.setImageBitmap(bitmap);
@@ -113,7 +141,24 @@ public class GooglePlacesApi {
                 Log.e("Error", "Place not found: " + apiException.getMessage());
             }
         });
+    }
 
+    public void loadImageFromStorage(RelativeLayout relativeLayout) {
+        String photoPath = Environment.getExternalStorageDirectory() + "/image.jpg";
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
+        Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+        relativeLayout.setBackground(drawable);
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
     }
 
     public String placeOpeningHours(Place place) {

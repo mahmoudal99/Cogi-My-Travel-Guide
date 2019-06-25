@@ -76,5 +76,6 @@
 
     // Settings Layout
     <string name="settings">Settings</string>
+    <string name="sultan_ahmed_mosque">Sultan Ahmed Mosque</string>
 
 </resources>
