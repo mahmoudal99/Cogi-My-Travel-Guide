@@ -216,7 +216,7 @@
                                 android:paddingTop="@dimen/information_padding_10dp"
                                 android:paddingBottom="@dimen/information_padding_10dp"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_18sp" />
+                                android:textSize="@dimen/_20sp" />
 
                         </LinearLayout>
 
@@ -241,7 +241,7 @@
                                 android:fontFamily="@font/rancho"
                                 android:padding="@dimen/information_padding_10dp"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_18sp" />
+                                android:textSize="@dimen/_20sp" />
 
                         </LinearLayout>
 
@@ -267,7 +267,61 @@
                                 android:paddingTop="@dimen/information_padding_10dp"
                                 android:paddingBottom="@dimen/information_padding_10dp"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_18sp" />
+                                android:textSize="@dimen/_20sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="Number:"
+                                android:textColor="#FF6D00"
+                                android:textSize="@dimen/_20sp" />
+
+                            <TextView
+                                android:id="@+id/number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:paddingTop="@dimen/information_padding_10dp"
+                                android:paddingBottom="@dimen/information_padding_10dp"
+                                android:autoLink="phone"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_20sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="Website:"
+                                android:textColor="#607D8B"
+                                android:textSize="@dimen/_20sp" />
+
+                            <TextView
+                                android:id="@+id/website"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/rancho"
+                                android:paddingTop="@dimen/information_padding_10dp"
+                                android:autoLink="web"
+                                android:paddingBottom="@dimen/information_padding_10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_22sp" />
 
                         </LinearLayout>
 

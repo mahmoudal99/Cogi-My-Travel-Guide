@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
-    private TextView landmarkTextView, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkHistoryTextView;
+    private TextView landmarkTextView, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkHistoryTextView, numberTextView, websiteTextView;
     private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory;
     private CardView informationCardView, nearbyLocationsCardView;
 
@@ -142,6 +143,8 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkOpeningHours = findViewById(R.id.openingHours);
         landmarkRating = findViewById(R.id.rating);
         landmarkPrice = findViewById(R.id.price);
+        numberTextView = findViewById(R.id.number);
+        websiteTextView = findViewById(R.id.website);
         landmarkHistoryTextView = findViewById(R.id.landmarkHistoryTextView);
         String landmarkInformationResult = "";
         landmarkNameString = "Landmark";
@@ -230,6 +233,10 @@ public class TravelGuideActivity extends AppCompatActivity {
     private void loadPreviousLandmark(){
         landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
         landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
+        numberTextView.setText(pref.getString("LandmarkNumber", ""));
+        websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
+        landmarkRating.setText(pref.getString("LandmarkRating", ""));
+        Linkify.addLinks(websiteTextView,  Linkify.WEB_URLS);
         googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
         new WikiApi().execute(landmarkTextView.getText().toString());
     }
@@ -313,7 +320,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
                 Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS,
-                Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL);
+                Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL, Place.Field.PHONE_NUMBER, Place.Field.VIEWPORT, Place.Field.WEBSITE_URI);
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
@@ -380,7 +387,7 @@ public class TravelGuideActivity extends AppCompatActivity {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 try {
                     new WikiApi().execute(place.getName());
-                    if(place.getName().equals("The Blue Mosuqe")){
+                    if(place.getName().equals("The Blue Mosque")){
                         landmarkTextView.setText(context.getString(R.string.sultan_ahmed_mosque));
                     }else {
                         landmarkTextView.setText(place.getName());
@@ -390,13 +397,21 @@ public class TravelGuideActivity extends AppCompatActivity {
                     landmarkNameString = place.getName();
                     landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
                     landmarkRating.setText(String.valueOf(place.getRating()));
+                    numberTextView.setText(place.getPhoneNumber());
+                    websiteTextView.setText(place.getWebsiteUri().toString());
+                    Linkify.addLinks(websiteTextView,  Linkify.WEB_URLS);
                     placeID = place.getId();
 
                     // Save Landmark Information in Shared Preferences
-                    editor.putString("LandmarkName", landmarkTextView.getText().toString());
+                    editor.putString("LandmarkName", place.getName());
                     editor.putString("LandmarkOpeningHours", landmarkOpeningHours.getText().toString());
-                    editor.putString("LandamrkInformation", landmarkHistoryTextView.getText().toString());
+                    editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
+                    editor.putString("LandmarkRating", landmarkRating.getText().toString());
+                    editor.putString("LandmarkWebsite", place.getWebsiteUri().toString());
+                    editor.putString("LandmarkNumber", place.getPhoneNumber());
                     editor.apply();
+
+                    Log.d("PLACEWIKI", place.getAddress() + " " + place.getPhoneNumber() + " " + place.getWebsiteUri().toString());
 
                     if (place.getPriceLevel() != null) {
                         landmarkPrice.setText(place.getPriceLevel());
@@ -490,6 +505,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             String wikipediaResult = result.replaceAll("[-+.^:,;(){}\']", "");
+            wikipediaResult = wikipediaResult.replaceAll("[0-9]", "");
             wikipediaResult = wikipediaResult.replaceAll("\\\\", "");
             landmarkHistoryTextView.setText(wikipediaResult);
         }
