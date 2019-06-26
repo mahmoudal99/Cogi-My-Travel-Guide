@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -117,6 +118,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         setContentView(R.layout.activity_travel_guide);
 
         requestPermission();
+        isWriteStoragePermissionGranted();
         init();
         setUpWidgets();
         loadPreviousLandmark();
@@ -539,6 +541,22 @@ public class TravelGuideActivity extends AppCompatActivity {
         super.onStop();
         if (authStateListener != null) {
             authentication.removeAuthStateListener(authStateListener);
+        }
+    }
+
+    public boolean isWriteStoragePermissionGranted(){
+        if(Build.VERSION.SDK_INT >= 23){
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                Log.d(TAG, "Permission Granted");
+                return true;
+            }else {
+                Log.d(TAG, "Permission not given");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return false;
+            }
+        }else {
+            Log.d(TAG, "Permission Granted");
+            return true;
         }
     }
 }
