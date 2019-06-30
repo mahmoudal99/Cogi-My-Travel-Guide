@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.CloudFirestore;
 import com.example.mytravelguide.utils.GooglePlacesApi;
+import com.example.mytravelguide.utils.Landmark;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
@@ -73,7 +74,6 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class TravelGuideActivity extends AppCompatActivity {
 
     private static final String TAG = "TravelGuideActivity";
-    private static final String API_KEY = BuildConfig.APIKEY;
     private final static int LOCATION = 3;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;
@@ -85,24 +85,21 @@ public class TravelGuideActivity extends AppCompatActivity {
     private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory;
     private CardView informationCardView, nearbyLocationsCardView;
 
-    private String landmarkNameString;
-    private String placeID;
+    private String landmarkNameString, placeID;
 
     private RelativeLayout landmarkRelativeLayout;
-
-    private Map<String, String> placeMap;
 
     // Firebase
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
+    private Landmark landmark;
 
     // Google
     private GooglePlacesApi googlePlacesApi;
 
     boolean expandInfo = true;
     boolean expandNearBy = true;
-    boolean landmarkAdded = false;
     boolean expendHistory = true;
 
     Context context;
@@ -128,7 +125,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void init() {
         context = TravelGuideActivity.this;
-
+        landmark = new Landmark(context);
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
         editor.apply();
@@ -149,7 +146,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         websiteTextView = findViewById(R.id.website);
         landmarkHistoryTextView = findViewById(R.id.landmarkHistoryTextView);
         String landmarkInformationResult = "";
-        landmarkNameString = "Landmark";
         landmarkNameString = getIntent().getStringExtra("AttractionName");
 
         informationCardView = findViewById(R.id.infoCard);
@@ -161,7 +157,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         expandNearByLocationsArrow = findViewById(R.id.expandNearLocationsByArrow);
         expandLandmarkHistory = findViewById(R.id.expandLandmarkHistory);
 
-        placeMap = new HashMap<>();
     }
 
     private void setUpWidgets() {
@@ -175,7 +170,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         addLandmarkToTimeline.setOnClickListener(v -> {
             if (landmarkNameString != null) {
-                checkLandmarkAlreadyAdded(landmarkNameString);
+                landmark.checkLandmarkAlreadyAdded(landmarkNameString, pref.getString("LandmarkID", null), currentUser);
             } else {
                 Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
             }
@@ -184,7 +179,10 @@ public class TravelGuideActivity extends AppCompatActivity {
         nearByLocationsButton.setOnClickListener(v -> loadNearByLocations());
         chooseImageButton.setOnClickListener(v -> openGallery());
 
-        searchLandmarkButton.setOnClickListener(v -> landmarkPicker());
+        searchLandmarkButton.setOnClickListener(v -> {
+            Intent intent = landmark.landmarkPicker();
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+        });
 
         expandLandmarkInformation.setOnClickListener(v -> {
             if (expandInfo) {
@@ -232,17 +230,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         });
     }
 
-    private void loadPreviousLandmark(){
-        landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
-        landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
-        numberTextView.setText(pref.getString("LandmarkNumber", ""));
-        websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
-        landmarkRating.setText(pref.getString("LandmarkRating", ""));
-        Linkify.addLinks(websiteTextView,  Linkify.WEB_URLS);
-        googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
-        new WikiApi().execute(landmarkTextView.getText().toString());
-    }
-
 
     /*---------------------------------------------------------------------- Locale ----------------------------------------------------------------------*/
 
@@ -263,69 +250,54 @@ public class TravelGuideActivity extends AppCompatActivity {
     public void loadLocale() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String language = sharedPreferences.getString("Language", "");
-        Log.d("MAHMOUD", language);
         setLocale(language);
     }
 
     /*---------------------------------------------------------------------- Landmark ----------------------------------------------------------------------*/
 
-    private void checkLandmarkAlreadyAdded(String landmarkName) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(getString(R.string.VisitedPlaces)).document(currentUser.getUid()).collection(getString(R.string.MyPlaces))
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                            if (Objects.requireNonNull(document.get("Place Name")).toString().equals(landmarkName)) {
-                                setLandmarkAddedTrue();
-                                Toast.makeText(TravelGuideActivity.this, "Landmark Already Added To Timeline", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        }
-                    }
-                    addLandmarkToTimeline();
-                });
-    }
 
-    public void setLandmarkAddedTrue() {
-        landmarkAdded = true;
-    }
-
-    private void addLandmarkToTimeline() {
-
-        if (placeID == null) {
-            Toast.makeText(this, "Landmark not added: No Id available", Toast.LENGTH_SHORT).show();
+    private void loadLandmark(Place place) {
+        if (place.getName().equals("The Blue Mosque")) {
+            landmarkTextView.setText(context.getString(R.string.sultan_ahmed_mosque));
         } else {
-            placeMap.put("Place Name", landmarkNameString);
-            placeMap.put("ID", placeID);
+            landmarkTextView.setText(place.getName());
+        }
 
-            CloudFirestore cloudFirestore = new CloudFirestore(placeMap, currentUser);
-            cloudFirestore.addPlace();
-            setLandmarkAddedTrue();
-            Toast.makeText(this, "Landmark added to timeline", Toast.LENGTH_SHORT).show();
+        googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
+        landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
+        landmarkRating.setText(String.valueOf(place.getRating()));
+        numberTextView.setText(place.getPhoneNumber());
+        websiteTextView.setText(place.getWebsiteUri().toString());
+        Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
+
+        if (place.getPriceLevel() != null) {
+            landmarkPrice.setText(place.getPriceLevel());
         }
     }
 
-    private void getLandmark(Bitmap bitmap) {
-        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
-        FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector();
-        detector.detectInImage(image)
-                .addOnSuccessListener(firebaseVisionCloudLandmarks -> {
-                    landmarkTextView.setText(firebaseVisionCloudLandmarks.get(0).getLandmark());
-                });
+    private void loadPreviousLandmark() {
+        landmarkNameString = pref.getString("LandmarkName", "Landmark");
+        landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
+        landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
+        numberTextView.setText(pref.getString("LandmarkNumber", ""));
+        websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
+        landmarkRating.setText(pref.getString("LandmarkRating", ""));
+        placeID = pref.getString("LandmarkID", null);
+        Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
+        googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
+        new WikiApi().execute(landmarkTextView.getText().toString());
     }
 
-    private void landmarkPicker() {
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), API_KEY);
-        }
-
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
-                Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS,
-                Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL, Place.Field.PHONE_NUMBER, Place.Field.VIEWPORT, Place.Field.WEBSITE_URI);
-
-        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    private void saveLandmarkInformation(String ID, String name, String rating, String phoneNumber, String website, String openingHours) {
+        // Save Landmark Information in Shared Preferences
+        editor.putString("LandmarkName", name);
+        editor.putString("LandmarkOpeningHours", openingHours);
+        editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
+        editor.putString("LandmarkRating", rating);
+        editor.putString("LandmarkWebsite", website);
+        editor.putString("LandmarkNumber", phoneNumber);
+        editor.putString("LandmarkID", ID);
+        editor.apply();
     }
 
     /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
@@ -378,7 +350,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         linearLayout.setLayoutParams(params);
     }
 
-
     /*---------------------------------------------------------------------- Activity Result ----------------------------------------------------------------------*/
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -389,35 +360,14 @@ public class TravelGuideActivity extends AppCompatActivity {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 try {
                     new WikiApi().execute(place.getName());
-                    if(place.getName().equals("The Blue Mosque")){
-                        landmarkTextView.setText(context.getString(R.string.sultan_ahmed_mosque));
-                    }else {
-                        landmarkTextView.setText(place.getName());
-                    }
-
-                    googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
                     landmarkNameString = place.getName();
-                    landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
-                    landmarkRating.setText(String.valueOf(place.getRating()));
-                    numberTextView.setText(place.getPhoneNumber());
-                    websiteTextView.setText(place.getWebsiteUri().toString());
-                    Linkify.addLinks(websiteTextView,  Linkify.WEB_URLS);
-                    placeID = place.getId();
-
-                    // Save Landmark Information in Shared Preferences
-                    editor.putString("LandmarkName", place.getName());
-                    editor.putString("LandmarkOpeningHours", landmarkOpeningHours.getText().toString());
-                    editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
-                    editor.putString("LandmarkRating", landmarkRating.getText().toString());
-                    editor.putString("LandmarkWebsite", place.getWebsiteUri().toString());
-                    editor.putString("LandmarkNumber", place.getPhoneNumber());
-                    editor.apply();
-
-                    Log.d("PLACEWIKI", place.getAddress() + " " + place.getPhoneNumber() + " " + place.getWebsiteUri().toString());
-
-                    if (place.getPriceLevel() != null) {
-                        landmarkPrice.setText(place.getPriceLevel());
-                    }
+                    loadLandmark(place);
+                    saveLandmarkInformation(place.getId(),
+                            place.getName(),
+                            String.valueOf(place.getRating()),
+                            place.getPhoneNumber().toString(),
+                            place.getWebsiteUri().toString(),
+                            googlePlacesApi.placeOpeningHours(place));
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -437,7 +387,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             try {
                 InputStream inputStream = context.getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                getLandmark(bitmap);
+                landmark.getLandmarkFromImage(bitmap, landmarkTextView);
                 landmarkImage.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -452,6 +402,19 @@ public class TravelGuideActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{ACCESS_FINE_LOCATION}, LOCATION);
             }
+        }
+    }
+
+    public void isWriteStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Permission Granted");
+            } else {
+                Log.d(TAG, "Permission not given");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+            }
+        } else {
+            Log.d(TAG, "Permission Granted");
         }
     }
 
@@ -473,9 +436,8 @@ public class TravelGuideActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             String keyword = strings[0];
             try {
-//                Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
 
-                if (keyword.equals("The Blue Mosque")){
+                if (keyword.equals("The Blue Mosque")) {
                     keyword = "Sultan Ahmed Mosque";
                 }
 
@@ -517,15 +479,12 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void setUpFirebaseAuthentication() {
         authentication = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
-                    Log.d(TAG, "Success");
-                } else {
-                    Log.d(TAG, "signed out");
-                }
+        authStateListener = firebaseAuth -> {
+            currentUser = firebaseAuth.getCurrentUser();
+            if (currentUser != null) {
+                Log.d(TAG, "Success");
+            } else {
+                Log.d(TAG, "signed out");
             }
         };
     }
@@ -544,21 +503,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isWriteStoragePermissionGranted(){
-        if(Build.VERSION.SDK_INT >= 23){
-            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
-                Log.d(TAG, "Permission Granted");
-                return true;
-            }else {
-                Log.d(TAG, "Permission not given");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-                return false;
-            }
-        }else {
-            Log.d(TAG, "Permission Granted");
-            return true;
-        }
-    }
 }
 
 

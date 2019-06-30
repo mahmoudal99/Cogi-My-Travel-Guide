@@ -90,6 +90,7 @@ public class VisitedActivity extends AppCompatActivity {
 
     private void setUpTimeline() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection("VisitedPlaces").document(currentUser.getUid()).collection("MyPlaces")
                 .get()
                 .addOnCompleteListener(task -> {
