@@ -51,9 +51,7 @@ public class FirebaseMethods {
 
     public void logout() {
         setUpGooogleSignin();
-//        authentication.signOut();
         FirebaseAuth.getInstance().signOut();
-        LoginManager.getInstance().logOut();
         googleSignInClient.signOut();
         Intent intent = new Intent(this.context, SignInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);

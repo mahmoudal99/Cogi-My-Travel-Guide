@@ -50,26 +50,18 @@ public class SignInActivity extends AppCompatActivity {
 
     private Context context;
 
+    private String facebookUserID;
+
     // Facebook
     private CallbackManager callbackManager;
-    private LoginButton loginButton;
 
     // Google
     private GoogleSignInClient mGoogleSignInClient;
-
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
-        // Shared Preferences
-        pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        editor = pref.edit();
-        editor.apply();
-
 
         initGoogleAuth();
         init();
@@ -78,8 +70,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void init() {
+        facebookUserID = "notFacebook";
         callbackManager = CallbackManager.Factory.create();
-        loginButton = findViewById(R.id.login_button);
         googleSignInButton = findViewById(R.id.sign_in_button);
         context = SignInActivity.this;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -97,29 +89,6 @@ public class SignInActivity extends AppCompatActivity {
     private void setUpWidgets() {
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
         googleSignInButton.setOnClickListener(v -> googleSignIn());
-
-        callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-                // ...
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-                // ...
-            }
-        });
     }
 
     /*---------------------------------------------------------------------- Google Sign In ----------------------------------------------------------------------*/
@@ -151,113 +120,14 @@ public class SignInActivity extends AppCompatActivity {
         authentication.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        saveGoogleCredentials(acct.getIdToken(), acct.getEmail());
-                        linkGoogleToFacebook(acct.getEmail());
+                        Log.d(TAG, "Login Successful");
                     } else {
                         Toast.makeText(context, "Sign In Failed, Please Try Again", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    /*---------------------------------------------------------------------- Facebook Sign In ----------------------------------------------------------------------*/
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        authentication.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        saveFacebookCredentials(token.getToken());
-                        String googleToken = pref.getString(getFacebookUserEmail() + "Google", "0");
-                        checkTokenExists(googleToken);
-                    } else {
-                        Log.w(TAG, "signInWithCredential:failure", task.getException());
-                        Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
     /*---------------------------------------------------------------------- Link Credentials ----------------------------------------------------------------------*/
-
-    private void saveFacebookCredentials(String token) {
-
-        authentication = FirebaseAuth.getInstance();
-        FirebaseUser user = authentication.getCurrentUser();
-
-        if (user != null) {
-            for (UserInfo userInfo : user.getProviderData()) {
-                Toast.makeText(SignInActivity.this, userInfo.getProviderId(), Toast.LENGTH_SHORT).show();
-                if (userInfo.getProviderId().contains("facebook.com")) {
-                    editor.putString(userInfo.getEmail() + "Facebook", token);
-                    editor.apply();
-                }
-            }
-        }
-    }
-
-    private void saveGoogleCredentials(String token, String email) {
-        editor.putString(email + "Google", token);
-        editor.apply();
-    }
-
-    private void checkTokenExists(String token) {
-        if (token.equals("0")) {
-            Log.d(TAG, "No google token saved");
-        } else {
-            String isLinked = pref.getString(getFacebookUserEmail() + "Linked", "NotLinked");
-            if (isLinked.equals("NotLinked")) {
-                deleteUser();
-            } else {
-                Log.d(TAG, "Accounts already linked");
-            }
-        }
-    }
-
-    public void linkGoogleToFacebook(String email) {
-        authentication = FirebaseAuth.getInstance();
-        FirebaseUser user = authentication.getCurrentUser();
-
-        String token = pref.getString(email + "Facebook", "");
-        if (!token.equals("")) {
-            AuthCredential credential = FacebookAuthProvider.getCredential(token);
-            user.linkWithCredential(credential)
-                    .addOnCompleteListener(this,
-                            task -> {
-                                if (!task.isSuccessful()) {
-                                    Log.d(TAG, "onComplete: " + task.getException().getMessage());
-                                } else {
-                                    editor.putString(getFacebookUserEmail() + "Linked", "Linked");
-                                    editor.apply();
-                                }
-                            });
-        }
-
-    }
-
-    private String getFacebookUserEmail() {
-        authentication = FirebaseAuth.getInstance();
-        FirebaseUser user = authentication.getCurrentUser();
-
-        if (user != null) {
-            for (UserInfo userInfo : user.getProviderData()) {
-                if (userInfo.getProviderId().equals("facebook.com")) {
-                    return userInfo.getEmail();
-                }
-            }
-        }
-        return "Email";
-    }
-
-    private void deleteUser() {
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        Objects.requireNonNull(user).delete()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "User account deleted.");
-                    }
-                });
-    }
 
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {
@@ -266,7 +136,10 @@ public class SignInActivity extends AppCompatActivity {
             currentUser = firebaseAuth.getCurrentUser();
             if (currentUser != null) {
                 Log.d(TAG, "Success");
-                startActivity(new Intent(SignInActivity.this, HomePageActivity.class));
+                Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
+                intent.putExtra("facebookUserId", facebookUserID);
+                startActivity(intent);
+
             } else {
                 Log.d(TAG, "signed out");
             }

@@ -13,11 +13,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.mytravelguide.attractions.AttractionsActivity;
 import com.example.mytravelguide.settings.SettingsActivity;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.Locale;
 
@@ -41,7 +44,6 @@ public class HomePageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         init();
-
         setUpWidgets();
         setUpFirebaseAuthentication();
     }

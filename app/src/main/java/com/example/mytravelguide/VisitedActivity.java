@@ -20,6 +20,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.maps.errors.ApiException;
@@ -49,6 +50,8 @@ public class VisitedActivity extends AppCompatActivity {
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
+
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

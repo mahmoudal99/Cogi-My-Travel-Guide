@@ -28,49 +28,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/google_sign_in_top" />
 
-        <LinearLayout
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal">
-
-
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="100dp"
-                android:layout_height="2dp"
-                android:layout_gravity="center"
-                android:background="@color/White" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:fontFamily="@font/rancho"
-                android:text="OR"
-                android:textColor="@color/White"
-                android:textSize="@dimen/_18sp"
-                app:fontFamily="sans-serif" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="100dp"
-                android:layout_height="2dp"
-                android:layout_gravity="center"
-                android:background="@color/White" />
-
-        </LinearLayout>
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="@dimen/googe_sign_width"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
