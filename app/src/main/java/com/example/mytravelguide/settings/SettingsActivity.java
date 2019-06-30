@@ -12,14 +12,20 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.utils.FirebaseMethods;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -28,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageView backArrow, languageArrow;
     private LinearLayout logoutLinearLayout;
     private TextView emailTextView;
+    private GoogleSignInClient googleSignInClient;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -44,7 +51,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         init();
-        userInformation();
         setupWidgets();
         setUpFirebaseAuthentication();
     }
@@ -60,18 +66,9 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupWidgets() {
         backArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HomePageActivity.class)));
         logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
-//        emailTextView.setText(email);
-        languageArrow.setOnClickListener(v -> showLanguageOptions());
-    }
-
-    private void getCurrentUserInstance() {
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         authentication = FirebaseAuth.getInstance();
-    }
-
-    private void userInformation() {
-        getCurrentUserInstance();
-//        email = Objects.requireNonNull(currentUser).getEmail();
+        emailTextView.setText(authentication.getCurrentUser().getProviderData().get(1).getEmail());
+        languageArrow.setOnClickListener(v -> showLanguageOptions());
     }
 
     private void showLanguageOptions() {
@@ -122,7 +119,8 @@ public class SettingsActivity extends AppCompatActivity {
         authStateListener = firebaseAuth -> {
             currentUser = firebaseAuth.getCurrentUser();
             if (currentUser != null) {
-                Log.d("Firebase Authentication", "Success");
+                Log.d("Firebase Auth" + "GS", "Success" + currentUser.getEmail());
+
             } else {
                 Log.d("Firebase Authentication", "signed out");
             }
