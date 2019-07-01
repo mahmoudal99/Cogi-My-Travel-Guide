@@ -110,8 +110,6 @@ public class SignInActivity extends AppCompatActivity {
                 Log.w(TAG, "Google sign in failed", e);
             }
         }
-
-        // Pass the activity result back to the Facebook SDK
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 

@@ -134,7 +134,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         nearByLocationsButton = findViewById(R.id.location);
         addLandmarkToTimeline = findViewById(R.id.addPlace);
         searchLandmarkButton = findViewById(R.id.search);
-        chooseImageButton = findViewById(R.id.gallery);
 
 //        landmarkImage = findViewById(R.id.attractionImage);
         landmarkRelativeLayout = findViewById(R.id.landmarkImage);
@@ -177,7 +176,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         });
 
         nearByLocationsButton.setOnClickListener(v -> loadNearByLocations());
-        chooseImageButton.setOnClickListener(v -> openGallery());
 
         searchLandmarkButton.setOnClickListener(v -> {
             Intent intent = landmark.landmarkPicker();
@@ -315,18 +313,6 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
         nearByLocationsArray = googlePlacesApi.getNearByLocations(nearByLocationsArray, mAdapter);
-    }
-
-    private void openGallery() {
-        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        getIntent.setType("image/*");
-
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setType("image/*");
-
-        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-        startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
     private void setUpLinearLayout() {
