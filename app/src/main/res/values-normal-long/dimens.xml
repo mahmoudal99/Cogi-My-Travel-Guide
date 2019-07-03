@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="yDelta">65%p</dimen>
+    //  Animation Dimens
+    <dimen name="yDelta">100%p</dimen>
 
-    <dimen name="travel_guide_logo_width">220dp</dimen>
-    <dimen name="travel_guide_logo_height">180dp</dimen>
+    <dimen name="travel_guide_logo_width">250dp</dimen>
+    <dimen name="travel_guide_logo_height">210dp</dimen>
 
     //--------------- Sign In Page Dimens ---------------//
 
     // Google Sign In
-    <dimen name="google_sign_in_top">420dp</dimen>
-    <dimen name="googe_sign_width">160dp</dimen>
+    <dimen name="google_sign_in_top">475dp</dimen>
+    <dimen name="googe_sign_width">200dp</dimen>
 
     // Sign In Edit Text Layout Dimens
     <dimen name="EditTextMargin">10dp</dimen>
     <dimen name="EditTextHeight">50dp</dimen>
 
+    // Change Password Activity
+    <dimen name="PasswordEditTextHeight">40dp</dimen>
+
     // Create Account Layout Dimens
-    <dimen name="createAccountTop">50dp</dimen>
+    <dimen name="createAccountTop">190dp</dimen>
     <dimen name="createAccontTvHeight">55dp</dimen>
     <dimen name="createAccontTvWidth">240dp</dimen>
 
@@ -27,6 +31,7 @@
     // Logo Image Dimens
     <dimen name="LogoWidth">200dp</dimen>
     <dimen name="LogoHeight">170dp</dimen>
+
 
     //--------------- Home Page Page Dimens ---------------//
 
@@ -42,8 +47,12 @@
 
     // Home Page Dimens
     <dimen name="settingsIcon">24dp</dimen>
+    <dimen name="settings_padding">10dp</dimen>
+
     <dimen name="homeRelativeLayoutHeight">220dp</dimen>
     <dimen name="cardViewHeight">150dp</dimen>
+
+    <dimen name="logo_margin_top">30dp</dimen>
 
     //--------------- Trave Guide Page Dimens ---------------//
     <dimen name="landmarkImageHeight">230dp</dimen>
@@ -52,7 +61,7 @@
     <dimen name="searchImageDimens">25dp</dimen>
     <dimen name="dropDownButtonDimens">18dp</dimen>
 
-    <dimen name="microphone_dimens">35dp</dimen>
+    <dimen name="microphone_dimens">25dp</dimen>
 
 
     <dimen name="cardview_margin_top_10dp">10dp</dimen>
@@ -64,7 +73,7 @@
 
     <dimen name="list_height">45dp</dimen>
 
-    <dimen name="landmark_image_height">300dp</dimen>
+    <dimen name="landmark_image_height">270dp</dimen>
 
     //--------------- Tab Dimens ---------------//
     <dimen name="backArrowDimens">25dp</dimen>
@@ -81,9 +90,9 @@
 
     // Margin Values
     <dimen name="margin_10dp">10dp</dimen>
-    <dimen name="margin_20dp">15dp</dimen>
-    <dimen name="margin_25dp">20dp</dimen>
-    <dimen name="margin_30dp">25dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_25dp">25dp</dimen>
+    <dimen name="margin_30dp">30dp</dimen>
 
     // Logo Splash Position
     <dimen name="LogoMarginTop">600px</dimen>

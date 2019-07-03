@@ -357,8 +357,8 @@
 
                             <ImageView
                                 android:id="@+id/microphone"
-                                android:layout_width="@dimen/dropDownButtonDimens"
-                                android:layout_height="@dimen/dropDownButtonDimens"
+                                android:layout_width="@dimen/microphone_dimens"
+                                android:layout_height="@dimen/microphone_dimens"
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"
                                 android:src="@drawable/microphone" />
@@ -378,11 +378,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="6"
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/asap"
                             android:padding="@dimen/information_padding_10dp"
                             android:text=""
                             android:textColor="@color/black"
                             android:textSize="@dimen/_18sp"
+                            android:textStyle="bold"
                             android:visibility="gone" />
 
                     </LinearLayout>
