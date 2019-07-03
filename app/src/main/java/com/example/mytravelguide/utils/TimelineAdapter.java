@@ -1,6 +1,7 @@
 package com.example.mytravelguide.utils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.example.mytravelguide.models.VisitedPlaceObject;
 import com.example.mytravelguide.R;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +22,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
 
     private ArrayList<VisitedPlaceObject> places;
     private Context context;
+    private View divider;
+    private String[] colours = {"#D50000", "#00C853", "#2979FF", "#FFFF00", "#FF3D00", "#6200EA"};
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView placeName, dateVisited;
@@ -28,6 +32,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
             super(view);
             placeName = view.findViewById(R.id.placeName);
             placeImage = view.findViewById(R.id.placeImage);
+            divider = view.findViewById(R.id.divider);
         }
     }
 
@@ -49,6 +54,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
+        Random random = new Random();
+        int index = random.nextInt(6);
+        divider.setBackgroundColor(Color.parseColor(colours[index]));
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);
         googlePlacesApi.setPhotoBitmap(placeModel.photoMetadata, holder.placeImage);
     }

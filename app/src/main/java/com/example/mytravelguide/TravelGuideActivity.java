@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
@@ -68,6 +69,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -82,10 +84,10 @@ public class TravelGuideActivity extends AppCompatActivity {
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkHistoryTextView, numberTextView, websiteTextView;
-    private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory;
+    private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory, mircophone;
     private CardView informationCardView, nearbyLocationsCardView;
 
-    private String landmarkNameString, placeID;
+    private String landmarkNameString, placeID, wikipediaResult;
 
     private RelativeLayout landmarkRelativeLayout;
 
@@ -102,6 +104,8 @@ public class TravelGuideActivity extends AppCompatActivity {
     boolean expandNearBy = true;
     boolean expendHistory = true;
 
+    private TextToSpeech textToSpeech;
+
     Context context;
 
     // Shared Preference
@@ -115,6 +119,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         setContentView(R.layout.activity_travel_guide);
 
         requestPermission();
+        setUpTextToSpeech();
         isWriteStoragePermissionGranted();
         init();
         setUpWidgets();
@@ -149,6 +154,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         informationCardView = findViewById(R.id.infoCard);
         nearbyLocationsCardView = findViewById(R.id.nearbyLocationsCardView);
+        mircophone = findViewById(R.id.microphone);
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
 
@@ -159,7 +165,15 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
     private void setUpWidgets() {
-        backArrow.setOnClickListener(v -> startActivity(new Intent(TravelGuideActivity.this, HomePageActivity.class)));
+        mircophone.setEnabled(false);
+
+        mircophone.setOnClickListener(v -> speak());
+
+        backArrow.setOnClickListener(v -> {
+            startActivity(new Intent(TravelGuideActivity.this, HomePageActivity.class));
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        });
 
         if (landmarkNameString != null) {
             landmarkTextView.setText(landmarkNameString);
@@ -228,6 +242,13 @@ public class TravelGuideActivity extends AppCompatActivity {
         });
     }
 
+    private void clearTextViews(){
+        landmarkOpeningHours.setText("");
+        landmarkPrice.setText("");
+        landmarkRating.setText("");
+        landmarkTextView.setText("");
+        websiteTextView.setText("");
+    }
 
     /*---------------------------------------------------------------------- Locale ----------------------------------------------------------------------*/
 
@@ -261,6 +282,14 @@ public class TravelGuideActivity extends AppCompatActivity {
             landmarkTextView.setText(place.getName());
         }
 
+
+        try {
+            wikipediaResult = new WikiApi().execute(place.getName()).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
         landmarkRating.setText(String.valueOf(place.getRating()));
@@ -283,7 +312,14 @@ public class TravelGuideActivity extends AppCompatActivity {
         placeID = pref.getString("LandmarkID", null);
         Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
         googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
-        new WikiApi().execute(landmarkTextView.getText().toString());
+        try {
+            wikipediaResult = new WikiApi().execute(landmarkTextView.getText().toString()).get();
+            Log.d("WIKIHERE", wikipediaResult);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveLandmarkInformation(String ID, String name, String rating, String phoneNumber, String website, String openingHours) {
@@ -336,6 +372,25 @@ public class TravelGuideActivity extends AppCompatActivity {
         linearLayout.setLayoutParams(params);
     }
 
+    private void setUpTextToSpeech() {
+        textToSpeech = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                int result = textToSpeech.setLanguage(Locale.ENGLISH);
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.d("TextToSpeech", "Language not supported");
+                } else {
+                    mircophone.setEnabled(true);
+                }
+            } else {
+                Log.d("TextToSpeech", "TextToSpeech initializing failed");
+            }
+        });
+    }
+
+    private void speak() {
+        textToSpeech.speak(wikipediaResult, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(0));
+    }
+
     /*---------------------------------------------------------------------- Activity Result ----------------------------------------------------------------------*/
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -345,8 +400,8 @@ public class TravelGuideActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 try {
-                    new WikiApi().execute(place.getName());
                     landmarkNameString = place.getName();
+                    clearTextViews();
                     loadLandmark(place);
                     saveLandmarkInformation(place.getId(),
                             place.getName(),
@@ -442,6 +497,9 @@ public class TravelGuideActivity extends AppCompatActivity {
                 Log.d("WIKI", responseSB);
                 if (responseSB.split("extract\":\"").length > 1) {
                     String result = responseSB.split("extract\":\"")[1];
+                    result = result.replaceAll("[-+.^:,;(){}\']", "");
+                    result = result.replaceAll("[0-9]", "");
+                    result = result.replaceAll("\\\\", "");
                     return result;
                 }
 
@@ -454,9 +512,6 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            String wikipediaResult = result.replaceAll("[-+.^:,;(){}\']", "");
-            wikipediaResult = wikipediaResult.replaceAll("[0-9]", "");
-            wikipediaResult = wikipediaResult.replaceAll("\\\\", "");
             landmarkHistoryTextView.setText(wikipediaResult);
         }
     }
@@ -487,8 +542,21 @@ public class TravelGuideActivity extends AppCompatActivity {
         if (authStateListener != null) {
             authentication.removeAuthStateListener(authStateListener);
         }
+
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+        super.onDestroy();
+    }
 }
 
 

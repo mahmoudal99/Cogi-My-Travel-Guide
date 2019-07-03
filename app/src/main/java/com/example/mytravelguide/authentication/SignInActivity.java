@@ -50,8 +50,6 @@ public class SignInActivity extends AppCompatActivity {
 
     private Context context;
 
-    private String facebookUserID;
-
     // Facebook
     private CallbackManager callbackManager;
 
@@ -70,7 +68,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void init() {
-        facebookUserID = "notFacebook";
         callbackManager = CallbackManager.Factory.create();
         googleSignInButton = findViewById(R.id.sign_in_button);
         context = SignInActivity.this;
@@ -135,7 +132,6 @@ public class SignInActivity extends AppCompatActivity {
             if (currentUser != null) {
                 Log.d(TAG, "Success");
                 Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
-                intent.putExtra("facebookUserId", facebookUserID);
                 startActivity(intent);
 
             } else {
