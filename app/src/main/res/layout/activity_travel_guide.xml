@@ -223,12 +223,12 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/rancho"
                                 android:padding="@dimen/information_padding_10dp"
-                                android:text="@string/price"
+                                android:text="Address:"
                                 android:textColor="@color/LightBlue"
                                 android:textSize="@dimen/_20sp" />
 
                             <TextView
-                                android:id="@+id/price"
+                                android:id="@+id/address"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/rancho"

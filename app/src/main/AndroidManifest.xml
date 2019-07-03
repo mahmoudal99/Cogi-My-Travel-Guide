@@ -46,7 +46,7 @@
 
         <activity android:name=".settings.SettingsActivity" />
         <activity android:name=".attractions.ContinentAttractionsActivity" />
-        <activity android:name=".VisitedActivity" />
+        <activity android:name=".TimelineActivity" />
         <activity android:name=".TravelGuideActivity" />
         <activity android:name=".attractions.AttractionsActivity" />
         <activity android:name=".HomePageActivity" />

@@ -29,7 +29,6 @@ import java.util.Objects;
 public class Landmark {
 
     private static final String API_KEY = BuildConfig.APIKEY;
-    private Place place;
     private Context context;
 
     private Map<String, String> placeMap;
@@ -93,8 +92,8 @@ public class Landmark {
         }
 
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
-                Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS,
-                Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL, Place.Field.PHONE_NUMBER, Place.Field.VIEWPORT, Place.Field.WEBSITE_URI);
+                Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL, Place.Field.PHONE_NUMBER, Place.Field.VIEWPORT,
+                Place.Field.WEBSITE_URI, Place.Field.ADDRESS);
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(context);
         return intent;

@@ -20,7 +20,6 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.maps.errors.ApiException;
@@ -30,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class VisitedActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity {
 
     private static final String TAG = "TimetableActivity";
     private static final String API_KEY = BuildConfig.APIKEY;
@@ -56,7 +55,7 @@ public class VisitedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visited);
+        setContentView(R.layout.activity_timeline);
 
         init();
         setUpListView();
@@ -67,19 +66,19 @@ public class VisitedActivity extends AppCompatActivity {
 
     private void init() {
         backArrow = findViewById(R.id.backArrow);
-        context = VisitedActivity.this;
+        context = TimelineActivity.this;
         listView = findViewById(R.id.list);
         Places.initialize(context, API_KEY);
         placesClient = Places.createClient(context);
         landmarksList = new ArrayList<>();
-        timelineAdapter = new TimelineAdapter(landmarksList, VisitedActivity.this);
+        timelineAdapter = new TimelineAdapter(landmarksList, TimelineActivity.this);
         listView = findViewById(R.id.list);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private void setUpWidgets() {
         backArrow.setOnClickListener(v -> {
-            Intent backIntent = new Intent(VisitedActivity.this, HomePageActivity.class);
+            Intent backIntent = new Intent(TimelineActivity.this, HomePageActivity.class);
             startActivity(backIntent);
         });
     }

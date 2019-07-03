@@ -83,7 +83,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
-    private TextView landmarkTextView, landmarkOpeningHours, landmarkPrice, landmarkRating, landmarkHistoryTextView, numberTextView, websiteTextView;
+    private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, landmarkHistoryTextView, numberTextView, websiteTextView;
     private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory, mircophone;
     private CardView informationCardView, nearbyLocationsCardView;
 
@@ -145,7 +145,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkTextView = findViewById(R.id.attractionName);
         landmarkOpeningHours = findViewById(R.id.openingHours);
         landmarkRating = findViewById(R.id.rating);
-        landmarkPrice = findViewById(R.id.price);
+        landmarkAddress = findViewById(R.id.address);
         numberTextView = findViewById(R.id.number);
         websiteTextView = findViewById(R.id.website);
         landmarkHistoryTextView = findViewById(R.id.landmarkHistoryTextView);
@@ -244,7 +244,7 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void clearTextViews(){
         landmarkOpeningHours.setText("");
-        landmarkPrice.setText("");
+        landmarkAddress.setText("");
         landmarkRating.setText("");
         landmarkTextView.setText("");
         websiteTextView.setText("");
@@ -282,7 +282,6 @@ public class TravelGuideActivity extends AppCompatActivity {
             landmarkTextView.setText(place.getName());
         }
 
-
         try {
             wikipediaResult = new WikiApi().execute(place.getName()).get();
         } catch (ExecutionException e) {
@@ -295,10 +294,11 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkRating.setText(String.valueOf(place.getRating()));
         numberTextView.setText(place.getPhoneNumber());
         websiteTextView.setText(place.getWebsiteUri().toString());
+        landmarkAddress.setText(place.getAddress());
         Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
 
-        if (place.getPriceLevel() != null) {
-            landmarkPrice.setText(place.getPriceLevel());
+        if (place.getAddress() != null) {
+            landmarkAddress.setText(place.getAddress());
         }
     }
 
@@ -309,6 +309,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         numberTextView.setText(pref.getString("LandmarkNumber", ""));
         websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
         landmarkRating.setText(pref.getString("LandmarkRating", ""));
+        landmarkAddress.setText(pref.getString("LandmarkAddress", ""));
         placeID = pref.getString("LandmarkID", null);
         Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
         googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
@@ -322,7 +323,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         }
     }
 
-    private void saveLandmarkInformation(String ID, String name, String rating, String phoneNumber, String website, String openingHours) {
+    private void saveLandmarkInformation(String ID, String name, String rating, String phoneNumber, String website, String openingHours, String address) {
         // Save Landmark Information in Shared Preferences
         editor.putString("LandmarkName", name);
         editor.putString("LandmarkOpeningHours", openingHours);
@@ -330,6 +331,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         editor.putString("LandmarkRating", rating);
         editor.putString("LandmarkWebsite", website);
         editor.putString("LandmarkNumber", phoneNumber);
+        editor.putString("LandmarkAddress", address);
         editor.putString("LandmarkID", ID);
         editor.apply();
     }
@@ -406,9 +408,10 @@ public class TravelGuideActivity extends AppCompatActivity {
                     saveLandmarkInformation(place.getId(),
                             place.getName(),
                             String.valueOf(place.getRating()),
-                            place.getPhoneNumber().toString(),
+                            place.getPhoneNumber(),
                             place.getWebsiteUri().toString(),
-                            googlePlacesApi.placeOpeningHours(place));
+                            googlePlacesApi.placeOpeningHours(place),
+                            place.getAddress());
 
                 } catch (Exception e) {
                     e.printStackTrace();
