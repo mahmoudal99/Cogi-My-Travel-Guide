@@ -34,41 +34,18 @@ public class AttractionsActivity extends AppCompatActivity {
     }
 
     private void setUpWidgets(){
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backIntent = new Intent(AttractionsActivity.this, HomePageActivity.class);
-                startActivity(backIntent);
-            }
+        backArrow.setOnClickListener(v -> {
+            Intent backIntent = new Intent(AttractionsActivity.this, HomePageActivity.class);
+            startActivity(backIntent);
         });
 
-        europeCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "Europe"));
-            }
-        });
+        europeCardView.setOnClickListener(v -> startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "Europe")));
 
-        asiaCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "Asia"));
-            }
-        });
+        asiaCardView.setOnClickListener(v -> startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "Asia")));
 
-        americaCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "America"));
-            }
-        });
+        americaCardView.setOnClickListener(v -> startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "America")));
 
-        africaCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "Africa"));
-            }
-        });
+        africaCardView.setOnClickListener(v -> startActivity(new Intent(AttractionsActivity.this, ContinentAttractionsActivity.class).putExtra("Continent", "Africa")));
     }
 }
 

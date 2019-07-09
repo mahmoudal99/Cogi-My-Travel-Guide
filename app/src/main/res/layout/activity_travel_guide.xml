@@ -311,6 +311,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/rancho"
                                 android:paddingTop="@dimen/information_padding_10dp"
+                                android:maxLines="1"
                                 android:autoLink="web"
                                 android:paddingBottom="@dimen/information_padding_10dp"
                                 android:textColor="@color/black"

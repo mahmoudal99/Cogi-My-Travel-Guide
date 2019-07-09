@@ -3,15 +3,25 @@ package com.example.mytravelguide.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.example.mytravelguide.authentication.SignInActivity;
 import com.example.mytravelguide.R;
+import com.example.mytravelguide.models.AttractionObject;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -67,6 +77,29 @@ public class FirebaseMethods {
         googleSignInClient = GoogleSignIn.getClient(this.context, gso);
     }
 
+    public void getLandmarkInformation(String landmarkName, TextView landmarkInformation){
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        Query query = reference.child("Landmarks").orderByChild("placeName").equalTo(landmarkName);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // dataSnapshot is the "issue" node with all children with id 0
+                    for (DataSnapshot issue : dataSnapshot.getChildren()) {
+                        landmarkInformation.setText(issue.child("description").getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void sendVerificationEmail() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -80,7 +113,6 @@ public class FirebaseMethods {
                     });
         }
     }
-
 
 }
 

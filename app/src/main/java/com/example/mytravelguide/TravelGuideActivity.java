@@ -19,6 +19,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfDocument;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,15 +38,19 @@ import android.widget.Toast;
 
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.CloudFirestore;
+import com.example.mytravelguide.utils.FirebaseMethods;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.Landmark;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.vision.L;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.api.client.util.IOUtils;
+import com.google.api.services.customsearch.model.Search;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,14 +59,28 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmarkDetector;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -70,16 +89,27 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class TravelGuideActivity extends AppCompatActivity {
 
     private static final String TAG = "TravelGuideActivity";
+
+    private static final String app_id = "20c13d7a";
+    private static final String app_key = "fe221efca83fc8b9af63dba9f0e4adb3";
+    private static final String language = "en-gb";
+
     private final static int LOCATION = 3;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;
     private static final String encoding = "UTF-8";
+    private String api_url;
+    private String word_id;
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
@@ -96,6 +126,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
     private Landmark landmark;
+    private FirebaseMethods firebaseMethods;
 
     // Google
     private GooglePlacesApi googlePlacesApi;
@@ -157,6 +188,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         mircophone = findViewById(R.id.microphone);
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
+        firebaseMethods = new FirebaseMethods(TravelGuideActivity.this);
 
         expandLandmarkInformation = findViewById(R.id.expandInformation);
         expandNearByLocationsArrow = findViewById(R.id.expandNearLocationsByArrow);
@@ -242,7 +274,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         });
     }
 
-    private void clearTextViews(){
+    private void clearTextViews() {
         landmarkOpeningHours.setText("");
         landmarkAddress.setText("");
         landmarkRating.setText("");
@@ -282,13 +314,6 @@ public class TravelGuideActivity extends AppCompatActivity {
             landmarkTextView.setText(place.getName());
         }
 
-        try {
-            wikipediaResult = new WikiApi().execute(place.getName()).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
         landmarkRating.setText(String.valueOf(place.getRating()));
@@ -312,15 +337,9 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkAddress.setText(pref.getString("LandmarkAddress", ""));
         placeID = pref.getString("LandmarkID", null);
         Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
+        landmarkHistoryTextView.setText(pref.getString("LandmarkHistory", ""));
         googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
-        try {
-            wikipediaResult = new WikiApi().execute(landmarkTextView.getText().toString()).get();
-            Log.d("WIKIHERE", wikipediaResult);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        firebaseMethods.getLandmarkInformation(landmarkNameString, landmarkHistoryTextView);
     }
 
     private void saveLandmarkInformation(String ID, String name, String rating, String phoneNumber, String website, String openingHours, String address) {
@@ -333,6 +352,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         editor.putString("LandmarkNumber", phoneNumber);
         editor.putString("LandmarkAddress", address);
         editor.putString("LandmarkID", ID);
+        editor.putString("LandmarkHistory", landmarkHistoryTextView.getText().toString());
         editor.apply();
     }
 
@@ -390,7 +410,7 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
     private void speak() {
-        textToSpeech.speak(wikipediaResult, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(0));
+        textToSpeech.speak(landmarkHistoryTextView.getText(), TextToSpeech.QUEUE_FLUSH, null, String.valueOf(0));
     }
 
     /*---------------------------------------------------------------------- Activity Result ----------------------------------------------------------------------*/
@@ -403,8 +423,12 @@ public class TravelGuideActivity extends AppCompatActivity {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 try {
                     landmarkNameString = place.getName();
+                    Log.d("LLLL", place.getName());
+                    FirebaseMethods firebaseMethods = new FirebaseMethods(TravelGuideActivity.this);
+                    firebaseMethods.getLandmarkInformation(place.getName(), landmarkHistoryTextView);
                     clearTextViews();
                     loadLandmark(place);
+                    // Save landmark information
                     saveLandmarkInformation(place.getId(),
                             place.getName(),
                             String.valueOf(place.getRating()),
@@ -475,49 +499,64 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     /*---------------------------------------------------------------------- Wikipedia Api ----------------------------------------------------------------------*/
 
-    private class WikiApi extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String keyword = strings[0];
-            try {
-
-                if (keyword.equals("The Blue Mosque")) {
-                    keyword = "Sultan Ahmed Mosque";
-                }
-
-                String wikipediaURL = keyword;
-                String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
-                        + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
-
-                //"extract":" the summary of the article
-                HttpURLConnection httpcon = (HttpURLConnection) new URL(wikipediaApiJSON).openConnection();
-                httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
-                BufferedReader in = new BufferedReader(new InputStreamReader(httpcon.getInputStream()));
-
-                String responseSB = in.readLine();
-
-                in.close();
-                Log.d("WIKI", responseSB);
-                if (responseSB.split("extract\":\"").length > 1) {
-                    String result = responseSB.split("extract\":\"")[1];
-                    result = result.replaceAll("[-+.^:,;(){}\']", "");
-                    result = result.replaceAll("[0-9]", "");
-                    result = result.replaceAll("\\\\", "");
-                    return result;
-                }
-
-                return "No information found";
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            landmarkHistoryTextView.setText(wikipediaResult);
-        }
-    }
+//    private class WikiApi extends AsyncTask<String, Integer, String> {
+//        @Override
+//        protected String doInBackground(String... strings) {
+//            String keyword = strings[0];
+//            try {
+//
+//                keyword = keyword.replaceAll(" ", "+");
+//                String searchText = keyword + "+wikipedia";
+//                Document document = Jsoup.connect("https://www.google.com/search?source=hp&ei=uc8gXdSGFLOD8gK8r5qACA&q=" + searchText).get();
+//                Element link = document
+//                        .select("article[itemprop=articleBody] p.interstitial-link i a")
+//                        .first();
+//
+//                String linkText = link.ownText();
+//
+//                String linkURL = link.absUrl("href");
+//
+//                Log.d("LINKIT", linkURL);
+////                if (keyword.equals("The Blue Mosque")) {
+////                    keyword = "Sultan Ahmed Mosque";
+////                }
+////
+////                String wikipediaURL = keyword;
+////                String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
+////                        + URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
+////
+////                //"extract":" the summary of the article
+////                HttpURLConnection httpcon = (HttpURLConnection) new URL(wikipediaApiJSON).openConnection();
+////                httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
+////                BufferedReader in = new BufferedReader(new InputStreamReader(httpcon.getInputStream()));
+////
+////                String responseSB = in.readLine();
+////
+////                in.close();
+////                if (responseSB.split("extract\":\"").length > 1) {
+////
+////                    String result = responseSB.split("extract\":\"")[1];
+////                    result = result.replaceAll("[-+.^:,;(){}\']", "");
+////                    result = result.replaceAll("[0-9]", "");
+////                    result = result.replaceAll("\\\\[.*?\\\\]", "");
+////                    result = result.replaceAll("\\\\", "");
+////                    result = result.replaceAll("tuuufubfubl", "");
+////                    return result;
+////                }
+//
+//                return "Nothing found";
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//            landmarkHistoryTextView.setText(wikipediaResult);
+//        }
+//    }
 
     /*---------------------------------------------------------------------- Firebase ----------------------------------------------------------------------*/
 
