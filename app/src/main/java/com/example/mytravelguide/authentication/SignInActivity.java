@@ -1,12 +1,18 @@
 package com.example.mytravelguide.authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
 import com.example.mytravelguide.HomePageActivity;
@@ -40,6 +46,8 @@ public class SignInActivity extends AppCompatActivity {
 
     private static final int SIGN_IN = 1;
 
+    Handler handler;
+
     // Widgets
     private SignInButton googleSignInButton;
 
@@ -72,6 +80,7 @@ public class SignInActivity extends AppCompatActivity {
         googleSignInButton = findViewById(R.id.sign_in_button);
         context = SignInActivity.this;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        handler = new Handler();
     }
 
     private void initGoogleAuth() {
@@ -87,6 +96,7 @@ public class SignInActivity extends AppCompatActivity {
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
         googleSignInButton.setOnClickListener(v -> googleSignIn());
     }
+
 
     /*---------------------------------------------------------------------- Google Sign In ----------------------------------------------------------------------*/
     private void googleSignIn() {
