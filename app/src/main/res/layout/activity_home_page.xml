@@ -128,15 +128,15 @@
                             android:layout_width="@dimen/attractionsPageImage"
                             android:layout_height="@dimen/attractionsPageImage"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/image_margin_bottom_30dp"
-                            android:src="@drawable/pyramids" />
+                            android:layout_marginBottom="@dimen/image_margin_bottom_20dp"
+                            android:src="@drawable/near_by_landmarks" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="@string/landmark"
+                            android:text="Landmarks"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />

@@ -36,7 +36,7 @@
 
     // Home Page Images Dimens
     <dimen name="travelGuidePageImage">120dp</dimen>
-    <dimen name="attractionsPageImage">140dp</dimen>
+    <dimen name="attractionsPageImage">160dp</dimen>
     <dimen name="timelinePageImageHeight">140dp</dimen>
 
     <dimen name="image_margin_bottom_10dp">10dp</dimen>
