@@ -70,6 +70,8 @@
     <dimen name="backArrowDimens">34dp</dimen>
 
     // Text Size
+    <dimen name="_13sp">13sp</dimen>
+    <dimen name="_14sp">14sp</dimen>
     <dimen name="_15sp">22sp</dimen>
     <dimen name="_17sp">20sp</dimen>
     <dimen name="_18sp">22sp</dimen>

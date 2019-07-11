@@ -36,13 +36,6 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/landmarkImage"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/landmark_image_height"
-            android:background="@drawable/blue_mosque">
-
-        </RelativeLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -53,10 +46,78 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/mainCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/cardview_margin_top_20dp"
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_marginBottom="@dimen/margin_30dp"
+                    android:background="@drawable/cardview_bg_white"
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/landmarkInformationLin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/landmarkImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/landmark_image_height"
+                            android:layout_margin="@dimen/margin_10dp"
+                            android:background="@drawable/blue_mosque"></RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="5dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/microphone"
+                                android:layout_width="@dimen/microphone_dimens"
+                                android:layout_height="@dimen/microphone_dimens"
+                                android:layout_gravity="center"
+                                android:layout_margin="5dp"
+                                android:src="@drawable/microphone" />
+
+                            <ImageView
+                                android:id="@+id/expandLandmarkHistory"
+                                android:layout_width="@dimen/dropDownButtonDimens"
+                                android:layout_height="@dimen/dropDownButtonDimens"
+                                android:layout_gravity="center"
+                                android:layout_margin="5dp"
+                                android:src="@drawable/ic_expand_more_black_24dp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/landmarkHistoryTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="6"
+                            android:fontFamily="@font/asap"
+                            android:padding="@dimen/information_padding_10dp"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_18sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="-15dp"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -84,6 +145,187 @@
                         android:src="@drawable/add_location" />
 
                 </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/infoCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="@dimen/cardview_margin_top_10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="@dimen/cardview_margin_top_30dp"
+                    android:background="@drawable/cardview_bg_white"
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/informationList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/cardview_bg_white"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:fontFamily="@font/rancho"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="@string/information"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_24sp" />
+
+                            <ImageView
+                                android:id="@+id/expandInformation"
+                                android:layout_width="@dimen/dropDownButtonDimens"
+                                android:layout_height="@dimen/dropDownButtonDimens"
+                                android:layout_gravity="center"
+                                android:layout_margin="10dp"
+                                android:src="@drawable/ic_expand_more_black_24dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="@string/opening_hours"
+                                android:textColor="@color/Red"
+                                android:textSize="@dimen/_14sp" />
+
+                            <TextView
+                                android:id="@+id/openingHours"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:paddingTop="@dimen/information_padding_10dp"
+                                android:paddingBottom="@dimen/information_padding_10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="Address:"
+                                android:textColor="@color/LightBlue"
+                                android:textSize="@dimen/_14sp" />
+
+                            <TextView
+                                android:id="@+id/address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="@string/rating"
+                                android:textColor="@color/Green"
+                                android:textSize="@dimen/_14sp" />
+
+                            <TextView
+                                android:id="@+id/rating"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:paddingTop="@dimen/information_padding_10dp"
+                                android:paddingBottom="@dimen/information_padding_10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="Number:"
+                                android:textColor="#FF6D00"
+                                android:textSize="@dimen/_14sp" />
+
+                            <TextView
+                                android:id="@+id/number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:autoLink="phone"
+                                android:fontFamily="monospace"
+                                android:paddingTop="@dimen/information_padding_10dp"
+                                android:paddingBottom="@dimen/information_padding_10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:padding="@dimen/information_padding_10dp"
+                                android:text="Website:"
+                                android:textColor="#607D8B"
+                                android:textSize="@dimen/_14sp" />
+
+                            <TextView
+                                android:id="@+id/website"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:autoLink="web"
+                                android:fontFamily="monospace"
+                                android:maxLines="1"
+                                android:paddingTop="@dimen/information_padding_10dp"
+                                android:paddingBottom="@dimen/information_padding_10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/nearbyLocationsCardView"
@@ -136,256 +378,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             tools:visibility="gone" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/infoCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="@dimen/cardview_margin_top_20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="@dimen/cardview_margin_top_30dp"
-                    android:background="@drawable/cardview_bg_white"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/informationList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/cardview_bg_white"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="6"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:text="@string/information"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_24sp" />
-
-                            <ImageView
-                                android:id="@+id/expandInformation"
-                                android:layout_width="@dimen/dropDownButtonDimens"
-                                android:layout_height="@dimen/dropDownButtonDimens"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:src="@drawable/ic_expand_more_black_24dp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:text="@string/opening_hours"
-                                android:textColor="@color/Red"
-                                android:textSize="@dimen/_20sp" />
-
-                            <TextView
-                                android:id="@+id/openingHours"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:paddingTop="@dimen/information_padding_10dp"
-                                android:paddingBottom="@dimen/information_padding_10dp"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_20sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:text="Address:"
-                                android:textColor="@color/LightBlue"
-                                android:textSize="@dimen/_20sp" />
-
-                            <TextView
-                                android:id="@+id/address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_20sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:text="@string/rating"
-                                android:textColor="@color/Green"
-                                android:textSize="@dimen/_20sp" />
-
-                            <TextView
-                                android:id="@+id/rating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:paddingTop="@dimen/information_padding_10dp"
-                                android:paddingBottom="@dimen/information_padding_10dp"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_20sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:text="Number:"
-                                android:textColor="#FF6D00"
-                                android:textSize="@dimen/_20sp" />
-
-                            <TextView
-                                android:id="@+id/number"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:paddingTop="@dimen/information_padding_10dp"
-                                android:paddingBottom="@dimen/information_padding_10dp"
-                                android:autoLink="phone"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_20sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:text="Website:"
-                                android:textColor="#607D8B"
-                                android:textSize="@dimen/_20sp" />
-
-                            <TextView
-                                android:id="@+id/website"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/rancho"
-                                android:paddingTop="@dimen/information_padding_10dp"
-                                android:maxLines="1"
-                                android:autoLink="web"
-                                android:paddingBottom="@dimen/information_padding_10dp"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_22sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/landmarkHistory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="@dimen/margin_10dp"
-                    android:layout_marginTop="@dimen/cardview_margin_top_20dp"
-                    android:layout_marginRight="@dimen/margin_10dp"
-                    android:layout_marginBottom="@dimen/margin_30dp"
-                    android:background="@drawable/cardview_bg_white"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/landmarkHistoryList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="6"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/information_padding_10dp"
-                                android:text="History"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_24sp" />
-
-                            <ImageView
-                                android:id="@+id/microphone"
-                                android:layout_width="@dimen/microphone_dimens"
-                                android:layout_height="@dimen/microphone_dimens"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:src="@drawable/microphone" />
-
-                            <ImageView
-                                android:id="@+id/expandLandmarkHistory"
-                                android:layout_width="@dimen/dropDownButtonDimens"
-                                android:layout_height="@dimen/dropDownButtonDimens"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:src="@drawable/ic_expand_more_black_24dp" />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/landmarkHistoryTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="6"
-                            android:fontFamily="@font/asap"
-                            android:padding="@dimen/information_padding_10dp"
-                            android:text=""
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_18sp"
-                            android:textStyle="bold"
-                            android:visibility="gone" />
 
                     </LinearLayout>
 

@@ -257,17 +257,21 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         expandLandmarkHistory.setOnClickListener(v -> {
             if (expendHistory) {
-                LinearLayout layout = findViewById(R.id.landmarkHistoryList);
-                expandLinearLayout(layout);
+//                LinearLayout layout = findViewById(R.id.landmarkInformationLin);
+//                expandLinearLayout(layout);
                 expendHistory = false;
                 landmarkHistoryTextView.setVisibility(View.VISIBLE);
-                nearbyLocationsCardView.setVisibility(View.GONE);
-                informationCardView.setVisibility(View.GONE);
+//                nearbyLocationsCardView.setVisibility(View.GONE);
+//                informationCardView.setVisibility(View.GONE);
 
             } else if (!expendHistory) {
-                LinearLayout layout = findViewById(R.id.landmarkHistoryList);
-                collapseLinearLayout(layout);
+                LinearLayout layout = findViewById(R.id.landmarkInformationLin);
+                expandLinearLayout(layout);
                 expendHistory = true;
+                ViewGroup.LayoutParams params = layout.getLayoutParams();
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                layout.setLayoutParams(params);
+                landmarkHistoryTextView.setVisibility(View.GONE);
                 nearbyLocationsCardView.setVisibility(View.VISIBLE);
                 informationCardView.setVisibility(View.VISIBLE);
             }
