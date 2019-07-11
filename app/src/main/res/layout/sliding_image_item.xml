@@ -33,6 +33,8 @@
         android:layout_gravity="center_horizontal|center_vertical"
         android:fontFamily="@font/pompiere"
         android:text="Mount Fuji"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical|center|center_horizontal"
         android:textColor="@color/White"
         android:textSize="35sp"
         android:textStyle="bold" />

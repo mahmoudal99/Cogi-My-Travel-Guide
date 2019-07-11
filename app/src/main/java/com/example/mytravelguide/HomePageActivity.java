@@ -50,13 +50,17 @@ public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
 
+    Handler handler;
+    Runnable Update;
+    Timer swipeTimer;
+
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private ArrayList<ImageModel> imageModelArrayList;
 
     private int[] myImageList = new int[]{R.drawable.sphinx, R.drawable.taj_mahal, R.drawable.petra, R.drawable.alhambra};
-    private String[] imageNames = new String[]{"Sphinx", "Taj Mahal", "Petra", "Alhambra"};
+    private String[] imageNames = new String[]{"Sphinx of Giza", "Taj Mahal", "Petra", "Alhambra"};
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -103,16 +107,17 @@ public class HomePageActivity extends AppCompatActivity {
         mPager.setAdapter(new SlidingImageAdapter(HomePageActivity.this,imageModelArrayList));
 
         NUM_PAGES =imageModelArrayList.size();
+        currentPage = 0;
 
         // Auto start of viewpager
-        final Handler handler = new Handler();
-        final Runnable Update = () -> {
+        handler = new Handler();
+        Update = () -> {
             if (currentPage == NUM_PAGES) {
                 currentPage = 0;
             }
             mPager.setCurrentItem(currentPage++, true);
         };
-        Timer swipeTimer = new Timer();
+        swipeTimer = new Timer();
         swipeTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -220,6 +225,7 @@ public class HomePageActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         authentication.addAuthStateListener(authStateListener);
+        handler.removeCallbacks(Update);
     }
 
     @Override
@@ -228,6 +234,8 @@ public class HomePageActivity extends AppCompatActivity {
         if (authStateListener != null) {
             authentication.removeAuthStateListener(authStateListener);
         }
+        swipeTimer.cancel();
+        handler.removeCallbacks(Update);
     }
 }
 
