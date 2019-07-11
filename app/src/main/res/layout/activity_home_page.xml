@@ -12,38 +12,70 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/homeRelativeLayoutHeight"
+            android:layout_height="400dp"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/margin_10dp"
-            android:layout_marginTop="@dimen/margin_10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/home_bg_round">
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="@dimen/margin_10dp"/>
 
-            <ImageView
-                android:id="@+id/settings"
-                android:layout_width="@dimen/settingsIcon"
-                android:layout_height="@dimen/settingsIcon"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="@dimen/settings_padding"
-                android:layout_marginLeft="@dimen/settings_padding"
-                android:layout_marginTop="@dimen/settings_padding"
-                android:layout_marginEnd="@dimen/settings_padding"
-                android:layout_marginRight="@dimen/settings_padding"
-                android:layout_marginBottom="@dimen/settings_padding"
-                android:src="@drawable/settings" />
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/relLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="400dp"-->
+        <!--android:layout_marginLeft="@dimen/margin_20dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginRight="@dimen/margin_20dp"-->
+        <!--android:background="@drawable/cardview_bg_white">-->
 
-            <ImageView
-                android:layout_width="@dimen/LogoWidth"
-                android:layout_height="@dimen/LogoHeight"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/logo_margin_top"
-                android:contentDescription="@string/logo"
-                android:src="@drawable/logo_white" />
 
-        </RelativeLayout>
+        <!--<ImageView-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginTop="-30dp"-->
+        <!--android:contentDescription="@string/logo"-->
+        <!--android:src="@drawable/japan" />-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/settings"-->
+        <!--android:layout_width="@dimen/settingsIcon"-->
+        <!--android:layout_height="@dimen/settingsIcon"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginStart="@dimen/settings_padding"-->
+        <!--android:layout_marginEnd="@dimen/settings_padding"-->
+        <!--android:layout_margin="@dimen/settings_padding"-->
+        <!--android:src="@drawable/settings" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/landmarkName"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:fontFamily="@font/pompiere"-->
+        <!--android:text="Mount Fuji"-->
+        <!--android:textColor="@color/White"-->
+        <!--android:textSize="@dimen/_30sp" />-->
+
+        <!--<Button-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:text="Explore"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textColor="@color/White"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/button_bg"/>-->
+
+        <!--</RelativeLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +96,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/cardViewHeight"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="@dimen/margin_10dp"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_marginBottom="@dimen/margin_10dp"
                     android:background="@drawable/cardview_bg"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="10dp">
@@ -81,7 +116,6 @@
                             android:layout_height="@dimen/travelGuidePageImage"
                             android:layout_gravity="center|bottom"
                             android:layout_marginTop="@dimen/image_margin_bottom_20dp"
-                            android:layout_marginBottom="@dimen/margin_20dp"
                             android:src="@drawable/options" />
 
                         <TextView
@@ -112,7 +146,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/cardViewHeight"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_marginBottom="@dimen/margin_10dp"
                     android:background="@drawable/cardview_bg"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="10dp">
@@ -128,7 +165,7 @@
                             android:layout_width="@dimen/attractionsPageImage"
                             android:layout_height="@dimen/attractionsPageImage"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/image_margin_bottom_20dp"
+                            android:layout_marginTop="-15dp"
                             android:src="@drawable/near_by_landmarks" />
 
                         <TextView
@@ -152,9 +189,11 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/timelineCard"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/cardViewHeight"
+            android:layout_height="120dp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:layout_marginTop="@dimen/cardview_margin_top_25dp"
+            android:layout_marginRight="@dimen/margin_10dp"
             android:background="@drawable/cardview_bg_white"
             app:cardCornerRadius="@dimen/margin_10dp"
             app:cardElevation="10dp">
@@ -170,7 +209,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/timelinePageImageHeight"
                     android:layout_gravity="center|bottom"
-                    android:layout_marginTop="@dimen/margin_10dp"
                     android:contentDescription="@string/planet"
                     android:src="@drawable/timeline" />
 
@@ -178,6 +216,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginTop="-5dp"
                     android:gravity="center_horizontal"
                     android:text="@string/timeline"
                     android:textColor="@color/black"

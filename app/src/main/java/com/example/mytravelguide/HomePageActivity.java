@@ -4,6 +4,7 @@ package com.example.mytravelguide;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,12 +12,15 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.mytravelguide.attractions.AttractionsActivity;
+import com.example.mytravelguide.models.ImageModel;
 import com.example.mytravelguide.settings.SettingsActivity;
+import com.example.mytravelguide.utils.SlidingImageAdapter;
 import com.google.android.gms.vision.L;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +33,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,15 +50,43 @@ public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
 
+    private static ViewPager mPager;
+    private static int currentPage = 0;
+    private static int NUM_PAGES = 0;
+    private ArrayList<ImageModel> imageModelArrayList;
+
+    private int[] myImageList = new int[]{R.drawable.sphinx, R.drawable.taj_mahal, R.drawable.petra, R.drawable.alhambra};
+    private String[] imageNames = new String[]{"Sphinx", "Taj Mahal", "Petra", "Alhambra"};
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        imageModelArrayList = new ArrayList<>();
+        imageModelArrayList = populateList();
+
         loadLocale();
         setContentView(R.layout.activity_home_page);
         init();
         setUpWidgets();
         setUpFirebaseAuthentication();
+        initViewPager();
+    }
+
+    private ArrayList<ImageModel> populateList(){
+
+        ArrayList<ImageModel> list = new ArrayList<>();
+
+        for(int i = 0; i < 4; i++){
+            ImageModel imageModel = new ImageModel();
+            imageModel.setImage_drawable(myImageList[i]);
+            imageModel.setImage_text(imageNames[i]);
+            list.add(imageModel);
+        }
+
+        return list;
     }
 
     private void init() {
@@ -61,6 +95,31 @@ public class HomePageActivity extends AppCompatActivity {
         timelineCard = findViewById(R.id.timelineCard);
         settings = findViewById(R.id.settings);
         authentication = FirebaseAuth.getInstance();
+    }
+
+    private void initViewPager() {
+
+        mPager = findViewById(R.id.pager);
+        mPager.setAdapter(new SlidingImageAdapter(HomePageActivity.this,imageModelArrayList));
+
+        NUM_PAGES =imageModelArrayList.size();
+
+        // Auto start of viewpager
+        final Handler handler = new Handler();
+        final Runnable Update = () -> {
+            if (currentPage == NUM_PAGES) {
+                currentPage = 0;
+            }
+            mPager.setCurrentItem(currentPage++, true);
+        };
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, 4000, 3000);
+
     }
 
     private void setUpWidgets() {
@@ -79,7 +138,6 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(visitedIntent);
         });
 
-        settings.setOnClickListener(v -> startActivity(new Intent(HomePageActivity.this, SettingsActivity.class)));
     }
 
     private void setLocale(String lang) {

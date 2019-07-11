@@ -2,5 +2,7 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/asap</item>
+        <item>@font/comfortaa_light</item>
+        <item>@font/pompiere</item>
     </array>
 </resources>

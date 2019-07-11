@@ -79,6 +79,8 @@ dependencies {
 
     // Jsoup
     implementation 'org.jsoup:jsoup:1.12.1'
+
+    implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
 }
 
 

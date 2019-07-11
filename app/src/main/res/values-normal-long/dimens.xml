@@ -38,7 +38,7 @@
     // Home Page Images Dimens
     <dimen name="travelGuidePageImage">100dp</dimen>
     <dimen name="attractionsPageImage">120dp</dimen>
-    <dimen name="timelinePageImageHeight">110dp</dimen>
+    <dimen name="timelinePageImageHeight">90dp</dimen>
 
     <dimen name="image_margin_bottom_10dp">10dp</dimen>
     <dimen name="image_margin_bottom_20dp">5dp</dimen>
@@ -50,12 +50,12 @@
     <dimen name="settings_padding">10dp</dimen>
 
     <dimen name="homeRelativeLayoutHeight">220dp</dimen>
-    <dimen name="cardViewHeight">150dp</dimen>
+    <dimen name="cardViewHeight">130dp</dimen>
 
     <dimen name="logo_margin_top">30dp</dimen>
 
     //--------------- Trave Guide Page Dimens ---------------//
-    <dimen name="landmarkImageHeight">230dp</dimen>
+    <dimen name="landmarkImageHeight">210dp</dimen>
     <dimen name="galleryImageDimens">45dp</dimen>
     <dimen name="locationImageDimens">30dp</dimen>
     <dimen name="searchImageDimens">25dp</dimen>

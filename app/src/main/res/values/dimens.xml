@@ -49,7 +49,7 @@
     <dimen name="settings_padding">10dp</dimen>
 
     <dimen name="homeRelativeLayoutHeight">280dp</dimen>
-    <dimen name="cardViewHeight">200dp</dimen>
+    <dimen name="cardViewHeight">180dp</dimen>
 
     <dimen name="logo_margin_top">20dp</dimen>
 
