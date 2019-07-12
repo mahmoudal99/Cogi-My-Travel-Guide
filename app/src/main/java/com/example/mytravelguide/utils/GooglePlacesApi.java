@@ -163,16 +163,23 @@ public class GooglePlacesApi {
 
     public String placeOpeningHours(Place place) {
         // Opening Hours
-        OpeningHours openingHours;
-        openingHours = place.getOpeningHours();
-        List<Period> periods = Objects.requireNonNull(openingHours).getPeriods();
-        Period period = periods.get(0);
-        TimeOfWeek timeOfWeekOpen = period.getOpen();
-        TimeOfWeek timeOfWeekClose = period.getClose();
-        LocalTime localTimeOpen = Objects.requireNonNull(timeOfWeekOpen).getTime();
-        LocalTime localTimeClose = Objects.requireNonNull(timeOfWeekClose).getTime();
+        if(place.getOpeningHours() != null){
+            OpeningHours openingHours;
+            openingHours = place.getOpeningHours();
+            List<Period> periods = Objects.requireNonNull(openingHours).getPeriods();
+            Period period = periods.get(0);
+            TimeOfWeek timeOfWeekOpen = period.getOpen();
+            TimeOfWeek timeOfWeekClose = period.getClose();
+            LocalTime localTimeOpen = Objects.requireNonNull(timeOfWeekOpen).getTime();
+            if(timeOfWeekClose != null){
+                LocalTime localTimeClose = timeOfWeekClose.getTime();
+                return localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00";
+            }
 
-        return localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00";
+            return  localTimeOpen.getHours() + ":00";
+        }
+
+        return  "No Information Available";
     }
 
 }
