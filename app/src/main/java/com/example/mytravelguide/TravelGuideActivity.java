@@ -198,7 +198,6 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void setUpWidgets() {
         mircophone.setEnabled(false);
-
         mircophone.setOnClickListener(v -> speak());
 
         backArrow.setOnClickListener(v -> {
@@ -280,6 +279,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkRating.setText("");
         landmarkTextView.setText("");
         websiteTextView.setText("");
+        landmarkHistoryTextView.setText("");
     }
 
     /*---------------------------------------------------------------------- Locale ----------------------------------------------------------------------*/
@@ -320,15 +320,12 @@ public class TravelGuideActivity extends AppCompatActivity {
         if (place.getPhoneNumber() != null){
             numberTextView.setText(place.getPhoneNumber());
         }
-        if (place.getWebsiteUri() != null){
-            websiteTextView.setText(place.getWebsiteUri().toString());
-        }
-        if(place.getId() != null){
-            editor.putString("LandmarkID", place.getId());
+        if (place.getAddress() != null){
+            landmarkAddress.setText(place.getAddress());
         }
 
-        if (place.getAddress() != null){
-            landmarkAddress.setText(place.getWebsiteUri().toString());
+        if (place.getWebsiteUri() != null){
+            websiteTextView.setText(place.getWebsiteUri().toString());
             Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
         }
 
