@@ -314,27 +314,27 @@ public class TravelGuideActivity extends AppCompatActivity {
             landmarkTextView.setText(place.getName());
         }
 
-        if (place.getAddress() == null || place.getPhoneNumber() == null || place.getWebsiteUri() == null || place.getRating() == null) {
-            googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
-            landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
-            landmarkRating.setText("No Information Available");
-            numberTextView.setText("No Information Available");
-            websiteTextView.setText("No Information Available");
-            landmarkAddress.setText("No Information Available");
-            Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
-        } else {
-            googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
-            landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
+        if (place.getRating() != null){
             landmarkRating.setText(place.getRating().toString());
+        }
+        if (place.getPhoneNumber() != null){
             numberTextView.setText(place.getPhoneNumber());
+        }
+        if (place.getWebsiteUri() != null){
             websiteTextView.setText(place.getWebsiteUri().toString());
+        }
+        if(place.getId() != null){
+            editor.putString("LandmarkID", place.getId());
+        }
+
+        if (place.getAddress() != null){
             landmarkAddress.setText(place.getWebsiteUri().toString());
             Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
         }
-//
-//        if (place.getAddress() != null) {
-//            landmarkAddress.setText(place.getAddress());
-//        }
+
+        googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
+        landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
+
     }
 
     private void loadPreviousLandmark() {
@@ -353,30 +353,28 @@ public class TravelGuideActivity extends AppCompatActivity {
     }
 
     private void saveLandmarkInformation(Place place) {
-        if (place.getRating() == null || place.getWebsiteUri() == null || place.getAddress() == null) {
-            editor.putString("LandmarkName", place.getName());
-            editor.putString("LandmarkOpeningHours", googlePlacesApi.placeOpeningHours(place));
-            editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
-            editor.putString("LandmarkRating", "No Information Available");
-            editor.putString("LandmarkWebsite", "No Information Available");
-            editor.putString("LandmarkNumber", place.getPhoneNumber());
-            editor.putString("LandmarkAddress", "No Information Available");
-            editor.putString("LandmarkID", place.getId());
-            editor.putString("LandmarkHistory", landmarkHistoryTextView.getText().toString());
-            editor.apply();
-        } else {
-            editor.putString("LandmarkName", place.getName());
-            editor.putString("LandmarkOpeningHours", googlePlacesApi.placeOpeningHours(place));
-            editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
+
+        if (place.getRating() != null){
             editor.putString("LandmarkRating", place.getRating().toString());
-            editor.putString("LandmarkWebsite", place.getWebsiteUri().toString());
-            editor.putString("LandmarkNumber", place.getPhoneNumber());
-            editor.putString("LandmarkAddress", place.getAddress());
+        }
+        if (place.getPhoneNumber() != null){
+            editor.putString("LandmarkRating", place.getPhoneNumber().toString());
+        }
+        if (place.getWebsiteUri() != null){
+            editor.putString("LandmarkRating", place.getWebsiteUri().toString());
+        }
+        if(place.getId() != null){
             editor.putString("LandmarkID", place.getId());
-            editor.putString("LandmarkHistory", landmarkHistoryTextView.getText().toString());
-            editor.apply();
+        }
+        if (place.getAddress() != null){
+            editor.putString("LandmarkAddress", place.getAddress());
         }
 
+        editor.putString("LandmarkName", place.getName());
+        editor.putString("LandmarkOpeningHours", googlePlacesApi.placeOpeningHours(place));
+        editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
+        editor.putString("LandmarkHistory", landmarkHistoryTextView.getText().toString());
+        editor.apply();
     }
 
     /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
