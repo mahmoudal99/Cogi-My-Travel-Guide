@@ -314,19 +314,22 @@ public class TravelGuideActivity extends AppCompatActivity {
             landmarkTextView.setText(place.getName());
         }
 
-        if (place.getRating() != null){
+        if (place.getRating() != null) {
             landmarkRating.setText(place.getRating().toString());
         }
-        if (place.getPhoneNumber() != null){
+        if (place.getPhoneNumber() != null) {
             numberTextView.setText(place.getPhoneNumber());
         }
-        if (place.getAddress() != null){
+        if (place.getAddress() != null) {
             landmarkAddress.setText(place.getAddress());
         }
 
-        if (place.getWebsiteUri() != null){
+        if (place.getWebsiteUri() != null) {
             websiteTextView.setText(place.getWebsiteUri().toString());
             Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
+        } else if (place.getWebsiteUri() == null) {
+
+            websiteTextView.setText("No Information Available");
         }
 
         googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
@@ -351,19 +354,19 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private void saveLandmarkInformation(Place place) {
 
-        if (place.getRating() != null){
+        if (place.getRating() != null) {
             editor.putString("LandmarkRating", place.getRating().toString());
         }
-        if (place.getPhoneNumber() != null){
+        if (place.getPhoneNumber() != null) {
             editor.putString("LandmarkRating", place.getPhoneNumber().toString());
         }
-        if (place.getWebsiteUri() != null){
+        if (place.getWebsiteUri() != null) {
             editor.putString("LandmarkRating", place.getWebsiteUri().toString());
         }
-        if(place.getId() != null){
+        if (place.getId() != null) {
             editor.putString("LandmarkID", place.getId());
         }
-        if (place.getAddress() != null){
+        if (place.getAddress() != null) {
             editor.putString("LandmarkAddress", place.getAddress());
         }
 
@@ -441,11 +444,11 @@ public class TravelGuideActivity extends AppCompatActivity {
                 Place place = Autocomplete.getPlaceFromIntent(data);
 
 //                try {
-                    FirebaseMethods firebaseMethods = new FirebaseMethods(TravelGuideActivity.this);
-                    firebaseMethods.getLandmarkInformation(place.getName(), landmarkHistoryTextView);
-                    clearTextViews();
-                    loadLandmark(place);
-                    saveLandmarkInformation(place);
+                FirebaseMethods firebaseMethods = new FirebaseMethods(TravelGuideActivity.this);
+                firebaseMethods.getLandmarkInformation(place.getName(), landmarkHistoryTextView);
+                clearTextViews();
+                loadLandmark(place);
+                saveLandmarkInformation(place);
 
 //                } catch (Exception e) {
 //                    e.printStackTrace();

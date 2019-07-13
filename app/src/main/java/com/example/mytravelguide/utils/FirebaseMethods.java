@@ -5,12 +5,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.example.mytravelguide.authentication.SignInActivity;
 import com.example.mytravelguide.R;
-import com.example.mytravelguide.models.AttractionObject;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;

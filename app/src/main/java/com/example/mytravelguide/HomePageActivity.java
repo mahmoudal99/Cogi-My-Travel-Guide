@@ -19,15 +19,10 @@ import android.widget.ImageView;
 
 import com.example.mytravelguide.attractions.AttractionsActivity;
 import com.example.mytravelguide.models.ImageModel;
-import com.example.mytravelguide.settings.SettingsActivity;
 import com.example.mytravelguide.utils.SlidingImageAdapter;
 import com.google.android.gms.vision.L;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +30,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HomePageActivity extends AppCompatActivity {
 

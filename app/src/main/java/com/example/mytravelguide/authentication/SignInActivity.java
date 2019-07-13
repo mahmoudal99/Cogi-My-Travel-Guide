@@ -18,12 +18,6 @@ import android.widget.Toast;
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,7 +26,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -59,7 +52,6 @@ public class SignInActivity extends AppCompatActivity {
     private Context context;
 
     // Facebook
-    private CallbackManager callbackManager;
 
     // Google
     private GoogleSignInClient mGoogleSignInClient;
@@ -76,7 +68,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void init() {
-        callbackManager = CallbackManager.Factory.create();
         googleSignInButton = findViewById(R.id.sign_in_button);
         context = SignInActivity.this;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,7 +108,6 @@ public class SignInActivity extends AppCompatActivity {
                 Log.w(TAG, "Google sign in failed", e);
             }
         }
-        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
