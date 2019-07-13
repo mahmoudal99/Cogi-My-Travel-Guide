@@ -108,8 +108,6 @@ public class TravelGuideActivity extends AppCompatActivity {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;
     private static final String encoding = "UTF-8";
-    private String api_url;
-    private String word_id;
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
