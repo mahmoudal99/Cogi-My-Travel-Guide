@@ -78,6 +78,9 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.12.1'
 
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
+    implementation 'org.apache.commons:com.springsource.org.apache.commons.attributes:2.2.0'
+    implementation files('C:\\Users\\mahmo\\Downloads\\commons-io-2.6-bin.tar.gz')
+    implementation files('C:\\Users\\mahmo\\Downloads\\commons-io-2.6-bin\\commons-io-2.6\\commons-io-2.6.jar')
 }
 
 

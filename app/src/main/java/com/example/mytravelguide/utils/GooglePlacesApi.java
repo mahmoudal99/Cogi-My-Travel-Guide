@@ -78,7 +78,7 @@ public class GooglePlacesApi {
             })).addOnFailureListener((exception) -> {
                 if (exception instanceof ApiException) {
                     ApiException apiException = (ApiException) exception;
-                    Log.d("Gooogle Places Api", apiException.getMessage());
+                    Log.d("Gooogle Place Api", apiException.getMessage());
                 }
             });
         } else {

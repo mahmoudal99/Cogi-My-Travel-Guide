@@ -19,19 +19,52 @@ import android.widget.ImageView;
 
 import com.example.mytravelguide.attractions.AttractionsActivity;
 import com.example.mytravelguide.models.ImageModel;
+import com.example.mytravelguide.utils.GooglePlaces;
 import com.example.mytravelguide.utils.SlidingImageAdapter;
-import com.google.android.gms.vision.L;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.api.client.json.Json;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.LongFunction;
 
 public class HomePageActivity extends AppCompatActivity {
+
+    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+
+    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    private static final String TYPE_DETAILS = "/details";
+    private static final String TYPE_SEARCH = "/search";
+
+    private static final String OUT_JSON = "/json";
+
+    // KEY!
+    private static final String API_KEY = "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o";
+
 
     private static final String TAG = "HomePageActivity";
 
@@ -55,15 +88,20 @@ public class HomePageActivity extends AppCompatActivity {
     private int[] myImageList = new int[]{R.drawable.sphinx, R.drawable.taj_mahal, R.drawable.petra, R.drawable.alhambra};
     private String[] imageNames = new String[]{"Sphinx of Giza", "Taj Mahal", "Petra", "Alhambra"};
 
+    static String result = null;
+    Integer responseCode = null;
+    String responseMessage = "";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        GooglePlaces client = new GooglePlaces("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+        client.getPlacesByQuery("Empire State Building", GooglePlaces.MAXIMUM_RESULTS);
+        new SearchAsyncTask().execute();
         imageModelArrayList = new ArrayList<>();
         imageModelArrayList = populateList();
-
         loadLocale();
         setContentView(R.layout.activity_home_page);
         init();
@@ -71,6 +109,41 @@ public class HomePageActivity extends AppCompatActivity {
         setUpFirebaseAuthentication();
         initViewPager();
     }
+
+
+    // Google Search Async Task
+    private class SearchAsyncTask extends AsyncTask<URL, Integer, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            String json = null;
+            try {
+                URL url = new URL("https://maps.googleapis.com/maps/api/place/textsearch/json?query=Empire+State+Building&key=AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setInstanceFollowRedirects(false);
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("charset", "utf-8");
+                connection.connect();
+                InputStream inStream = connection.getInputStream();
+                String text = new Scanner(inStream, "UTF-8").useDelimiter("\\Z").next();
+                Log.d("ONGOD2", text);
+                JSONObject jsonObj = new JSONObject(text);
+                JSONArray contacts = jsonObj.getJSONArray("results");
+                for (int i = 0; i < contacts.length(); i++) {
+                    JSONObject c = contacts.getJSONObject(i);
+                    String id = c.getString("place_id");
+                    Log.d("ONGOD3", id);
+                }
+
+            } catch (IOException | JSONException ex) {
+                ex.printStackTrace();
+            }
+            return json;
+        }
+    }
+
 
     private ArrayList<ImageModel> populateList(){
 
@@ -158,48 +231,6 @@ public class HomePageActivity extends AppCompatActivity {
         setLocale(language);
     }
 
-//    private class WikiApi extends AsyncTask<String, Integer, String> {
-//        @Override
-//        protected String doInBackground(String... strings) {
-//
-//            String keyword = "Eiffel Tower";
-//            keyword = keyword.replaceAll(" ", "+");
-//            String searchText = keyword + "+wikipedia";
-//            Document document = null;
-//            try {
-//                document = Jsoup.connect("https://www.google.com/search?source=hp&ei=uc8gXdSGFLOD8gK8r5qACA&q=" + searchText).get();
-//                ArrayList<Element> elements = document.getAllElements();
-//
-//                List<String> containedUrls = new ArrayList<String>();
-//                String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-//                Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-//                Matcher urlMatcher = pattern.matcher(document.getAllElements().get(0).text());
-//
-//                while (urlMatcher.find())
-//                {
-//                    containedUrls.add(document.getAllElements().get(0).text().substring(urlMatcher.start(0),
-//                            urlMatcher.end(0)));
-//                }
-//
-//                Log.d("LINKIT", containedUrls.get(0));
-//
-////                Document google = Jsoup.connect(containedUrls.get(0)).get();
-//                Document google = Jsoup.connect(containedUrls.get(0)).get();
-//                Log.d("RESULTWIKI13", google.getElementsByTag("div").text());
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            return "Nothing found";
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//            String yes = result;
-//        }
-//    }
-
     //---------- Firebase ----------//
     private void setUpFirebaseAuthentication() {
 
@@ -230,6 +261,7 @@ public class HomePageActivity extends AppCompatActivity {
         swipeTimer.cancel();
         handler.removeCallbacks(Update);
     }
+
 }
 
 

@@ -46,6 +46,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.vision.L;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
@@ -146,6 +147,9 @@ public class TravelGuideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_travel_guide);
+
+        Places.initialize(context.getApplicationContext(), BuildConfig.APIKEY);
+
 
         requestPermission();
         setUpTextToSpeech();
