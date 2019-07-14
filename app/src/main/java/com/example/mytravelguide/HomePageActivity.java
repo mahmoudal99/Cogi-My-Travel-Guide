@@ -19,9 +19,7 @@ import android.widget.ImageView;
 
 import com.example.mytravelguide.attractions.AttractionsActivity;
 import com.example.mytravelguide.models.ImageModel;
-import com.example.mytravelguide.utils.GooglePlaces;
 import com.example.mytravelguide.utils.SlidingImageAdapter;
-import com.google.api.client.json.Json;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import org.json.JSONArray;
@@ -31,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -66,9 +63,6 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        GooglePlaces client = new GooglePlaces("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
-        client.getPlacesByQuery("Empire State Building", GooglePlaces.MAXIMUM_RESULTS);
         new SearchAsyncTask().execute();
         imageModelArrayList = new ArrayList<>();
         imageModelArrayList = populateList();
