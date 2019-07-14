@@ -21,50 +21,24 @@ import com.example.mytravelguide.attractions.AttractionsActivity;
 import com.example.mytravelguide.models.ImageModel;
 import com.example.mytravelguide.utils.GooglePlaces;
 import com.example.mytravelguide.utils.SlidingImageAdapter;
-import com.google.android.libraries.places.api.model.Place;
 import com.google.api.client.json.Json;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.LongFunction;
 
 public class HomePageActivity extends AppCompatActivity {
-
-    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-
-    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
-    private static final String TYPE_DETAILS = "/details";
-    private static final String TYPE_SEARCH = "/search";
-
-    private static final String OUT_JSON = "/json";
-
-    // KEY!
-    private static final String API_KEY = "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o";
-
 
     private static final String TAG = "HomePageActivity";
 
@@ -87,10 +61,6 @@ public class HomePageActivity extends AppCompatActivity {
 
     private int[] myImageList = new int[]{R.drawable.sphinx, R.drawable.taj_mahal, R.drawable.petra, R.drawable.alhambra};
     private String[] imageNames = new String[]{"Sphinx of Giza", "Taj Mahal", "Petra", "Alhambra"};
-
-    static String result = null;
-    Integer responseCode = null;
-    String responseMessage = "";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override

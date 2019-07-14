@@ -147,10 +147,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_travel_guide);
-
-        Places.initialize(context.getApplicationContext(), BuildConfig.APIKEY);
-
-
         requestPermission();
         setUpTextToSpeech();
         isWriteStoragePermissionGranted();

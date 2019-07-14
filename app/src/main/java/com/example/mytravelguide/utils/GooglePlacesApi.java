@@ -29,6 +29,8 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.maps.errors.ApiException;
@@ -180,6 +182,19 @@ public class GooglePlacesApi {
         }
 
         return  "No Information Available";
+    }
+
+    public Place getPlaceById(String id){
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS,
+                Place.Field.LAT_LNG, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.PRICE_LEVEL, Place.Field.PHONE_NUMBER, Place.Field.WEBSITE_URI);
+        FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
+        FetchPlaceResponse fetchPlaceResponse = placesClient.fetchPlace(request).getResult();
+        if(fetchPlaceResponse != null){
+            Place place = fetchPlaceResponse.getPlace();
+            return place;
+        }
+
+        return null;
     }
 
 }
