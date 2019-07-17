@@ -104,51 +104,8 @@ public class HomePageActivity extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
         client.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
-        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=Petra&minPopulation=1000";
-        Request request = new Request.Builder()
-                .url(url)
-                .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
-                .header("X-RapidAPI-Key", "de22d3cbadmshf632b8fa723db10p12a5e2jsnecd78f4ef9d6")
-                .build();
 
-        String cityDataId = "Q621";
-        String typePalace = "Q16560";
-        String typeTower = "Q12518";
-        String typeCastle = "Q23413";
-        String typeTouristAttraction = "Q570116";
-        String typeArchaeologicalSite = "Q839954";
 
-        String url1 = "https://query.wikidata.org/sparql?format=json&query=%0ASELECT+DISTINCT+%3Fitem+%3Fname+%3Fcoord+%3Flat+%3Flon%0AWHERE+%7B%0A+++hint%3AQuery+hint%3Aoptimizer+%22None%22+.%0A+++%3Fitem+wdt%3AP131%2A+wd%3A"+cityDataId+"+.%0A+++%3Fitem+wdt%3AP31%2Fwdt%3AP279%2A+wd%3A"+typePalace+"+.%0A+++%3Fitem+wdt%3AP625+%3Fcoord+.%0A+++%3Fitem+p%3AP625+%3Fcoordinate+.%0A+++%3Fcoordinate+psv%3AP625+%3Fcoordinate_node+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLatitude+%3Flat+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLongitude+%3Flon+.%0A+++SERVICE+wikibase%3Alabel+%7B%0A++++bd%3AserviceParam+wikibase%3Alanguage+%22%5BAUTO_LANGUAGE%5D%2Cen%22+.%0A++++%3Fitem+rdfs%3Alabel+%3Fname%0A+++%7D%0A%7D%0AORDER+BY+ASC+%28%3Fname%29%0A";
-        Request request1 = new Request.Builder().url(url1).header("content-type", "application/html").build();
-
-        client.newCall(request1).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                Log.d("FINALLITO", e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                final String myResponse = response.body().string();
-
-                try {
-                    JSONObject jsonObject = new JSONObject(myResponse);
-                    String value = jsonObject.getString("results");
-                    jsonObject = new JSONObject(value);
-                    JSONArray jsonArray = jsonObject.getJSONArray("bindings");
-                    Log.d("FINALLITO4", "\n\n");
-                    for (int i = 0; i < jsonArray.length(); i++){
-                        JSONObject finalObject = jsonArray.getJSONObject(i);
-
-                        Log.d("FINALLITO4", finalObject.get("name") + " jodjo");
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-//                Log.d("FINALLITO", myResponse);
-            }
-        });
 
 
 
