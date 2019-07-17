@@ -3,43 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     tools:context=".TravelGuideActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/backArrow"
-                android:layout_width="@dimen/backArrowDimens"
-                android:layout_height="@dimen/backArrowDimens"
-                android:layout_centerVertical="true"
-                android:src="@drawable/back_arrow_black" />
-
-            <TextView
-                android:id="@+id/attractionName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
-                android:text="Giza Necropolis"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_28sp"
-                android:fontFamily="@font/pompiere"/>
-
-        </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:padding="1dip"
@@ -52,17 +29,36 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/sphinx" />
+                android:src="@drawable/sphinx">
+            </ImageView>
+
+            <TextView
+                android:id="@+id/attractionName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pompiere"
+                android:gravity="center_horizontal"
+                android:text="Giza Necropolis"
+                android:textColor="@color/White"
+                android:textSize="@dimen/_28sp" />
+
+            <ImageView
+                android:id="@+id/backArrow"
+                android:layout_width="@dimen/backArrowDimens"
+                android:layout_height="@dimen/backArrowDimens"
+                android:layout_marginTop="5dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/left_arrow" />
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_horizontal|bottom"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="-5dp"
+            android:layout_marginRight="5dp"
             android:backgroundTint="#1565C0"
             android:padding="1dip"
             app:cardCornerRadius="8dp">
@@ -86,11 +82,11 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="200dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="@dimen/cardview_margin_top_10dp"
             android:padding="1dip"
             app:cardCornerRadius="8dp">
 
@@ -102,7 +98,6 @@
                 tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
         </androidx.cardview.widget.CardView>
-
 
 
     </LinearLayout>

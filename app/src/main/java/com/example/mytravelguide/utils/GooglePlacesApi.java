@@ -56,6 +56,7 @@ public class GooglePlacesApi {
     private static final String API_KEY = BuildConfig.APIKEY;
     public static final String API_URL = "https://maps.googleapis.com/maps/api/place/";
     public static final String METHOD_TEXT_SEARCH = "textsearch";
+    public static final String METHOD_NEARBY_SEARCH = "nearbysearch";
 
 
     private PlacesClient placesClient;
@@ -209,6 +210,17 @@ public class GooglePlacesApi {
     public String getPlacesByQuery(String query, int limit, Param... extraParams) {
         try {
             String uri = buildUrl(METHOD_TEXT_SEARCH, String.format("query=%s&key=%s", query, apiKey), extraParams);
+            return uri;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getNearbyPlaces(double lat, double lng, double radius) {
+        try {
+            String uri = buildUrl(METHOD_NEARBY_SEARCH, String.format("key=%s&location=%f,%f&radius=%f", apiKey, lat, lng, radius));
+            Log.d("LONELY1", uri);
             return uri;
         } catch (Exception e) {
             e.printStackTrace();

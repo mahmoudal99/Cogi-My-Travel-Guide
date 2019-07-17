@@ -68,6 +68,7 @@
 
     //--------------- Tab Dimens ---------------//
     <dimen name="backArrowDimens">34dp</dimen>
+    <dimen name="backArrowHeightDimens">44dp</dimen>
 
     // Text Size
     <dimen name="_13sp">13sp</dimen>

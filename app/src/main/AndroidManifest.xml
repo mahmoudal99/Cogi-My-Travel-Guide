@@ -46,7 +46,7 @@
         <activity android:name=".attractions.ContinentAttractionsActivity" />
         <activity android:name=".TimelineActivity" />
         <activity android:name=".TravelGuideActivity" />
-        <activity android:name=".attractions.AttractionsActivity" />
+        <activity android:name=".attractions.LandmarksActivity" />
         <activity android:name=".HomePageActivity" />
         <activity android:name=".authentication.SignInActivity" />
         <activity android:name=".MainActivity">

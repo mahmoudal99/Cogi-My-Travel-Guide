@@ -79,11 +79,32 @@ dependencies {
 
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
     implementation 'org.apache.commons:com.springsource.org.apache.commons.attributes:2.2.0'
-    implementation files('C:\\Users\\mahmo\\Downloads\\commons-io-2.6-bin.tar.gz')
-    implementation files('C:\\Users\\mahmo\\Downloads\\commons-io-2.6-bin\\commons-io-2.6\\commons-io-2.6.jar')
+
+    implementation 'com.wirefreethought.geodb:geodb-java-client:1.1.4'
+    implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-arq-3.12.0.jar')
+    implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-cmds-3.12.0.jar')
+    implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-core-3.12.0.jar')
+    implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-base-3.12.0.jar')
+    implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-shaded-guava-3.12.0.jar')
+
+    compileOnly 'com.google.dagger:dagger:2.0'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.0'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-iri-3.12.0.jar')
+    implementation files('C:/Users/mahmo/Downloads/jar_files/unirest-java-1.4.7.jar')
+    implementation files('C:/Users/mahmo/Downloads/jar_files/json-20140107.jar')
+    implementation files('C:/Users/mahmo/Downloads/jar_files/httpcore-nio-4.3.2.jar')
+    implementation files('C:/Users/mahmo/Downloads/jar_files/httpmime-4.3.6.jar')
+    implementation files('C:/Users/mahmo/Downloads/jar_files/httpasyncclient-4.0.2.jar')
+
+
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+
 }
 
 
 repositories {
     google()
+    mavenCentral()
 }
