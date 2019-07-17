@@ -55,7 +55,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
         init();
         setUpWidgets();
-        getCityDataId();
+        getCityDataId("Paris");
     }
 
     // Include the OnCreate() method here too, as described above.
@@ -74,8 +74,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         okHttpClient = new OkHttpClient();
     }
 
-    private void getCityDataId() {
-        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=1000";
+    private void getCityDataId(String cityName) {
+        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=1000000";
         Request cityDataIDRequest = new Request.Builder()
                 .url(url)
                 .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
@@ -109,22 +109,24 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onResponse(Response response) throws IOException {
                 final String myResponse = response.body().string();
-                getCityIDFromJson(myResponse);
-                parseJsonResult(myResponse);
+                if(requestType.equals("LANDMARKSREQEST")){
+                    landmarksInCityFromJson(myResponse);
+                }else if(requestType.equals("WIKIDATA")){
+                    getCityIDFromJson(myResponse);
+                }
             }
         });
     }
 
-    private void parseJsonResult(String response){
+    private void landmarksInCityFromJson(String response){
         try {
             JSONObject jsonObject = new JSONObject(response);
             String value = jsonObject.getString("results");
             jsonObject = new JSONObject(value);
             JSONArray jsonArray = jsonObject.getJSONArray("bindings");
-            Log.d("FINALLITO4", "\n\n");
             for (int i = 0; i < jsonArray.length(); i++){
                 JSONObject finalObject = jsonArray.getJSONObject(i);
-                Log.d("FINALLITO4", finalObject.get("name") + " jodjo");
+                Log.d("landmarksInCityFromJson", finalObject.get("name") + " jodjo");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -132,8 +134,15 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void getCityIDFromJson(String respnse){
-        Log.d("City WIKIDATA Id", respnse);
-        getCityLandmarks(respnse);
+        try {
+            JSONObject jsonObject = new JSONObject(respnse);
+            JSONArray data = jsonObject.getJSONArray("data");
+            Log.d("getCityIDFromJson", data.getJSONObject(0).get("wikiDataId").toString());
+            getCityLandmarks(data.getJSONObject(0).get("wikiDataId").toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void setUpWidgets() {

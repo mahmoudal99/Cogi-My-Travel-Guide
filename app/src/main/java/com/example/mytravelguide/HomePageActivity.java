@@ -41,6 +41,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.jena.atlas.json.JsonAccess;
 import org.apache.jena.atlas.json.JsonArray;
+import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.Query;
@@ -96,18 +97,6 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
-//        googlePlacesApi.getNearbyPlaces(48.85391, 2.2913515, 800);
-
-        GooglePlacesQuery googlePlacesQuery = new GooglePlacesQuery();
-        googlePlacesQuery.new GooglePlacesQueryAsyncTask().execute();
-
-        OkHttpClient client = new OkHttpClient();
-        client.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
-
-
-
-
 
         imageModelArrayList = new ArrayList<>();
         imageModelArrayList = populateList();
