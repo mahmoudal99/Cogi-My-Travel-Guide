@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -138,6 +140,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void landmarksInCityFromJson(String response){
+        ArrayList<String> landmarks = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(response);
             String value = jsonObject.getString("results");
@@ -145,13 +148,14 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             JSONArray jsonArray = jsonObject.getJSONArray("bindings");
             for (int i = 0; i < jsonArray.length(); i++){
                 JSONObject finalObject = jsonArray.getJSONObject(i);
-                Set<String> landmarks = new HashSet<>();
-
                 jsonObject = new JSONObject(finalObject.getString("name"));
 
                 landmarks.add(jsonObject.get("value").toString());
-                landmarksInCity(landmarks);
+
             }
+            Set<String> hs1 = new LinkedHashSet<>(landmarks);
+            List<String> al2 = new ArrayList<>(hs1);
+            landmarksInCity(al2);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -168,8 +172,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    private void landmarksInCity(Set<String> landmarks){
+    private void landmarksInCity(List<String> landmarks){
+
         for (String landmark : landmarks){
+            Log.d("IOJOOEFIF", landmark);
             AttractionObject attractionObject = new AttractionObject();
             attractionObject.setPlaceName(landmark);
             landmarksArrayList.add(attractionObject);
