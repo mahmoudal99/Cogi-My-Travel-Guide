@@ -1,6 +1,7 @@
 package com.example.mytravelguide.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytravelguide.R;
+import com.example.mytravelguide.models.AttractionObject;
 
 import java.util.ArrayList;
 
 public class LandmarksInCityAdapter extends RecyclerView.Adapter<LandmarksInCityAdapter.MyViewHolder> {
 
-    ArrayList<String> landmarks;
+    ArrayList<AttractionObject> landmarks;
     Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -27,7 +29,7 @@ public class LandmarksInCityAdapter extends RecyclerView.Adapter<LandmarksInCity
         }
     }
 
-    public LandmarksInCityAdapter(ArrayList<String> landmarks, Context context){
+    public LandmarksInCityAdapter(ArrayList<AttractionObject> landmarks, Context context){
         this.landmarks = landmarks;
         this.context = context;
     }
@@ -42,8 +44,9 @@ public class LandmarksInCityAdapter extends RecyclerView.Adapter<LandmarksInCity
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        String placeName = landmarks.get(position);
-        holder.placeName.setText(placeName);
+        AttractionObject landmark = landmarks.get(position);
+        Log.d("FFIIINEINADAP", landmark.placeName);
+        holder.placeName.setText(landmark.placeName);
     }
 
     @Override

@@ -6,105 +6,148 @@
     android:layout_height="fill_parent"
     tools:context=".TravelGuideActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:padding="1dip"
-            app:cardCornerRadius="8dp">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/sphinx">
-            </ImageView>
-
-            <TextView
-                android:id="@+id/attractionName"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pompiere"
-                android:gravity="center_horizontal"
-                android:text="Giza Necropolis"
-                android:textColor="@color/White"
-                android:textSize="@dimen/_28sp" />
-
-            <ImageView
-                android:id="@+id/backArrow"
-                android:layout_width="@dimen/backArrowDimens"
-                android:layout_height="@dimen/backArrowDimens"
+                android:layout_height="220dp"
+                android:layout_gravity="center_horizontal|top"
                 android:layout_marginTop="5dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/left_arrow" />
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="-5dp"
-            android:layout_marginRight="5dp"
-            android:backgroundTint="#1565C0"
-            android:padding="1dip"
-            app:cardCornerRadius="8dp">
-
-            <TextView
-                android:id="@+id/about"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:fontFamily="@font/pompiere"
-                android:gravity="center"
-                android:text="@string/discover"
-                android:textColor="@color/White"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:padding="1dip"
+                app:cardCornerRadius="8dp">
 
-        </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sphinx">
+                </ImageView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="5dp"
-            android:padding="1dip"
-            app:cardCornerRadius="8dp">
+                <TextView
+                    android:id="@+id/attractionName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pompiere"
+                    android:gravity="center_horizontal"
+                    android:text="Giza Necropolis"
+                    android:textColor="@color/White"
+                    android:textSize="@dimen/_28sp" />
 
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+                <ImageView
+                    android:id="@+id/backArrow"
+                    android:layout_width="@dimen/backArrowDimens"
+                    android:layout_height="@dimen/backArrowDimens"
+                    android:layout_marginTop="5dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/left_arrow" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="-5dp"
+                android:layout_marginRight="5dp"
+                android:backgroundTint="#1565C0"
+                android:padding="1dip"
+                app:cardCornerRadius="8dp">
 
-        </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/about"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/pompiere"
+                    android:gravity="center"
+                    android:text="@string/discover"
+                    android:textColor="@color/White"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-    </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:padding="1dip"
+                app:cardCornerRadius="8dp">
+
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/nearByLocationsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/cardview_bg_white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/rancho"
+                        android:padding="@dimen/margin_10dp"
+                        android:text="@string/near_by"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_24sp" />
+
+                    <ImageView
+                        android:id="@+id/expandNearLocationsByArrow"
+                        android:layout_width="@dimen/dropDownButtonDimens"
+                        android:layout_height="@dimen/dropDownButtonDimens"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin_10dp"
+                        android:src="@drawable/ic_expand_more_black_24dp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/landmarksInCity"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

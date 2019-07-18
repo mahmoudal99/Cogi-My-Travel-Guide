@@ -28,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.L;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Protocol;
@@ -37,6 +38,7 @@ import com.squareup.okhttp.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Attr;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     private String cityName;
     private OkHttpClient okHttpClient;
+    ArrayList<AttractionObject> landmarksArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +150,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 jsonObject = new JSONObject(finalObject.getString("name"));
 
                 landmarks.add(jsonObject.get("value").toString());
-                loadNearByLandmarks(landmarks);
+                landmarksInCity(landmarks);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -165,23 +168,30 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-
-    private void loadNearByLandmarks(Set<String> landmarks) {
-        ArrayList<String> attractionsInCityArray = new ArrayList<>();
-
-        RecyclerView listView = findViewById(R.id.list);
-        listView.setVisibility(View.VISIBLE);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        RecyclerView.Adapter mAdapter = new LandmarksInCityAdapter(attractionsInCityArray, LandmarksActivity.this);
-        listView.setLayoutManager(mLayoutManager);
-        listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(mAdapter);
-
+    private void landmarksInCity(Set<String> landmarks){
         for (String landmark : landmarks){
-            Log.d("LANDMARKINPARIS", landmark);
-            attractionsInCityArray.add(landmark);
+            AttractionObject attractionObject = new AttractionObject();
+            attractionObject.setPlaceName(landmark);
+            landmarksArrayList.add(attractionObject);
         }
+        loadNearByLocations(landmarksArrayList);
+    }
 
+    private void loadNearByLocations(ArrayList<AttractionObject> landmarksArrayList) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RecyclerView listView = findViewById(R.id.landmarksInCity);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(landmarksArrayList, LandmarksActivity.this);
+                listView.setLayoutManager(mLayoutManager);
+                listView.setItemAnimator(new DefaultItemAnimator());
+                listView.setAdapter(mAdapter);
+
+
+            }
+        });
     }
 
     private void setUpWidgets() {
