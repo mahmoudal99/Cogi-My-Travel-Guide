@@ -2,16 +2,25 @@ package com.example.mytravelguide.attractions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
+import com.example.mytravelguide.TravelGuideActivity;
+import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.GeocodingLocation;
+import com.example.mytravelguide.utils.GooglePlacesApi;
+import com.example.mytravelguide.utils.LandmarksInCityAdapter;
+import com.example.mytravelguide.utils.NearByLocationsAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
@@ -137,7 +147,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 jsonObject = new JSONObject(finalObject.getString("name"));
 
                 landmarks.add(jsonObject.get("value").toString());
-                landmarksInCity(landmarks);
+                loadNearByLandmarks(landmarks);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -155,10 +165,23 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    private void landmarksInCity(Set<String> landmarks){
+
+    private void loadNearByLandmarks(Set<String> landmarks) {
+        ArrayList<String> attractionsInCityArray = new ArrayList<>();
+
+        RecyclerView listView = findViewById(R.id.list);
+        listView.setVisibility(View.VISIBLE);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.Adapter mAdapter = new LandmarksInCityAdapter(attractionsInCityArray, LandmarksActivity.this);
+        listView.setLayoutManager(mLayoutManager);
+        listView.setItemAnimator(new DefaultItemAnimator());
+        listView.setAdapter(mAdapter);
+
         for (String landmark : landmarks){
             Log.d("LANDMARKINPARIS", landmark);
+            attractionsInCityArray.add(landmark);
         }
+
     }
 
     private void setUpWidgets() {
