@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
+    android:background="@color/White"
     tools:context=".TravelGuideActivity">
 
     <ScrollView
@@ -84,6 +85,23 @@
 
             </androidx.cardview.widget.CardView>
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                app:tabTextColor="@color/black"
+                android:layout_height="wrap_content"
+                android:background="@color/White"
+                android:elevation="6dp"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tab_layout"/>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -92,6 +110,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="5dp"
                 android:padding="1dip"
+                android:visibility="gone"
                 app:cardCornerRadius="8dp">
 
                 <fragment
@@ -114,6 +133,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -141,7 +161,8 @@
                     android:id="@+id/landmarksInCity"
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
