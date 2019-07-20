@@ -26,7 +26,7 @@
                 android:src="@drawable/back_arrow_black" />
 
             <TextView
-                android:id="@+id/attractionName"
+                android:id="@+id/cityTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pompiere"
@@ -34,6 +34,26 @@
                 android:text="Giza Necropolis"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_28sp" />
+
+            <EditText
+                android:id="@+id/searchTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter city name"
+                android:textColor="@color/black"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/search"
+                android:layout_width="@dimen/backArrowDimens"
+                android:layout_height="@dimen/backArrowDimens"
+                android:layout_gravity="end"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/search" />
 
         </RelativeLayout>
 

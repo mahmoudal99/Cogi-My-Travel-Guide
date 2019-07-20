@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -57,9 +58,10 @@ import java.util.function.LongFunction;
 
 public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageView backArrow;
+    ImageView backArrow, search;
     CardView mapCardView;
     RecyclerView listView;
+    private TextView cityTextView, searchTextView;
 
     private String cityName;
     private OkHttpClient okHttpClient;
@@ -75,8 +77,6 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         tabLayout.addTab(tabLayout.newTab().setText("Landmarks"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = findViewById(R.id.view_pager);
-//        TabsAdapter tabsAdapter = new TabsAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-//        viewPager.setAdapter(tabsAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -130,6 +130,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         okHttpClient = new OkHttpClient();
         mapCardView = findViewById(R.id.mapCardView);
         listView = findViewById(R.id.landmarksInCity);
+        backArrow = findViewById(R.id.backArrow);
+        cityTextView = findViewById(R.id.cityTextView);
+        searchTextView = findViewById(R.id.searchTextView);
+        search = findViewById(R.id.search);
     }
 
     private void getCityDataId(String cityName) {
@@ -227,23 +231,25 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void loadNearByLocations(ArrayList<AttractionObject> landmarksArrayList) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(landmarksArrayList, LandmarksActivity.this);
-                listView.setLayoutManager(mLayoutManager);
-                listView.setItemAnimator(new DefaultItemAnimator());
-                listView.setAdapter(mAdapter);
-            }
+        runOnUiThread(() -> {
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(landmarksArrayList, LandmarksActivity.this);
+            listView.setLayoutManager(mLayoutManager);
+            listView.setItemAnimator(new DefaultItemAnimator());
+            listView.setAdapter(mAdapter);
         });
     }
 
     private void setUpWidgets() {
-//        backArrow.setOnClickListener(v -> {
-//            Intent backIntent = new Intent(LandmarksActivity.this, HomePageActivity.class);
-//            startActivity(backIntent);
-//        });
+        backArrow.setOnClickListener(v -> {
+            Intent backIntent = new Intent(LandmarksActivity.this, HomePageActivity.class);
+            startActivity(backIntent);
+        });
+
+        search.setOnClickListener(v -> {
+            cityTextView.setVisibility(View.GONE);
+            searchTextView.setVisibility(View.VISIBLE);
+        });
     }
 }
 
