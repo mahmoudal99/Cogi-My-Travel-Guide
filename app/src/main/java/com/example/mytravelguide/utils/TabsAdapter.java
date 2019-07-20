@@ -1,5 +1,7 @@
 package com.example.mytravelguide.utils;
 
+import android.util.Log;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -25,11 +27,9 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position){
         switch (position){
             case 0:
-                HomeFragment home = new HomeFragment();
-                return home;
+                Log.d("Map", "Loaded Map");
             case 1:
-                AboutFragment about = new AboutFragment();
-                return about;
+                Log.d("Landmark", "Loaded Landmark");
             default:
                 return null;
         }

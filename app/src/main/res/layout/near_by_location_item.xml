@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rlRow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,38 +9,52 @@
     android:layout_marginBottom="5dp"
     android:background="@drawable/cardview_bg_white">
 
-    <LinearLayout
-        android:id="@+id/linLayoutMain"
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:orientation="horizontal">
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/White"
+        app:cardElevation="7dp"
+        android:padding="1dip"
+        app:cardCornerRadius="8dp">
 
-        <ImageView
-            android:id="@+id/location"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:src="@drawable/location" />
-
-        <TextView
-            android:id="@+id/place_name"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/linLayoutMain"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="6"
-            android:duplicateParentState="true"
-            android:fontFamily="@font/rancho"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:text="@string/Attraction"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_21sp"
-            android:layout_marginLeft="10dp" />
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/location"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:src="@drawable/location" />
+
+            <TextView
+                android:id="@+id/place_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="6"
+                android:duplicateParentState="true"
+                android:fontFamily="@font/pompiere"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/Attraction"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_21sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
 </RelativeLayout>

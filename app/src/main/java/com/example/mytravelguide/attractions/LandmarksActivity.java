@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.mytravelguide.HomePageActivity;
@@ -52,11 +53,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.LongFunction;
 
 public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageView backArrow;
-    CardView europeCardView, africaCardView, asiaCardView, americaCardView;
+    CardView mapCardView;
+    RecyclerView listView;
 
     private String cityName;
     private OkHttpClient okHttpClient;
@@ -67,23 +70,32 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Home"));
-        tabLayout.addTab(tabLayout.newTab().setText("About"));
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("Map"));
+        tabLayout.addTab(tabLayout.newTab().setText("Landmarks"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        final ViewPager viewPager =(ViewPager)findViewById(R.id.view_pager);
-        TabsAdapter tabsAdapter = new TabsAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(tabsAdapter);
+        final ViewPager viewPager = findViewById(R.id.view_pager);
+//        TabsAdapter tabsAdapter = new TabsAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+//        viewPager.setAdapter(tabsAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                if (tab.getPosition() == 0) {
+                    mapCardView.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.GONE);
+                }else if (tab.getPosition() == 1){
+                    mapCardView.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
+                }
             }
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
@@ -116,10 +128,12 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void init() {
         okHttpClient = new OkHttpClient();
+        mapCardView = findViewById(R.id.mapCardView);
+        listView = findViewById(R.id.landmarksInCity);
     }
 
     private void getCityDataId(String cityName) {
-        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix="+cityName+"&minPopulation=1000000";
+        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=1000000";
         Request cityDataIDRequest = new Request.Builder()
                 .url(url)
                 .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
@@ -128,7 +142,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         httpClientCall(cityDataIDRequest, "WIKIDATA");
     }
 
-    private void getCityLandmarks(String cityWikiDataID){
+    private void getCityLandmarks(String cityWikiDataID) {
         String cityDataId = cityWikiDataID;
         String[] types = {"Q16560", "Q12518", "Q23413", "Q570116", "Q839954"};
         String typePalace = "Q16560";
@@ -137,8 +151,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         String typeTouristAttraction = "Q570116";
         String typeArchaeologicalSite = "Q839954";
 
-        for (int i = 0; i < 5; i++){
-            String url1 = "https://query.wikidata.org/sparql?format=json&query=%0ASELECT+DISTINCT+%3Fitem+%3Fname+%3Fcoord+%3Flat+%3Flon%0AWHERE+%7B%0A+++hint%3AQuery+hint%3Aoptimizer+%22None%22+.%0A+++%3Fitem+wdt%3AP131%2A+wd%3A"+cityDataId+"+.%0A+++%3Fitem+wdt%3AP31%2Fwdt%3AP279%2A+wd%3A"+types[i]+"+.%0A+++%3Fitem+wdt%3AP625+%3Fcoord+.%0A+++%3Fitem+p%3AP625+%3Fcoordinate+.%0A+++%3Fcoordinate+psv%3AP625+%3Fcoordinate_node+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLatitude+%3Flat+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLongitude+%3Flon+.%0A+++SERVICE+wikibase%3Alabel+%7B%0A++++bd%3AserviceParam+wikibase%3Alanguage+%22%5BAUTO_LANGUAGE%5D%2Cen%22+.%0A++++%3Fitem+rdfs%3Alabel+%3Fname%0A+++%7D%0A%7D%0AORDER+BY+ASC+%28%3Fname%29%0A";
+        for (int i = 0; i < 5; i++) {
+            String url1 = "https://query.wikidata.org/sparql?format=json&query=%0ASELECT+DISTINCT+%3Fitem+%3Fname+%3Fcoord+%3Flat+%3Flon%0AWHERE+%7B%0A+++hint%3AQuery+hint%3Aoptimizer+%22None%22+.%0A+++%3Fitem+wdt%3AP131%2A+wd%3A" + cityDataId + "+.%0A+++%3Fitem+wdt%3AP31%2Fwdt%3AP279%2A+wd%3A" + types[i] + "+.%0A+++%3Fitem+wdt%3AP625+%3Fcoord+.%0A+++%3Fitem+p%3AP625+%3Fcoordinate+.%0A+++%3Fcoordinate+psv%3AP625+%3Fcoordinate_node+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLatitude+%3Flat+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLongitude+%3Flon+.%0A+++SERVICE+wikibase%3Alabel+%7B%0A++++bd%3AserviceParam+wikibase%3Alanguage+%22%5BAUTO_LANGUAGE%5D%2Cen%22+.%0A++++%3Fitem+rdfs%3Alabel+%3Fname%0A+++%7D%0A%7D%0AORDER+BY+ASC+%28%3Fname%29%0A";
             Request cityLandmarksRequest = new Request.Builder().url(url1).header("content-type", "application/html").build();
 
             httpClientCall(cityLandmarksRequest, "LANDMARKSREQEST");
@@ -154,26 +168,27 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             public void onFailure(Request request, IOException e) {
                 Log.d("City WIKIDATA Id" + "Error", e.getMessage());
             }
+
             @Override
             public void onResponse(Response response) throws IOException {
                 final String myResponse = response.body().string();
-                if(requestType.equals("LANDMARKSREQEST")){
+                if (requestType.equals("LANDMARKSREQEST")) {
                     landmarksInCityFromJson(myResponse);
-                }else if(requestType.equals("WIKIDATA")){
+                } else if (requestType.equals("WIKIDATA")) {
                     getCityIDFromJson(myResponse);
                 }
             }
         });
     }
 
-    private void landmarksInCityFromJson(String response){
+    private void landmarksInCityFromJson(String response) {
         ArrayList<String> landmarks = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(response);
             String value = jsonObject.getString("results");
             jsonObject = new JSONObject(value);
             JSONArray jsonArray = jsonObject.getJSONArray("bindings");
-            for (int i = 0; i < jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject finalObject = jsonArray.getJSONObject(i);
                 jsonObject = new JSONObject(finalObject.getString("name"));
 
@@ -188,7 +203,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    private void getCityIDFromJson(String respnse){
+    private void getCityIDFromJson(String respnse) {
         try {
             JSONObject jsonObject = new JSONObject(respnse);
             JSONArray data = jsonObject.getJSONArray("data");
@@ -199,9 +214,9 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    private void landmarksInCity(List<String> landmarks){
+    private void landmarksInCity(List<String> landmarks) {
 
-        for (String landmark : landmarks){
+        for (String landmark : landmarks) {
             Log.d("IOJOOEFIF", landmark);
             AttractionObject attractionObject = new AttractionObject();
             attractionObject.setPlaceName(landmark);
@@ -215,14 +230,11 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RecyclerView listView = findViewById(R.id.landmarksInCity);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(landmarksArrayList, LandmarksActivity.this);
                 listView.setLayoutManager(mLayoutManager);
                 listView.setItemAnimator(new DefaultItemAnimator());
                 listView.setAdapter(mAdapter);
-
-
             }
         });
     }
