@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,13 +62,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.LongFunction;
+import java.util.regex.Pattern;
 
 public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageView backArrow, search;
     CardView mapCardView;
     RecyclerView listView;
-    private TextView cityTextView, searchTextView;
+    private TextView cityTextView;
+    private EditText searchTextView;
 
     private String cityName;
     private OkHttpClient okHttpClient;
@@ -91,7 +94,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 if (tab.getPosition() == 0) {
                     mapCardView.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
-                }else if (tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     mapCardView.setVisibility(View.GONE);
                     listView.setVisibility(View.VISIBLE);
                 }
@@ -117,7 +120,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
         init();
         setUpWidgets();
-        getCityDataId("Paris");
+        getCityDataId("Jerusalem");
     }
 
     // Include the OnCreate() method here too, as described above.
@@ -139,17 +142,19 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         backArrow = findViewById(R.id.backArrow);
         cityTextView = findViewById(R.id.cityTextView);
         searchTextView = findViewById(R.id.searchTextView);
+        searchTextView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         search = findViewById(R.id.search);
     }
 
     private void getCityDataId(String cityName) {
-        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=1000000";
+        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=800000";
         Request cityDataIDRequest = new Request.Builder()
                 .url(url)
                 .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
                 .header("X-RapidAPI-Key", "de22d3cbadmshf632b8fa723db10p12a5e2jsnecd78f4ef9d6")
                 .build();
         httpClientCall(cityDataIDRequest, "WIKIDATA");
+        landmarksArrayList.clear();
     }
 
     private void getCityLandmarks(String cityWikiDataID) {
@@ -230,7 +235,11 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             Log.d("IOJOOEFIF", landmark);
             AttractionObject attractionObject = new AttractionObject();
             attractionObject.setPlaceName(landmark);
-            landmarksArrayList.add(attractionObject);
+            if (Pattern.compile("[0-9]").matcher(landmark).find()) {
+                Log.d("Landmark", "Not added");
+            } else {
+                landmarksArrayList.add(attractionObject);
+            }
         }
         loadNearByLocations(landmarksArrayList);
     }
@@ -243,6 +252,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             listView.setLayoutManager(mLayoutManager);
             listView.setItemAnimator(new DefaultItemAnimator());
             listView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         });
     }
 
@@ -257,18 +267,18 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             searchTextView.setVisibility(View.VISIBLE);
         });
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
-        searchTextView.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
-                    closeKeyboard();
-                    return true;
-                }
-                return false;
+        searchTextView.setOnKeyListener((v, keyCode, event) -> {
+            // If the event is a key-down event on the "enter" button
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                // Perform action on key press
+                Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
+                cityTextView.setText(searchTextView.getText());
+                getCityDataId("Paris");
+                closeKeyboard();
+                return true;
             }
+            return false;
         });
     }
 
