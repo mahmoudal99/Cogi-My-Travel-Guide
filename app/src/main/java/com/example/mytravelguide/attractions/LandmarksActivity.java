@@ -7,13 +7,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -250,6 +256,25 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             cityTextView.setVisibility(View.GONE);
             searchTextView.setVisibility(View.VISIBLE);
         });
+        searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchTextView.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
+                    closeKeyboard();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void closeKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 }
 
