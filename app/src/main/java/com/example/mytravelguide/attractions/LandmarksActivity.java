@@ -162,14 +162,14 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void getCityLandmarks(String cityWikiDataID) {
         String cityDataId = cityWikiDataID;
-        String[] types = {"Q16560", "Q12518", "Q23413", "Q570116", "Q839954"};
+        String[] types = {"Q16560", "Q12518", "Q23413", "Q570116", "Q839954", "Q32815", "Q44539", "Q16970", "Q34627"};
         String typePalace = "Q16560";
         String typeTower = "Q12518";
         String typeCastle = "Q23413";
         String typeTouristAttraction = "Q570116";
         String typeArchaeologicalSite = "Q839954";
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 9; i++) {
             String url1 = "https://query.wikidata.org/sparql?format=json&query=%0ASELECT+DISTINCT+%3Fitem+%3Fname+%3Fcoord+%3Flat+%3Flon%0AWHERE+%7B%0A+++hint%3AQuery+hint%3Aoptimizer+%22None%22+.%0A+++%3Fitem+wdt%3AP131%2A+wd%3A" + cityDataId + "+.%0A+++%3Fitem+wdt%3AP31%2Fwdt%3AP279%2A+wd%3A" + types[i] + "+.%0A+++%3Fitem+wdt%3AP625+%3Fcoord+.%0A+++%3Fitem+p%3AP625+%3Fcoordinate+.%0A+++%3Fcoordinate+psv%3AP625+%3Fcoordinate_node+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLatitude+%3Flat+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLongitude+%3Flon+.%0A+++SERVICE+wikibase%3Alabel+%7B%0A++++bd%3AserviceParam+wikibase%3Alanguage+%22%5BAUTO_LANGUAGE%5D%2Cen%22+.%0A++++%3Fitem+rdfs%3Alabel+%3Fname%0A+++%7D%0A%7D%0AORDER+BY+ASC+%28%3Fname%29%0A";
             Request cityLandmarksRequest = new Request.Builder().url(url1).header("content-type", "application/html").build();
 
@@ -337,6 +337,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 Log.d("COMOMOMO", url);
                 getCityLatLng(url);
                 closeKeyboard();
+                cityTextView.setVisibility(View.VISIBLE);
+                searchTextView.setVisibility(View.GONE);
                 return true;
             }
             return false;
