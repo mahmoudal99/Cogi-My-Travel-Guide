@@ -73,8 +73,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     private EditText searchTextView;
 
     private String cityName;
+    private double lat, lng;
     private OkHttpClient okHttpClient;
     ArrayList<AttractionObject> landmarksArrayList = new ArrayList<>();
+    GoogleMap mGoogleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,13 +128,14 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     // Include the OnCreate() method here too, as described above.
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(48.8539241, 2.2913515);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng sydney = new LatLng(lat, lng);
+        mGoogleMap = googleMap;
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
-        googleMap.setMaxZoomPreference(12);
-        googleMap.setMinZoomPreference(12);
+        mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
+        mGoogleMap.setMaxZoomPreference(12);
+        mGoogleMap.setMinZoomPreference(12);
     }
 
     private void init() {
@@ -175,6 +178,11 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     }
 
+    private void getCityLatLng(String cityJsonUrl) {
+        Request cityLatLngRequest = new Request.Builder().url(cityJsonUrl).header("content-type", "application/html").build();
+        getCityLatLngFromJson(cityLatLngRequest);
+    }
+
     private void httpClientCall(Request request, String requestType) {
 
         okHttpClient.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
@@ -191,6 +199,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                     landmarksInCityFromJson(myResponse);
                 } else if (requestType.equals("WIKIDATA")) {
                     getCityIDFromJson(myResponse);
+                } else if (requestType.equals("CITYREQUEST")) {
+                    getCityLatLng(myResponse);
                 }
             }
         });
@@ -229,6 +239,44 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    private void getCityLatLngFromJson(Request request){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                final String myResponse = response.body().string();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(myResponse);
+                    Log.d("LATLNG", jsonObject.toString());
+                    JSONArray jsonArray = jsonObject.getJSONArray("results");
+                    jsonObject = new JSONObject(jsonArray.get(0).toString());
+                    jsonObject = jsonObject.getJSONObject("geometry");
+                    jsonObject = jsonObject.getJSONObject("location");
+                    Log.d("LATLNG", jsonObject.get("lat") + " " + jsonObject.get("lng") + "f");
+                    setMapsLatLng((double)jsonObject.get("lat"), (double)jsonObject.get("lng"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void setMapsLatLng(double lat,  double lng){
+        runOnUiThread(() -> {
+            LatLng sydney = new LatLng(lat, lng);
+            mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        });
+    }
+
+
+
     private void landmarksInCity(List<String> landmarks) {
 
         for (String landmark : landmarks) {
@@ -263,9 +311,18 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
         search.setOnClickListener(v -> {
-            cityTextView.setVisibility(View.GONE);
-            searchTextView.setVisibility(View.VISIBLE);
+
+            if(searchTextView.getVisibility() == View.GONE){
+                cityTextView.setVisibility(View.GONE);
+                searchTextView.setVisibility(View.VISIBLE);
+            }else {
+                cityTextView.setVisibility(View.VISIBLE);
+                searchTextView.setVisibility(View.GONE);
+            }
+
         });
+
+
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchTextView.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
@@ -274,13 +331,18 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 // Perform action on key press
                 Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
                 cityTextView.setText(searchTextView.getText());
-                getCityDataId("Paris");
+                getCityDataId(searchTextView.getText().toString());
+                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+                String url = googlePlacesApi.getPlacesByQuery(searchTextView.getText().toString());
+                Log.d("COMOMOMO", url);
+                getCityLatLng(url);
                 closeKeyboard();
                 return true;
             }
             return false;
         });
     }
+
 
     private void closeKeyboard() {
         InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);

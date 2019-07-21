@@ -207,7 +207,7 @@ public class GooglePlacesApi {
         return null;
     }
 
-    public String getPlacesByQuery(String query, int limit, Param... extraParams) {
+    public String getPlacesByQuery(String query, Param... extraParams) {
         try {
             String uri = buildUrl(METHOD_TEXT_SEARCH, String.format("query=%s&key=%s", query, apiKey), extraParams);
             return uri;
