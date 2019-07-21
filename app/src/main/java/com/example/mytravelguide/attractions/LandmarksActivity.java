@@ -66,13 +66,12 @@ import java.util.regex.Pattern;
 
 public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageView backArrow, search;
-    CardView mapCardView;
-    RecyclerView listView;
+    private ImageView backArrow, search;
+    private CardView mapCardView;
+    private RecyclerView listView;
     private TextView cityTextView;
     private EditText searchTextView;
 
-    private String cityName;
     private double lat, lng;
     private OkHttpClient okHttpClient;
     ArrayList<AttractionObject> landmarksArrayList = new ArrayList<>();
@@ -239,7 +238,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    private void getCityLatLngFromJson(Request request){
+    private void getCityLatLngFromJson(Request request) {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -259,7 +258,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                     jsonObject = jsonObject.getJSONObject("geometry");
                     jsonObject = jsonObject.getJSONObject("location");
                     Log.d("LATLNG", jsonObject.get("lat") + " " + jsonObject.get("lng") + "f");
-                    setMapsLatLng((double)jsonObject.get("lat"), (double)jsonObject.get("lng"));
+                    setMapsLatLng((double) jsonObject.get("lat"), (double) jsonObject.get("lng"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -267,14 +266,13 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
-    private void setMapsLatLng(double lat,  double lng){
+    private void setMapsLatLng(double lat, double lng) {
         runOnUiThread(() -> {
             LatLng sydney = new LatLng(lat, lng);
             mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         });
     }
-
 
 
     private void landmarksInCity(List<String> landmarks) {
@@ -312,10 +310,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
         search.setOnClickListener(v -> {
 
-            if(searchTextView.getVisibility() == View.GONE){
+            if (searchTextView.getVisibility() == View.GONE) {
                 cityTextView.setVisibility(View.GONE);
                 searchTextView.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 cityTextView.setVisibility(View.VISIBLE);
                 searchTextView.setVisibility(View.GONE);
             }
@@ -337,8 +335,11 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 Log.d("COMOMOMO", url);
                 getCityLatLng(url);
                 closeKeyboard();
-                cityTextView.setVisibility(View.VISIBLE);
-                searchTextView.setVisibility(View.GONE);
+
+                runOnUiThread(() -> {
+                    cityTextView.setVisibility(View.VISIBLE);
+                    searchTextView.setVisibility(View.GONE);
+                });
                 return true;
             }
             return false;
