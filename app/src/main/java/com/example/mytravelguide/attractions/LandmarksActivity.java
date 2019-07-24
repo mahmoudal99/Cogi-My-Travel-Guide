@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -96,6 +97,9 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     ImageProcessing imageProcessing;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,20 +138,21 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         Handler handler = new Handler();
         GeocodingLocation geocodingLocation = new GeocodingLocation();
         geocodingLocation.getAddressFromLocation("Wadi Musa", LandmarksActivity.this, handler);
-
+        init();
+        setUpWidgets();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        init();
-        setUpWidgets();
         imageProcessing.loadImageFromStorage(cityImage);
-        getCityDataId("Jerusalem");
+        getCityDataId(cityTextView.getText().toString());
     }
 
     // Include the OnCreate() method here too, as described above.
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(lat, lng);
+        double landmarkLat = Double.parseDouble(pref.getString("LandmarkLat", "0.0"));
+        double landmarkLng = Double.parseDouble(pref.getString("LandmarkLng", "0.0"));
+        LatLng sydney = new LatLng(landmarkLat, landmarkLng);
         mGoogleMap = googleMap;
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -168,6 +173,9 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         search = findViewById(R.id.search);
         imageProcessing = new ImageProcessing(LandmarksActivity.this);
         cityImage = findViewById(R.id.cityImage);
+        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        editor = pref.edit();
+        editor.apply();
     }
 
     private void getCityDataId(String cityName) {
@@ -334,6 +342,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         });
+
+        editor.putString("LandmarkLat", String.valueOf(lat));
+        editor.putString("LandmarkLng", String.valueOf(lng));
+        editor.commit();
     }
 
 
@@ -397,7 +409,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 getCityLatLng(url);
                 getCityID(url);
                 closeKeyboard();
-
+                editor.putString("CityName", searchTextView.getText().toString());
                 Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
                 unsplash.searchPhotos(searchTextView.getText().toString(), new Unsplash.OnSearchCompleteListener() {
                     @Override
@@ -420,6 +432,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             }
             return false;
         });
+
+        cityTextView.setText(pref.getString("CityName", "Berlin"));
     }
 
     private void closeKeyboard() {
