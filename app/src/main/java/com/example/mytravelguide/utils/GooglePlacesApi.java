@@ -121,6 +121,25 @@ public class GooglePlacesApi {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void setPhoto(PhotoMetadata photo, ImageView imageView) {
+
+        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
+        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+            bitmap = fetchPhotoResponse.getBitmap();
+
+            saveImageBitmap(bitmap);
+
+            Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+            imageView.setBackground(drawable);
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                Log.e("Error", "Place not found: " + apiException.getMessage());
+            }
+        });
+    }
+
     private void saveImageBitmap(Bitmap bitmap) {
         String path = Environment.getExternalStorageDirectory().toString();
         OutputStream outputStream = null;

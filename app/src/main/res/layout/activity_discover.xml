@@ -70,7 +70,7 @@
             app:cardCornerRadius="8dp">
 
             <ImageView
-                android:id="@+id/image"
+                android:id="@+id/cityImage"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"

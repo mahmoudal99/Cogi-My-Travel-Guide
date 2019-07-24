@@ -9,6 +9,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -18,12 +23,14 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.mytravelguide.BuildConfig;
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.TravelGuideActivity;
@@ -41,7 +48,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.L;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.tabs.TabLayout;
+import com.kc.unsplash.Unsplash;
+import com.kc.unsplash.models.Photo;
+import com.kc.unsplash.models.SearchResults;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Protocol;
@@ -53,7 +64,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Attr;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -182,6 +198,11 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         getCityLatLngFromJson(cityLatLngRequest);
     }
 
+    private void getCityID(String cityURL) {
+        Request cityLatLngRequest = new Request.Builder().url(cityURL).header("content-type", "application/html").build();
+        getCityIDFromJson(cityLatLngRequest);
+    }
+
     private void httpClientCall(Request request, String requestType) {
 
         okHttpClient.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
@@ -250,14 +271,15 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             public void onResponse(Response response) throws IOException {
                 final String myResponse = response.body().string();
                 JSONObject jsonObject = null;
+                JSONObject placeIDObject = null;
                 try {
                     jsonObject = new JSONObject(myResponse);
-                    Log.d("LATLNG", jsonObject.toString());
                     JSONArray jsonArray = jsonObject.getJSONArray("results");
                     jsonObject = new JSONObject(jsonArray.get(0).toString());
                     jsonObject = jsonObject.getJSONObject("geometry");
                     jsonObject = jsonObject.getJSONObject("location");
                     Log.d("LATLNG", jsonObject.get("lat") + " " + jsonObject.get("lng") + "f");
+
                     setMapsLatLng((double) jsonObject.get("lat"), (double) jsonObject.get("lng"));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -265,6 +287,40 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
     }
+
+    private void getCityIDFromJson(Request request) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                final String myResponse = response.body().string();
+                JSONObject placeIDObject = null;
+                try {
+                    placeIDObject = new JSONObject(myResponse);
+                    JSONArray jsonArray = placeIDObject.getJSONArray("results");
+                    placeIDObject = new JSONObject(jsonArray.get(0).toString());
+//                    setCitImage("ChIJD7fiBh9u5kcRYJSMaMOCCwQ");
+                    Log.d("LATLNG3", placeIDObject.get("place_id").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+//
+//    private void setCitImage(String placeID) {
+//        runOnUiThread(() -> {
+//            GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY);
+//            Place place = googlePlacesApi.getPlaceById(placeID);
+//            ImageView cityImage = findViewById(R.id.cityImage);
+//            googlePlacesApi.setPhoto(place.getPhotoMetadatas().get(0), cityImage);
+//        });
+//    }
 
     private void setMapsLatLng(double lat, double lng) {
         runOnUiThread(() -> {
@@ -323,10 +379,9 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchTextView.setOnKeyListener((v, keyCode, event) -> {
-            // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                // Perform action on key press
+
                 Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
                 cityTextView.setText(searchTextView.getText());
                 getCityDataId(searchTextView.getText().toString());
@@ -334,16 +389,71 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 String url = googlePlacesApi.getPlacesByQuery(searchTextView.getText().toString());
                 Log.d("COMOMOMO", url);
                 getCityLatLng(url);
+                getCityID(url);
                 closeKeyboard();
+
+                ImageView citImage = findViewById(R.id.cityImage);
+
+                Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
+                unsplash.searchPhotos(searchTextView.getText().toString(), new Unsplash.OnSearchCompleteListener() {
+                    @Override
+                    public void onComplete(SearchResults results) {
+                        Log.d("UNSPLASH111", results.getResults().get(0).getUrls().getFull());
+                        Photo photo = results.getResults().get(0);
+                        new DownloadImageTask(citImage).execute(results.getResults().get(0).getUrls().getFull());
+                        Drawable drawable = LoadImageFromWebOperations(results.getResults().get(0).getUrls().getFull().toString());
+                        citImage.setImageDrawable(drawable);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
 
                 runOnUiThread(() -> {
                     cityTextView.setVisibility(View.VISIBLE);
                     searchTextView.setVisibility(View.GONE);
                 });
+
                 return true;
             }
             return false;
         });
+    }
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 
 
