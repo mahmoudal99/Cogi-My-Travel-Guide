@@ -385,21 +385,18 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
                 cityTextView.setText(searchTextView.getText());
                 getCityDataId(searchTextView.getText().toString());
-                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.GOOGLEAPIFORQUERY);
                 String url = googlePlacesApi.getPlacesByQuery(searchTextView.getText().toString());
-                Log.d("COMOMOMO", url);
                 getCityLatLng(url);
                 getCityID(url);
                 closeKeyboard();
 
                 ImageView citImage = findViewById(R.id.cityImage);
 
-                Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
+                Unsplash unsplash = new Unsplash(BuildConfig.UNSPLASHAPIKEY);
                 unsplash.searchPhotos(searchTextView.getText().toString(), new Unsplash.OnSearchCompleteListener() {
                     @Override
                     public void onComplete(SearchResults results) {
-                        Log.d("UNSPLASH111", results.getResults().get(0).getUrls().getFull());
-                        Photo photo = results.getResults().get(0);
                         new DownloadImageTask(citImage).execute(results.getResults().get(0).getUrls().getFull());
                         Drawable drawable = LoadImageFromWebOperations(results.getResults().get(0).getUrls().getFull().toString());
                         citImage.setImageDrawable(drawable);
@@ -434,6 +431,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
