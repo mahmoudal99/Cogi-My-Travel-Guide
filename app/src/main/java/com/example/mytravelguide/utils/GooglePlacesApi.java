@@ -103,13 +103,14 @@ public class GooglePlacesApi {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void setPhoto(PhotoMetadata photo, RelativeLayout relativeLayout) {
+    public void setLandmarkPhoto(PhotoMetadata photo, RelativeLayout relativeLayout) {
 
         FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
 
-            saveImageBitmap(bitmap);
+            ImageProcessing imageProcessing = new ImageProcessing(context);
+            imageProcessing.saveImageBitmap(bitmap);
 
             Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
             relativeLayout.setBackground(drawable);
@@ -122,13 +123,14 @@ public class GooglePlacesApi {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void setPhoto(PhotoMetadata photo, ImageView imageView) {
+    public void setLandmarkPhoto(PhotoMetadata photo, ImageView imageView) {
 
         FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
 
-            saveImageBitmap(bitmap);
+            ImageProcessing imageProcessing = new ImageProcessing(context);
+            imageProcessing.saveImageBitmap(bitmap);
 
             Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
             imageView.setBackground(drawable);
@@ -140,29 +142,9 @@ public class GooglePlacesApi {
         });
     }
 
-    private void saveImageBitmap(Bitmap bitmap) {
-        String path = Environment.getExternalStorageDirectory().toString();
-        OutputStream outputStream = null;
-        File file = new File(path, "image" + ".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
-        try {
-            outputStream = new FileOutputStream(file);
-
-            Bitmap pictureBitmap = bitmap;
-            pictureBitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void setPhotoBitmap(PhotoMetadata photo, ImageView imageView) {
+    public void setLandmarkImageWithBitmap(PhotoMetadata photo, ImageView imageView) {
 
         FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
@@ -175,24 +157,6 @@ public class GooglePlacesApi {
                 Log.e("Error", "Place not found: " + apiException.getMessage());
             }
         });
-    }
-
-    public void loadImageFromStorage(RelativeLayout relativeLayout) {
-        String photoPath = Environment.getExternalStorageDirectory() + "/image.jpg";
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
-        Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-        relativeLayout.setBackground(drawable);
-    }
-
-    /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
     }
 
     public String placeOpeningHours(Place place) {

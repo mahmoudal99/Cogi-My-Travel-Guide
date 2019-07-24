@@ -37,6 +37,7 @@ import com.example.mytravelguide.TravelGuideActivity;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.GeocodingLocation;
 import com.example.mytravelguide.utils.GooglePlacesApi;
+import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.LandmarksInCityAdapter;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
 import com.example.mytravelguide.utils.TabsAdapter;
@@ -82,7 +83,7 @@ import java.util.regex.Pattern;
 
 public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private ImageView backArrow, search;
+    private ImageView backArrow, search, cityImage;
     private CardView mapCardView;
     private RecyclerView listView;
     private TextView cityTextView;
@@ -92,6 +93,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     private OkHttpClient okHttpClient;
     ArrayList<AttractionObject> landmarksArrayList = new ArrayList<>();
     GoogleMap mGoogleMap;
+
+    ImageProcessing imageProcessing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +140,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
         init();
         setUpWidgets();
+        imageProcessing.loadImageFromStorage(cityImage);
         getCityDataId("Jerusalem");
     }
 
@@ -162,6 +166,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         searchTextView = findViewById(R.id.searchTextView);
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         search = findViewById(R.id.search);
+        imageProcessing = new ImageProcessing(LandmarksActivity.this);
+        cityImage = findViewById(R.id.cityImage);
     }
 
     private void getCityDataId(String cityName) {
@@ -385,21 +391,18 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
                 cityTextView.setText(searchTextView.getText());
                 getCityDataId(searchTextView.getText().toString());
-                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.GOOGLEAPIFORQUERY);
+                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
                 String url = googlePlacesApi.getPlacesByQuery(searchTextView.getText().toString());
+                Log.d("COMOMOMO", url);
                 getCityLatLng(url);
                 getCityID(url);
                 closeKeyboard();
 
-                ImageView citImage = findViewById(R.id.cityImage);
-
-                Unsplash unsplash = new Unsplash(BuildConfig.UNSPLASHAPIKEY);
+                Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
                 unsplash.searchPhotos(searchTextView.getText().toString(), new Unsplash.OnSearchCompleteListener() {
                     @Override
                     public void onComplete(SearchResults results) {
-                        new DownloadImageTask(citImage).execute(results.getResults().get(0).getUrls().getFull());
-                        Drawable drawable = LoadImageFromWebOperations(results.getResults().get(0).getUrls().getFull().toString());
-                        citImage.setImageDrawable(drawable);
+                        imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(0).getUrls().getFull());
                     }
 
                     @Override
@@ -418,42 +421,6 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             return false;
         });
     }
-
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
-
 
     private void closeKeyboard() {
         InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);

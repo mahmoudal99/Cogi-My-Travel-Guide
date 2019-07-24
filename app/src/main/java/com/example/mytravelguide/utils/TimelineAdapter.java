@@ -25,6 +25,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
     private View divider;
     private String[] colours = {"#D50000", "#00C853", "#2979FF", "#FFFF00", "#FF3D00", "#6200EA"};
 
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView placeName, dateVisited;
         ImageView placeImage;
@@ -52,13 +53,14 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
         Random random = new Random();
         int index = random.nextInt(6);
         divider.setBackgroundColor(Color.parseColor(colours[index]));
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);
-        googlePlacesApi.setPhotoBitmap(placeModel.photoMetadata, holder.placeImage);
+        googlePlacesApi.setLandmarkImageWithBitmap(placeModel.photoMetadata, holder.placeImage);
     }
 
     @Override

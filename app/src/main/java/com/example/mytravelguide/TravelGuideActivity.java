@@ -40,6 +40,7 @@ import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.CloudFirestore;
 import com.example.mytravelguide.utils.FirebaseMethods;
 import com.example.mytravelguide.utils.GooglePlacesApi;
+import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.Landmark;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
 import com.google.android.gms.common.api.Status;
@@ -142,6 +143,8 @@ public class TravelGuideActivity extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+    private ImageProcessing imageProcessing;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +166,8 @@ public class TravelGuideActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
         editor.apply();
+
+        imageProcessing = new ImageProcessing(TravelGuideActivity.this);
 
         backArrow = findViewById(R.id.backArrow);
         nearByLocationsButton = findViewById(R.id.location);
@@ -330,7 +335,7 @@ public class TravelGuideActivity extends AppCompatActivity {
             websiteTextView.setText("No Information Available");
         }
 
-        googlePlacesApi.setPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
+        googlePlacesApi.setLandmarkPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
 
     }
@@ -346,7 +351,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         placeID = pref.getString("LandmarkID", null);
         Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
         landmarkHistoryTextView.setText(pref.getString("LandmarkHistory", ""));
-        googlePlacesApi.loadImageFromStorage(landmarkRelativeLayout);
+        imageProcessing.loadImageFromStorage(landmarkRelativeLayout);
         firebaseMethods.getLandmarkInformation(landmarkNameString, landmarkHistoryTextView);
     }
 
