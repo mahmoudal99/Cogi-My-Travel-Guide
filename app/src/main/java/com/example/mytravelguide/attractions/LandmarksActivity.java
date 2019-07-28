@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,12 +21,14 @@ import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.LandmarksInCityAdapter;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
+import com.example.mytravelguide.utils.NewAdapter;
 import com.example.mytravelguide.utils.TabsAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -82,7 +86,7 @@ import java.util.Set;
 import java.util.function.LongFunction;
 import java.util.regex.Pattern;
 
-public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback, NewAdapter.LandmarkAdapterListener {
 
     private ImageView backArrow, search, cityImage;
     private CardView mapCardView;
@@ -92,13 +96,17 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     private double lat, lng;
     private OkHttpClient okHttpClient;
-    ArrayList<AttractionObject> landmarksArrayList = new ArrayList<>();
+    List<AttractionObject> landmarksArrayList = new ArrayList<>();
     GoogleMap mGoogleMap;
 
     ImageProcessing imageProcessing;
 
+    NewAdapter mAdapter = new NewAdapter(LandmarksActivity.this, landmarksArrayList, this);;
+
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +153,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
         imageProcessing.loadImageFromStorage(cityImage);
         getCityDataId(cityTextView.getText().toString());
+        searchListner();
     }
 
     // Include the OnCreate() method here too, as described above.
@@ -364,11 +373,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         loadNearByLocations(landmarksArrayList);
     }
 
-    private void loadNearByLocations(ArrayList<AttractionObject> landmarksArrayList) {
+    private void loadNearByLocations(List<AttractionObject> landmarksArrayList) {
 
         runOnUiThread(() -> {
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            RecyclerView.Adapter mAdapter = new NearByLocationsAdapter(landmarksArrayList, LandmarksActivity.this);
             listView.setLayoutManager(mLayoutManager);
             listView.setItemAnimator(new DefaultItemAnimator());
             listView.setAdapter(mAdapter);
@@ -440,6 +448,24 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
+
+    private void searchListner(){
+        ImageView imageView = findViewById(R.id.landmarkSearch);
+        EditText editText = findViewById(R.id.edit_query);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.getFilter().filter(editText.getText().toString());
+            }
+        });
+    }
+
+    @Override
+    public void onContactSelected(AttractionObject contact) {
+        Toast.makeText(getApplicationContext(), "Selected: " + contact.getPlaceName(), Toast.LENGTH_LONG).show();
+    }
+
 }
 
 

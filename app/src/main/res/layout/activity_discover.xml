@@ -126,6 +126,27 @@
             android:layout_below="@id/tab_layout"
             android:visibility="gone"/>
 
+        <EditText
+            android:id="@+id/edit_query"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter city name"
+            android:textColor="@color/black"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:inputType="textCapSentences"
+            android:imeOptions="actionSearch" />
+
+        <ImageView
+            android:id="@+id/landmarkSearch"
+            android:layout_width="@dimen/backArrowDimens"
+            android:layout_height="@dimen/backArrowDimens"
+            android:layout_gravity="end"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/search" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/mapCardView"
             android:layout_width="match_parent"
