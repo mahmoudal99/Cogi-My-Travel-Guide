@@ -39,22 +39,22 @@
                 android:id="@+id/searchTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter city name"
-                android:textColor="@color/black"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:inputType="textCapSentences"
+                android:hint="Enter city name"
                 android:imeOptions="actionSearch"
-                android:visibility="gone"/>
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/search"
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
-                android:layout_gravity="end"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
+                android:layout_gravity="end"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/search" />
 
         </RelativeLayout>
@@ -76,7 +76,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/sphinx"/>
+                android:src="@drawable/sphinx" />
 
         </androidx.cardview.widget.CardView>
 
@@ -123,9 +123,9 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="@color/White"
             android:layout_below="@id/tab_layout"
-            android:visibility="gone"/>
+            android:background="@color/White"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -137,25 +137,25 @@
                 android:id="@+id/edit_query"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Landmark"
-                android:textColor="@color/black"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:visibility="gone"
+                android:hint="Landmark"
+                android:imeOptions="actionSearch"
                 android:inputType="textCapSentences"
-                android:imeOptions="actionSearch" />
+                android:textColor="@color/black"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/landmarkSearch"
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
+                android:layout_alignParentRight="true"
                 android:layout_gravity="end"
                 android:layout_marginLeft="10dp"
-                android:layout_alignParentRight="true"
-                android:visibility="gone"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/search" />
+                android:layout_marginRight="10dp"
+                android:src="@drawable/search"
+                android:visibility="gone" />
 
         </RelativeLayout>
 

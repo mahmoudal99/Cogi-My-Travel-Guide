@@ -114,8 +114,8 @@ public class TravelGuideActivity extends AppCompatActivity {
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, landmarkHistoryTextView, numberTextView, websiteTextView;
-    private ImageView nearByLocationsButton, chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory, mircophone;
-    private CardView informationCardView, nearbyLocationsCardView;
+    private ImageView chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory, mircophone;
+    private CardView informationCardView;
 
     private String landmarkNameString, placeID, wikipediaResult;
 
@@ -156,7 +156,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         init();
         setUpWidgets();
         loadPreviousLandmark();
-        setUpLinearLayout();
         setUpFirebaseAuthentication();
     }
 
@@ -170,7 +169,6 @@ public class TravelGuideActivity extends AppCompatActivity {
         imageProcessing = new ImageProcessing(TravelGuideActivity.this);
 
         backArrow = findViewById(R.id.backArrow);
-        nearByLocationsButton = findViewById(R.id.location);
         addLandmarkToTimeline = findViewById(R.id.addPlace);
         searchLandmarkButton = findViewById(R.id.search);
 
@@ -187,16 +185,11 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkNameString = getIntent().getStringExtra("AttractionName");
 
         informationCardView = findViewById(R.id.infoCard);
-        nearbyLocationsCardView = findViewById(R.id.nearbyLocationsCardView);
         mircophone = findViewById(R.id.microphone);
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
         firebaseMethods = new FirebaseMethods(TravelGuideActivity.this);
-
-        expandLandmarkInformation = findViewById(R.id.expandInformation);
-        expandNearByLocationsArrow = findViewById(R.id.expandNearLocationsByArrow);
         expandLandmarkHistory = findViewById(R.id.expandLandmarkHistory);
-
     }
 
     private void setUpWidgets() {
@@ -223,39 +216,23 @@ public class TravelGuideActivity extends AppCompatActivity {
             }
         });
 
-        nearByLocationsButton.setOnClickListener(v -> loadNearByLocations());
 
         searchLandmarkButton.setOnClickListener(v -> {
             Intent intent = landmark.landmarkPicker();
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
         });
 
-        expandLandmarkInformation.setOnClickListener(v -> {
-            if (expandInfo) {
-                LinearLayout layout = findViewById(R.id.informationList);
-                expandLinearLayout(layout);
-                expandInfo = false;
-            } else if (!expandInfo) {
-                LinearLayout layout = findViewById(R.id.informationList);
-                collapseLinearLayout(layout);
-                expandInfo = true;
-            }
-        });
-
-
-        expandNearByLocationsArrow.setOnClickListener(v -> {
-
-            if (expandNearBy) {
-                LinearLayout layout = findViewById(R.id.nearByLocationsList);
-                expandLinearLayout(layout);
-                expandNearBy = false;
-
-            } else if (!expandNearBy) {
-                LinearLayout layout = findViewById(R.id.nearByLocationsList);
-                collapseLinearLayout(layout);
-                expandNearBy = true;
-            }
-        });
+//        expandLandmarkInformation.setOnClickListener(v -> {
+//            if (expandInfo) {
+//                LinearLayout layout = findViewById(R.id.informationList);
+//                expandLinearLayout(layout);
+//                expandInfo = false;
+//            } else if (!expandInfo) {
+//                LinearLayout layout = findViewById(R.id.informationList);
+//                collapseLinearLayout(layout);
+//                expandInfo = true;
+//            }
+//        });
 
         expandLandmarkHistory.setOnClickListener(v -> {
             if (expendHistory) {
@@ -270,7 +247,6 @@ public class TravelGuideActivity extends AppCompatActivity {
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 layout.setLayoutParams(params);
                 landmarkHistoryTextView.setVisibility(View.GONE);
-                nearbyLocationsCardView.setVisibility(View.VISIBLE);
                 informationCardView.setVisibility(View.VISIBLE);
             }
         });
@@ -397,13 +373,10 @@ public class TravelGuideActivity extends AppCompatActivity {
         nearByLocationsArray = googlePlacesApi.getNearByLocations(nearByLocationsArray, mAdapter);
     }
 
-    private void setUpLinearLayout() {
-        LinearLayout infoLayout = findViewById(R.id.informationList);
-        collapseLinearLayout(infoLayout);
-
-        LinearLayout nearByLayout = findViewById(R.id.nearByLocationsList);
-        collapseLinearLayout(nearByLayout);
-    }
+//    private void setUpLinearLayout() {
+//        LinearLayout infoLayout = findViewById(R.id.informationList);
+//        collapseLinearLayout(infoLayout);
+//    }
 
     private void collapseLinearLayout(LinearLayout linearLayout) {
         ViewGroup.LayoutParams params = linearLayout.getLayoutParams();

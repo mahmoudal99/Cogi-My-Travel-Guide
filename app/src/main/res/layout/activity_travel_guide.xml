@@ -121,14 +121,6 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/location"
-                        android:layout_width="@dimen/locationImageDimens"
-                        android:layout_height="@dimen/locationImageDimens"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:src="@drawable/map" />
-
-                    <ImageView
                         android:id="@+id/search"
                         android:layout_width="@dimen/searchImageDimens"
                         android:layout_height="@dimen/searchImageDimens"
@@ -180,14 +172,6 @@
                                 android:text="@string/information"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp" />
-
-                            <ImageView
-                                android:id="@+id/expandInformation"
-                                android:layout_width="@dimen/dropDownButtonDimens"
-                                android:layout_height="@dimen/dropDownButtonDimens"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:src="@drawable/ic_expand_more_black_24dp" />
 
                         </LinearLayout>
 
@@ -322,62 +306,6 @@
                                 android:textSize="@dimen/_14sp" />
 
                         </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/nearbyLocationsCardView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="@dimen/margin_10dp"
-                    android:layout_marginTop="@dimen/cardview_margin_top_20dp"
-                    android:layout_marginRight="@dimen/margin_10dp"
-                    android:layout_marginBottom="@dimen/margin_30dp"
-                    android:background="@drawable/cardview_bg_white"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/nearByLocationsList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/cardview_bg_white"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="6"
-                                android:fontFamily="@font/rancho"
-                                android:padding="@dimen/margin_10dp"
-                                android:text="@string/near_by"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_24sp" />
-
-                            <ImageView
-                                android:id="@+id/expandNearLocationsByArrow"
-                                android:layout_width="@dimen/dropDownButtonDimens"
-                                android:layout_height="@dimen/dropDownButtonDimens"
-                                android:layout_gravity="center"
-                                android:layout_margin="@dimen/margin_10dp"
-                                android:src="@drawable/ic_expand_more_black_24dp" />
-
-                        </LinearLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/list"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            tools:visibility="gone" />
 
                     </LinearLayout>
 

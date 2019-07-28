@@ -82,7 +82,6 @@ public class FirebaseMethods {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // dataSnapshot is the "issue" node with all children with id 0
                     for (DataSnapshot issue : dataSnapshot.getChildren()) {
                         landmarkInformation.setText(issue.child("description").getValue().toString());
                     }
