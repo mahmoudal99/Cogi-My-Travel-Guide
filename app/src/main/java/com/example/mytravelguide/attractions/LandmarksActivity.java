@@ -106,6 +106,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+
+    EditText editText;
+    ImageView imageView;
+
     private SearchView searchView;
 
     @Override
@@ -126,9 +130,13 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
                 if (tab.getPosition() == 0) {
                     mapCardView.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
+                    editText.setVisibility(View.GONE);
+                    imageView.setVisibility(View.GONE);
                 } else if (tab.getPosition() == 1) {
                     mapCardView.setVisibility(View.GONE);
                     listView.setVisibility(View.VISIBLE);
+                    editText.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -172,6 +180,8 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void init() {
+        imageView = findViewById(R.id.landmarkSearch);
+        editText = findViewById(R.id.edit_query);
         okHttpClient = new OkHttpClient();
         mapCardView = findViewById(R.id.mapCardView);
         listView = findViewById(R.id.landmarksInCity);
@@ -385,6 +395,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void setUpWidgets() {
+
         backArrow.setOnClickListener(v -> {
             Intent backIntent = new Intent(LandmarksActivity.this, HomePageActivity.class);
             startActivity(backIntent);
@@ -450,14 +461,10 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void searchListner(){
-        ImageView imageView = findViewById(R.id.landmarkSearch);
-        EditText editText = findViewById(R.id.edit_query);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapter.getFilter().filter(editText.getText().toString());
-            }
+        imageView.setOnClickListener(v -> {
+            mAdapter.getFilter().filter(editText.getText().toString());
+            closeKeyboard();
         });
     }
 
