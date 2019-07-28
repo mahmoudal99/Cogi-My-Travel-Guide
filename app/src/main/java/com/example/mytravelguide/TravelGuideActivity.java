@@ -102,22 +102,17 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     private static final String TAG = "TravelGuideActivity";
 
-    private static final String app_id = "20c13d7a";
-    private static final String app_key = "fe221efca83fc8b9af63dba9f0e4adb3";
-    private static final String language = "en-gb";
-
     private final static int LOCATION = 3;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;
-    private static final String encoding = "UTF-8";
 
     // Widgets
-    private ImageView backArrow, addLandmarkToTimeline, landmarkImage, searchLandmarkButton;
+    private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, landmarkHistoryTextView, numberTextView, websiteTextView;
-    private ImageView chooseImageButton, expandLandmarkInformation, expandNearByLocationsArrow, expandLandmarkHistory, mircophone;
+    private ImageView expandLandmarkHistory, mircophone, landmarkImage;
     private CardView informationCardView;
 
-    private String landmarkNameString, placeID, wikipediaResult;
+    private String landmarkNameString, placeID;
 
     private RelativeLayout landmarkRelativeLayout;
 
@@ -130,9 +125,6 @@ public class TravelGuideActivity extends AppCompatActivity {
 
     // Google
     private GooglePlacesApi googlePlacesApi;
-
-    boolean expandInfo = true;
-    boolean expandNearBy = true;
     boolean expendHistory = true;
 
     private TextToSpeech textToSpeech;

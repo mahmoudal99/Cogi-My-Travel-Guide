@@ -75,7 +75,7 @@ public class ContinentAttractionsActivity extends AppCompatActivity {
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backIntent = new Intent(ContinentAttractionsActivity.this, LandmarksActivity.class);
+                Intent backIntent = new Intent(ContinentAttractionsActivity.this, ExploreActivity.class);
                 startActivity(backIntent);
             }
         });

@@ -32,7 +32,7 @@
                 android:text="Landmark"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_28sp"
-                app:fontFamily="@font/rancho" />
+                android:fontFamily="@font/pompiere" />
 
         </RelativeLayout>
 

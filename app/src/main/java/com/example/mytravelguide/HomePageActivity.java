@@ -14,7 +14,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.example.mytravelguide.attractions.LandmarksActivity;
+import com.example.mytravelguide.attractions.ExploreActivity;
 import com.example.mytravelguide.models.ImageModel;
 import com.example.mytravelguide.utils.SlidingImageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -110,7 +110,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     private void setUpWidgets() {
         attractionsCard.setOnClickListener(v -> {
-            Intent attractionsIntent = new Intent(HomePageActivity.this, LandmarksActivity.class);
+            Intent attractionsIntent = new Intent(HomePageActivity.this, ExploreActivity.class);
             startActivity(attractionsIntent);
         });
 

@@ -7,45 +7,29 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-
-import com.example.mytravelguide.BuildConfig;
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
-import com.example.mytravelguide.TravelGuideActivity;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.GeocodingLocation;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
-import com.example.mytravelguide.utils.LandmarksInCityAdapter;
-import com.example.mytravelguide.utils.NearByLocationsAdapter;
 import com.example.mytravelguide.utils.NewAdapter;
-import com.example.mytravelguide.utils.TabsAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -53,11 +37,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.L;
-import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.tabs.TabLayout;
 import com.kc.unsplash.Unsplash;
-import com.kc.unsplash.models.Photo;
 import com.kc.unsplash.models.SearchResults;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -68,25 +49,16 @@ import com.squareup.okhttp.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Attr;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
-import java.util.function.LongFunction;
 import java.util.regex.Pattern;
 
-public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCallback, NewAdapter.LandmarkAdapterListener {
+public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, NewAdapter.LandmarkAdapterListener {
 
     private ImageView backArrow, search, cityImage;
     private CardView mapCardView;
@@ -101,7 +73,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
     ImageProcessing imageProcessing;
 
-    NewAdapter mAdapter = new NewAdapter(LandmarksActivity.this, landmarksArrayList, this);;
+    NewAdapter mAdapter = new NewAdapter(ExploreActivity.this, landmarksArrayList, this);;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -115,7 +87,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discover);
+        setContentView(R.layout.activity_explore);
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Map"));
@@ -153,7 +125,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
 
         Handler handler = new Handler();
         GeocodingLocation geocodingLocation = new GeocodingLocation();
-        geocodingLocation.getAddressFromLocation("Wadi Musa", LandmarksActivity.this, handler);
+        geocodingLocation.getAddressFromLocation("Wadi Musa", ExploreActivity.this, handler);
         init();
         setUpWidgets();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -190,7 +162,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
         searchTextView = findViewById(R.id.searchTextView);
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         search = findViewById(R.id.search);
-        imageProcessing = new ImageProcessing(LandmarksActivity.this);
+        imageProcessing = new ImageProcessing(ExploreActivity.this);
         cityImage = findViewById(R.id.cityImage);
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
@@ -397,7 +369,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
     private void setUpWidgets() {
 
         backArrow.setOnClickListener(v -> {
-            Intent backIntent = new Intent(LandmarksActivity.this, HomePageActivity.class);
+            Intent backIntent = new Intent(ExploreActivity.this, HomePageActivity.class);
             startActivity(backIntent);
         });
 
@@ -419,7 +391,7 @@ public class LandmarksActivity extends AppCompatActivity implements OnMapReadyCa
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                Toast.makeText(LandmarksActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExploreActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
                 cityTextView.setText(searchTextView.getText());
                 getCityDataId(searchTextView.getText().toString());
                 GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
