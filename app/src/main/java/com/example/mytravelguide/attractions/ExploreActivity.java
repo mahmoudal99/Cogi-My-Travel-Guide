@@ -205,12 +205,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onResponse(Response response) throws IOException {
                 final String myResponse = response.body().string();
-                if (requestType.equals(LANDMARKREQUEST)) {
-                    landmarksInCityFromJson(myResponse);
-                } else if (requestType.equals(WIKIDATAREQUEST)) {
-                    getCityIDFromJson(myResponse);
-                } else if (requestType.equals(CITYLATLNGREQUEST)) {
-                    getCityLatLng(myResponse);
+                switch (requestType) {
+                    case LANDMARKREQUEST:
+                        landmarksInCityFromJson(myResponse);
+                        break;
+                    case WIKIDATAREQUEST:
+                        getCityWikiDataID(myResponse);
+                        break;
+                    case CITYLATLNGREQUEST:
+                        getCityLatLng(myResponse);
+                        break;
                 }
             }
         });
@@ -266,8 +270,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-
-    private void getCityIDFromJson(String respnse) {
+    private void getCityWikiDataID(String respnse) {
         try {
             JSONObject jsonObject = new JSONObject(respnse);
             JSONArray data = jsonObject.getJSONArray("data");
@@ -348,10 +351,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         editor.commit();
     }
 
-
     private void landmarksInCity(List<String> landmarks) {
         for (String landmark : landmarks) {
-            Log.d("IOJOOEFIF", landmark);
             AttractionObject attractionObject = new AttractionObject();
             attractionObject.setPlaceName(landmark);
             if (Pattern.compile("[0-9]").matcher(landmark).find()) {
@@ -364,7 +365,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void loadNearByLocations() {
-
         runOnUiThread(() -> {
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             listView.setLayoutManager(mLayoutManager);
@@ -393,7 +393,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchTextView.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
                 cityTextView.setText(searchTextView.getText());
                 getCityDataId(searchTextView.getText().toString());
                 GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
@@ -407,7 +406,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                     cityTextView.setVisibility(View.VISIBLE);
                     searchTextView.setVisibility(View.GONE);
                 });
-
                 return true;
             }
             return false;

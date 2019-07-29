@@ -18,8 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseMethods {
 
-    private static final String TAG = "FirebaseMethods";
-
     private GoogleSignInClient googleSignInClient;
     private Context context;
 

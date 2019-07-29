@@ -43,7 +43,6 @@
             android:value="AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o" />
 
         <activity android:name=".settings.SettingsActivity" />
-        <activity android:name=".attractions.ContinentAttractionsActivity" />
         <activity android:name=".TimelineActivity" />
         <activity android:name=".TravelGuideActivity" />
         <activity android:name=".attractions.ExploreActivity" />

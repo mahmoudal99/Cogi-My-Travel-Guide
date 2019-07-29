@@ -3,12 +3,9 @@ package com.example.mytravelguide.utils;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,15 +32,6 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.maps.errors.ApiException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +50,9 @@ public class GooglePlacesApi {
     private Context context;
     private Bitmap bitmap;
     private String apiKey;
+    private List<Place.Field> placeFields;
+    private FindCurrentPlaceRequest findCurrentPlaceRequest;
+    private FetchPhotoRequest fetchPhotoRequest;
 
     public GooglePlacesApi(Context context) {
         this.context = context;
@@ -73,19 +64,26 @@ public class GooglePlacesApi {
         this.apiKey = apiKey;
     }
 
-    public ArrayList<AttractionObject> getNearByLocations(ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter) {
+    private void initializePlaceFields() {
+        placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS,
+                Place.Field.LAT_LNG, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.PRICE_LEVEL, Place.Field.PHONE_NUMBER, Place.Field.WEBSITE_URI);
+    }
 
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ID, Place.Field.PHOTO_METADATAS);
-        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.builder(placeFields).build();
+    private void findCurrentPlaceRequest() {
+        findCurrentPlaceRequest = FindCurrentPlaceRequest.builder(placeFields).build();
+    }
+
+    private void fetchPhotoRequest(PhotoMetadata photo) {
+        fetchPhotoRequest = FetchPhotoRequest.builder(photo).build();
+    }
+
+    public ArrayList<AttractionObject> getNearByLocations(ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter) {
+        initializePlaceFields();
+        findCurrentPlaceRequest();
 
         if (ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            placesClient.findCurrentPlace(request).addOnSuccessListener(((response) -> {
-                for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                    AttractionObject attractionObject = new AttractionObject();
-                    attractionObject.placeName = placeLikelihood.getPlace().getName();
-                    attractionObjects.add(attractionObject);
-                    mAdapter.notifyDataSetChanged();
-                }
+            placesClient.findCurrentPlace(findCurrentPlaceRequest).addOnSuccessListener(((response) -> {
+                loadPlaceLikelihoods(response.getPlaceLikelihoods(), attractionObjects, mAdapter);
             })).addOnFailureListener((exception) -> {
                 if (exception instanceof ApiException) {
                     ApiException apiException = (ApiException) exception;
@@ -98,16 +96,22 @@ public class GooglePlacesApi {
         return attractionObjects;
     }
 
+    private void loadPlaceLikelihoods(List<PlaceLikelihood> placeLikelihoods, ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter) {
+        for (PlaceLikelihood placeLikelihood : placeLikelihoods) {
+            AttractionObject attractionObject = new AttractionObject();
+            attractionObject.placeName = placeLikelihood.getPlace().getName();
+            attractionObjects.add(attractionObject);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkPhoto(PhotoMetadata photo, RelativeLayout relativeLayout) {
-
-        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
-        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+        fetchPhotoRequest(photo);
+        placesClient.fetchPhoto(fetchPhotoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
-
             ImageProcessing imageProcessing = new ImageProcessing(context);
             imageProcessing.saveImageBitmap(bitmap);
-
             Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
             relativeLayout.setBackground(drawable);
         }).addOnFailureListener((exception) -> {
@@ -120,14 +124,11 @@ public class GooglePlacesApi {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkPhoto(PhotoMetadata photo, ImageView imageView) {
-
-        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
-        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+        fetchPhotoRequest(photo);
+        placesClient.fetchPhoto(fetchPhotoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
-
             ImageProcessing imageProcessing = new ImageProcessing(context);
             imageProcessing.saveImageBitmap(bitmap);
-
             Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
             imageView.setBackground(drawable);
         }).addOnFailureListener((exception) -> {
@@ -140,12 +141,10 @@ public class GooglePlacesApi {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkImageWithBitmap(PhotoMetadata photo, ImageView imageView) {
-
-        FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photo).build();
-        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+        fetchPhotoRequest(photo);
+        placesClient.fetchPhoto(fetchPhotoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
             imageView.setImageBitmap(bitmap);
-
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
                 ApiException apiException = (ApiException) exception;
@@ -173,8 +172,7 @@ public class GooglePlacesApi {
     }
 
     public Place getPlaceById(String id) {
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS,
-                Place.Field.LAT_LNG, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.PRICE_LEVEL, Place.Field.PHONE_NUMBER, Place.Field.WEBSITE_URI);
+        initializePlaceFields();
         FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
         FetchPlaceResponse fetchPlaceResponse = placesClient.fetchPlace(request).getResult();
         if (fetchPlaceResponse != null) {
@@ -219,9 +217,6 @@ public class GooglePlacesApi {
         return base;
     }
 
-    /**
-     * Represents an extra, optional parameter that can be specified.
-     */
     public static class Param {
         private final String name;
         protected String value;
@@ -230,22 +225,10 @@ public class GooglePlacesApi {
             this.name = name;
         }
 
-        /**
-         * Returns a new param with the specified name.
-         *
-         * @param name to create Param from
-         * @return new param
-         */
         public static Param name(String name) {
             return new Param(name);
         }
 
-        /**
-         * Sets the value of the Param.
-         *
-         * @param value of param
-         * @return this param
-         */
         public Param value(Object value) {
             this.value = value.toString();
             return this;
