@@ -19,14 +19,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.models.AttractionObject;
-import com.example.mytravelguide.utils.GeocodingLocation;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.NewAdapter;
@@ -55,10 +53,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, NewAdapter.LandmarkAdapterListener {
+
+    private static final String PALACE = "Q16560";
+    private static final String TOWER = "Q12518";
+    private static final String CASTLE = "Q23413";
+    private static final String TOURISTATTRACTION = "Q570116";
+    private static final String ARCHAELOGICALSITE = "Q570116";
+    private static final String MOSQUE = "Q32815";
+    private static final String TEMPLE = "Q44539";
+    private static final String CHURCH = "Q16970";
+    private static final String SYNAGOGUE = "Q34627";
+
+    private static final String WIKIDATAREQUEST = "WIKIDATAREQUEST";
+    private static final String LANDMARKREQUEST = "LANDMARKREQUEST";
+    private static final String CITYLATLNGREQUEST = "CITYLATLNGREQUEST";
 
     private ImageView backArrow, search, cityImage;
     private CardView mapCardView;
@@ -66,85 +79,44 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private TextView cityTextView;
     private EditText searchTextView;
 
-    private double lat, lng;
     private OkHttpClient okHttpClient;
     List<AttractionObject> landmarksArrayList = new ArrayList<>();
     GoogleMap mGoogleMap;
 
     ImageProcessing imageProcessing;
 
-    NewAdapter mAdapter = new NewAdapter(ExploreActivity.this, landmarksArrayList, this);;
+    NewAdapter mAdapter = new NewAdapter(ExploreActivity.this, landmarksArrayList, this);
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-
     EditText editText;
     ImageView imageView;
 
-    private SearchView searchView;
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("Landmarks"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        final ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-                if (tab.getPosition() == 0) {
-                    mapCardView.setVisibility(View.VISIBLE);
-                    listView.setVisibility(View.GONE);
-                    editText.setVisibility(View.GONE);
-                    imageView.setVisibility(View.GONE);
-                } else if (tab.getPosition() == 1) {
-                    mapCardView.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
-                    editText.setVisibility(View.VISIBLE);
-                    imageView.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        Handler handler = new Handler();
-        GeocodingLocation geocodingLocation = new GeocodingLocation();
-        geocodingLocation.getAddressFromLocation("Wadi Musa", ExploreActivity.this, handler);
         init();
+        setUpTabs();
         setUpWidgets();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
         imageProcessing.loadImageFromStorage(cityImage);
+        supportMapFragment();
         getCityDataId(cityTextView.getText().toString());
         searchListner();
     }
 
-    // Include the OnCreate() method here too, as described above.
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        double landmarkLat = Double.parseDouble(pref.getString("LandmarkLat", "0.0"));
-        double landmarkLng = Double.parseDouble(pref.getString("LandmarkLng", "0.0"));
-        LatLng sydney = new LatLng(landmarkLat, landmarkLng);
+        double landmarkLat = Double.parseDouble(Objects.requireNonNull(pref.getString("LandmarkLat", "0.0")));
+        double landmarkLng = Double.parseDouble(Objects.requireNonNull(pref.getString("LandmarkLng", "0.0")));
+        LatLng cityLatLng = new LatLng(landmarkLat, landmarkLng);
         mGoogleMap = googleMap;
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mGoogleMap.addMarker(new MarkerOptions().position(cityLatLng).title(cityTextView.getText().toString()));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(cityLatLng));
 
         mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
         mGoogleMap.setMaxZoomPreference(12);
@@ -152,6 +124,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void init() {
+        tabLayout = findViewById(R.id.tab_layout);
         imageView = findViewById(R.id.landmarkSearch);
         editText = findViewById(R.id.edit_query);
         okHttpClient = new OkHttpClient();
@@ -169,45 +142,57 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         editor.apply();
     }
 
-    private void getCityDataId(String cityName) {
-        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=800000";
-        Request cityDataIDRequest = new Request.Builder()
-                .url(url)
-                .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
-                .header("X-RapidAPI-Key", "de22d3cbadmshf632b8fa723db10p12a5e2jsnecd78f4ef9d6")
-                .build();
-        httpClientCall(cityDataIDRequest, "WIKIDATA");
-        landmarksArrayList.clear();
+    private void setUpTabs() {
+        tabLayout.addTab(tabLayout.newTab().setText("Map"));
+        tabLayout.addTab(tabLayout.newTab().setText("Landmarks"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        setUpViewager();
     }
 
-    private void getCityLandmarks(String cityWikiDataID) {
-        String cityDataId = cityWikiDataID;
-        String[] types = {"Q16560", "Q12518", "Q23413", "Q570116", "Q839954", "Q32815", "Q44539", "Q16970", "Q34627"};
-        String typePalace = "Q16560";
-        String typeTower = "Q12518";
-        String typeCastle = "Q23413";
-        String typeTouristAttraction = "Q570116";
-        String typeArchaeologicalSite = "Q839954";
+    private void setUpViewager() {
+        final ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+                if (tab.getPosition() == 0) {
+                    showMapTabComponents();
+                } else if (tab.getPosition() == 1) {
+                    showLandmarksTabComponents();
+                }
+            }
 
-        for (int i = 0; i < 9; i++) {
-            String url1 = "https://query.wikidata.org/sparql?format=json&query=%0ASELECT+DISTINCT+%3Fitem+%3Fname+%3Fcoord+%3Flat+%3Flon%0AWHERE+%7B%0A+++hint%3AQuery+hint%3Aoptimizer+%22None%22+.%0A+++%3Fitem+wdt%3AP131%2A+wd%3A" + cityDataId + "+.%0A+++%3Fitem+wdt%3AP31%2Fwdt%3AP279%2A+wd%3A" + types[i] + "+.%0A+++%3Fitem+wdt%3AP625+%3Fcoord+.%0A+++%3Fitem+p%3AP625+%3Fcoordinate+.%0A+++%3Fcoordinate+psv%3AP625+%3Fcoordinate_node+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLatitude+%3Flat+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLongitude+%3Flon+.%0A+++SERVICE+wikibase%3Alabel+%7B%0A++++bd%3AserviceParam+wikibase%3Alanguage+%22%5BAUTO_LANGUAGE%5D%2Cen%22+.%0A++++%3Fitem+rdfs%3Alabel+%3Fname%0A+++%7D%0A%7D%0AORDER+BY+ASC+%28%3Fname%29%0A";
-            Request cityLandmarksRequest = new Request.Builder().url(url1).header("content-type", "application/html").build();
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
 
-            httpClientCall(cityLandmarksRequest, "LANDMARKSREQEST");
-        }
-
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
     }
 
-    private void getCityLatLng(String cityJsonUrl) {
-        Request cityLatLngRequest = new Request.Builder().url(cityJsonUrl).header("content-type", "application/html").build();
-        getCityLatLngFromJson(cityLatLngRequest);
+    private void showMapTabComponents() {
+        mapCardView.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.GONE);
+        editText.setVisibility(View.GONE);
+        imageView.setVisibility(View.GONE);
     }
 
-    private void getCityID(String cityURL) {
-        Request cityLatLngRequest = new Request.Builder().url(cityURL).header("content-type", "application/html").build();
-        getCityIDFromJson(cityLatLngRequest);
+    private void showLandmarksTabComponents() {
+        mapCardView.setVisibility(View.GONE);
+        listView.setVisibility(View.VISIBLE);
+        editText.setVisibility(View.VISIBLE);
+        imageView.setVisibility(View.VISIBLE);
     }
 
+    private void supportMapFragment() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    //---------------------------------- HttpClientCall ----------------------------------//
     private void httpClientCall(Request request, String requestType) {
 
         okHttpClient.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
@@ -220,15 +205,45 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onResponse(Response response) throws IOException {
                 final String myResponse = response.body().string();
-                if (requestType.equals("LANDMARKSREQEST")) {
+                if (requestType.equals(LANDMARKREQUEST)) {
                     landmarksInCityFromJson(myResponse);
-                } else if (requestType.equals("WIKIDATA")) {
+                } else if (requestType.equals(WIKIDATAREQUEST)) {
                     getCityIDFromJson(myResponse);
-                } else if (requestType.equals("CITYREQUEST")) {
+                } else if (requestType.equals(CITYLATLNGREQUEST)) {
                     getCityLatLng(myResponse);
                 }
             }
         });
+    }
+
+    private void getCityDataId(String cityName) {
+        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=800000";
+        Request cityDataIDRequest = new Request.Builder()
+                .url(url)
+                .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
+                .header("X-RapidAPI-Key", "de22d3cbadmshf632b8fa723db10p12a5e2jsnecd78f4ef9d6")
+                .build();
+        httpClientCall(cityDataIDRequest, WIKIDATAREQUEST);
+        landmarksArrayList.clear();
+    }
+
+    private void getCityLandmarks(String cityWikiDataID) {
+        String[] types = {PALACE, TOWER, CASTLE, TOURISTATTRACTION, ARCHAELOGICALSITE, MOSQUE, TEMPLE, CHURCH, SYNAGOGUE};
+        for (int i = 0; i < 9; i++) {
+            String url1 = "https://query.wikidata.org/sparql?format=json&query=%0ASELECT+DISTINCT+%3Fitem+%3Fname+%3Fcoord+%3Flat+%3Flon%0AWHERE+%7B%0A+++hint%3AQuery+hint%3Aoptimizer+%22None%22+.%0A+++%3Fitem+wdt%3AP131%2A+wd%3A" + cityWikiDataID + "+.%0A+++%3Fitem+wdt%3AP31%2Fwdt%3AP279%2A+wd%3A" + types[i] + "+.%0A+++%3Fitem+wdt%3AP625+%3Fcoord+.%0A+++%3Fitem+p%3AP625+%3Fcoordinate+.%0A+++%3Fcoordinate+psv%3AP625+%3Fcoordinate_node+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLatitude+%3Flat+.%0A+++%3Fcoordinate_node+wikibase%3AgeoLongitude+%3Flon+.%0A+++SERVICE+wikibase%3Alabel+%7B%0A++++bd%3AserviceParam+wikibase%3Alanguage+%22%5BAUTO_LANGUAGE%5D%2Cen%22+.%0A++++%3Fitem+rdfs%3Alabel+%3Fname%0A+++%7D%0A%7D%0AORDER+BY+ASC+%28%3Fname%29%0A";
+            Request cityLandmarksRequest = new Request.Builder().url(url1).header("content-type", "application/html").build();
+            httpClientCall(cityLandmarksRequest, LANDMARKREQUEST);
+        }
+    }
+
+    private void getCityLatLng(String cityJsonUrl) {
+        Request cityLatLngRequest = new Request.Builder().url(cityJsonUrl).header("content-type", "application/html").build();
+        getCityLatLngFromJson(cityLatLngRequest);
+    }
+
+    private void getCityID(String cityURL) {
+        Request cityLatLngRequest = new Request.Builder().url(cityURL).header("content-type", "application/html").build();
+        getCityIDFromJson(cityLatLngRequest);
     }
 
     private void landmarksInCityFromJson(String response) {
@@ -241,23 +256,21 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject finalObject = jsonArray.getJSONObject(i);
                 jsonObject = new JSONObject(finalObject.getString("name"));
-
                 landmarks.add(jsonObject.get("value").toString());
-
             }
-            Set<String> hs1 = new LinkedHashSet<>(landmarks);
-            List<String> al2 = new ArrayList<>(hs1);
-            landmarksInCity(al2);
+            Set<String> landmarksSet = new LinkedHashSet<>(landmarks);
+            List<String> landmarksList = new ArrayList<>(landmarksSet);
+            landmarksInCity(landmarksList);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+
     private void getCityIDFromJson(String respnse) {
         try {
             JSONObject jsonObject = new JSONObject(respnse);
             JSONArray data = jsonObject.getJSONArray("data");
-            Log.d("getCityIDFromJson", data.getJSONObject(0).get("wikiDataId").toString());
             getCityLandmarks(data.getJSONObject(0).get("wikiDataId").toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -274,18 +287,15 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
             @Override
             public void onResponse(Response response) throws IOException {
-                final String myResponse = response.body().string();
-                JSONObject jsonObject = null;
-                JSONObject placeIDObject = null;
+                final String requestResponse = response.body().string();
+                JSONObject requestJsonObject = null;
                 try {
-                    jsonObject = new JSONObject(myResponse);
-                    JSONArray jsonArray = jsonObject.getJSONArray("results");
-                    jsonObject = new JSONObject(jsonArray.get(0).toString());
-                    jsonObject = jsonObject.getJSONObject("geometry");
-                    jsonObject = jsonObject.getJSONObject("location");
-                    Log.d("LATLNG", jsonObject.get("lat") + " " + jsonObject.get("lng") + "f");
-
-                    setMapsLatLng((double) jsonObject.get("lat"), (double) jsonObject.get("lng"));
+                    requestJsonObject = new JSONObject(requestResponse);
+                    JSONArray resultsJsonArrau = requestJsonObject.getJSONArray("results");
+                    requestJsonObject = new JSONObject(resultsJsonArrau.get(0).toString());
+                    requestJsonObject = requestJsonObject.getJSONObject("geometry");
+                    requestJsonObject = requestJsonObject.getJSONObject("location");
+                    setMapsLatLng((double) requestJsonObject.get("lat"), (double) requestJsonObject.get("lng"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -310,14 +320,13 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                     JSONArray jsonArray = placeIDObject.getJSONArray("results");
                     placeIDObject = new JSONObject(jsonArray.get(0).toString());
 //                    setCitImage("ChIJD7fiBh9u5kcRYJSMaMOCCwQ");
-                    Log.d("LATLNG3", placeIDObject.get("place_id").toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
-//
+
 //    private void setCitImage(String placeID) {
 //        runOnUiThread(() -> {
 //            GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY);
@@ -330,7 +339,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private void setMapsLatLng(double lat, double lng) {
         runOnUiThread(() -> {
             LatLng sydney = new LatLng(lat, lng);
-            mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(cityTextView.getText().toString()));
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         });
 
@@ -341,21 +350,20 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
 
     private void landmarksInCity(List<String> landmarks) {
-
         for (String landmark : landmarks) {
             Log.d("IOJOOEFIF", landmark);
             AttractionObject attractionObject = new AttractionObject();
             attractionObject.setPlaceName(landmark);
             if (Pattern.compile("[0-9]").matcher(landmark).find()) {
-                Log.d("Landmark", "Not added");
+                Log.d("Invalid Landmark", "Not added");
             } else {
                 landmarksArrayList.add(attractionObject);
             }
         }
-        loadNearByLocations(landmarksArrayList);
+        loadNearByLocations();
     }
 
-    private void loadNearByLocations(List<AttractionObject> landmarksArrayList) {
+    private void loadNearByLocations() {
 
         runOnUiThread(() -> {
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -367,14 +375,12 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void setUpWidgets() {
-
         backArrow.setOnClickListener(v -> {
             Intent backIntent = new Intent(ExploreActivity.this, HomePageActivity.class);
             startActivity(backIntent);
         });
 
         search.setOnClickListener(v -> {
-
             if (searchTextView.getVisibility() == View.GONE) {
                 cityTextView.setVisibility(View.GONE);
                 searchTextView.setVisibility(View.VISIBLE);
@@ -382,38 +388,21 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 cityTextView.setVisibility(View.VISIBLE);
                 searchTextView.setVisibility(View.GONE);
             }
-
         });
-
 
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchTextView.setOnKeyListener((v, keyCode, event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                Toast.makeText(ExploreActivity.this, searchTextView.getText(), Toast.LENGTH_SHORT).show();
                 cityTextView.setText(searchTextView.getText());
                 getCityDataId(searchTextView.getText().toString());
                 GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
                 String url = googlePlacesApi.getPlacesByQuery(searchTextView.getText().toString());
-                Log.d("COMOMOMO", url);
                 getCityLatLng(url);
                 getCityID(url);
                 closeKeyboard();
                 editor.putString("CityName", searchTextView.getText().toString());
-                Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
-                unsplash.searchPhotos(searchTextView.getText().toString(), new Unsplash.OnSearchCompleteListener() {
-                    @Override
-                    public void onComplete(SearchResults results) {
-                        imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(0).getUrls().getFull());
-                    }
-
-                    @Override
-                    public void onError(String error) {
-
-                    }
-                });
-
+                setCityImage(searchTextView.getText().toString());
                 runOnUiThread(() -> {
                     cityTextView.setVisibility(View.VISIBLE);
                     searchTextView.setVisibility(View.GONE);
@@ -427,13 +416,27 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         cityTextView.setText(pref.getString("CityName", "Berlin"));
     }
 
+    private void setCityImage(String cityName) {
+        Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
+        unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
+            @Override
+            public void onComplete(SearchResults results) {
+                imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(0).getUrls().getFull());
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.d("Unsplash Error", error);
+            }
+        });
+    }
+
     private void closeKeyboard() {
         InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
-    private void searchListner(){
-
+    private void searchListner() {
         imageView.setOnClickListener(v -> {
             mAdapter.getFilter().filter(editText.getText().toString());
             closeKeyboard();
@@ -441,7 +444,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
-    public void onContactSelected(AttractionObject contact) {
+    public void onLandmarkSelected(AttractionObject contact) {
         Toast.makeText(getApplicationContext(), "Selected: " + contact.getPlaceName(), Toast.LENGTH_LONG).show();
     }
 

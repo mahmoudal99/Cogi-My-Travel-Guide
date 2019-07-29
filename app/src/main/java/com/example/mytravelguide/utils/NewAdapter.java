@@ -1,6 +1,8 @@
 package com.example.mytravelguide.utils;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,16 +30,12 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> im
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.place_name);
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // send selected contact in callback
-                    listener.onContactSelected(contactListFiltered.get(getAdapterPosition()));
-                }
+            view.setOnClickListener(view1 -> {
+                listener.onLandmarkSelected(contactListFiltered.get(getAdapterPosition()));
             });
         }
     }
@@ -50,8 +48,9 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> im
         this.contactListFiltered = contactList;
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.near_by_location_item, parent, false);
 
@@ -105,6 +104,6 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> im
     }
 
     public interface LandmarkAdapterListener {
-        void onContactSelected(AttractionObject contact);
+        void onLandmarkSelected(AttractionObject contact);
     }
 }

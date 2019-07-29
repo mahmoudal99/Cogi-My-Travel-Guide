@@ -54,10 +54,9 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class GooglePlacesApi {
 
     private static final String API_KEY = BuildConfig.APIKEY;
-    public static final String API_URL = "https://maps.googleapis.com/maps/api/place/";
-    public static final String METHOD_TEXT_SEARCH = "textsearch";
-    public static final String METHOD_NEARBY_SEARCH = "nearbysearch";
-
+    private static final String API_URL = "https://maps.googleapis.com/maps/api/place/";
+    private static final String METHOD_TEXT_SEARCH = "textsearch";
+    private static final String METHOD_NEARBY_SEARCH = "nearbysearch";
 
     private PlacesClient placesClient;
     private Context context;
@@ -80,16 +79,13 @@ public class GooglePlacesApi {
         FindCurrentPlaceRequest request = FindCurrentPlaceRequest.builder(placeFields).build();
 
         if (ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
             placesClient.findCurrentPlace(request).addOnSuccessListener(((response) -> {
-
                 for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
                     AttractionObject attractionObject = new AttractionObject();
                     attractionObject.placeName = placeLikelihood.getPlace().getName();
                     attractionObjects.add(attractionObject);
                     mAdapter.notifyDataSetChanged();
                 }
-
             })).addOnFailureListener((exception) -> {
                 if (exception instanceof ApiException) {
                     ApiException apiException = (ApiException) exception;
@@ -142,7 +138,6 @@ public class GooglePlacesApi {
         });
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkImageWithBitmap(PhotoMetadata photo, ImageView imageView) {
 
@@ -186,7 +181,6 @@ public class GooglePlacesApi {
             Place place = fetchPlaceResponse.getPlace();
             return place;
         }
-
         return null;
     }
 
@@ -256,46 +250,6 @@ public class GooglePlacesApi {
             this.value = value.toString();
             return this;
         }
-    }
-
-    /**
-     * Represents an extra, optional type parameter that restricts the results to places matching at least one of the specified types.
-     */
-    public static class TypeParam extends Param {
-
-        private TypeParam(String name) {
-            super(name);
-        }
-
-        /**
-         * Returns a new type param with the specified name.
-         *
-         * @param name to create TypeParam from
-         * @return new param
-         */
-        public static TypeParam name(String name) {
-            return new TypeParam(name);
-        }
-
-        /**
-         * Sets the values of the Param.
-         *
-         * @param values of params
-         * @return this params
-         */
-        public Param value(List<String> values) {
-            StringBuilder valuesSb = new StringBuilder();
-            for (int i = 0; i < values.size(); i++) {
-                valuesSb.append(values.get(i));
-                if (i != (values.size() - 1)) {
-                    valuesSb.append("%7C"); // it represents a pipeline character |
-                }
-            }
-            this.value = valuesSb.toString();
-            return this;
-        }
-
-
     }
 }
 

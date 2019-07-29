@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.mytravelguide.HomePageActivity;
@@ -25,7 +26,6 @@ public class SlidingImageAdapter extends PagerAdapter {
 
 
     private ArrayList<ImageModel> imageModelArrayList;
-    private ArrayList<String> landmarkNames;
     private LayoutInflater inflater;
     private Context context;
 
@@ -33,12 +33,11 @@ public class SlidingImageAdapter extends PagerAdapter {
     public SlidingImageAdapter(Context context, ArrayList<ImageModel> imageModelArrayList) {
         this.context = context;
         this.imageModelArrayList = imageModelArrayList;
-        this.landmarkNames = landmarkNames;
         inflater = LayoutInflater.from(context);
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
 
@@ -47,8 +46,9 @@ public class SlidingImageAdapter extends PagerAdapter {
         return imageModelArrayList.size();
     }
 
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup view, int position) {
+    public Object instantiateItem(@NonNull ViewGroup view, int position) {
         View imageLayout = inflater.inflate(R.layout.sliding_image_item, view, false);
 
         assert imageLayout != null;
@@ -66,7 +66,7 @@ public class SlidingImageAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view.equals(object);
     }
 

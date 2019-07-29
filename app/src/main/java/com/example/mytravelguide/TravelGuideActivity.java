@@ -329,10 +329,10 @@ public class TravelGuideActivity extends AppCompatActivity {
             editor.putString("LandmarkRating", place.getRating().toString());
         }
         if (place.getPhoneNumber() != null) {
-            editor.putString("LandmarkRating", place.getPhoneNumber().toString());
+            editor.putString("LandmarkNumber", place.getPhoneNumber());
         }
         if (place.getWebsiteUri() != null) {
-            editor.putString("LandmarkRating", place.getWebsiteUri().toString());
+            editor.putString("LandmarkWebsite", place.getWebsiteUri().toString());
         }
         if (place.getId() != null) {
             editor.putString("LandmarkID", place.getId());

@@ -13,6 +13,7 @@ import com.example.mytravelguide.TravelGuideActivity;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.MyViewHolder>  {
@@ -23,10 +24,9 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView placeName;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             placeName = view.findViewById(R.id.place_name);
-
         }
     }
 
@@ -36,8 +36,9 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.attraction_item, parent, false);
 
@@ -45,7 +46,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         AttractionObject placeModel = attractionObjects.get(position);
         holder.placeName.setText(placeModel.placeName);
 
