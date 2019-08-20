@@ -28,7 +28,7 @@ public class ImageProcessing {
     }
 
     public void loadImageFromStorage(RelativeLayout relativeLayout) {
-        String photoPath = Environment.getExternalStorageDirectory() + "/image.jpg";
+        String photoPath = Environment.getExternalStorageDirectory() + "/landmark.jpg";
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
@@ -130,7 +130,7 @@ public class ImageProcessing {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-            saveImageBitmap(mIcon11, "city");
+            saveImageBitmap(mIcon11, "landmark");
             return mIcon11;
         }
 

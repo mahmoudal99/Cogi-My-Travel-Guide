@@ -147,7 +147,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_travel_guide);
-        if(getIntent().getStringExtra("landmarkID") != null){
+        if (getIntent().getStringExtra("landmarkID") != null) {
             getLandmarkFromIntent(getIntent().getStringExtra("landmarkID"));
         }
         requestPermission();
@@ -318,13 +318,13 @@ public class TravelGuideActivity extends AppCompatActivity {
 //            setCityImage(place.getName());
 //        }
 
-        setCityImage(place.getName());
+        setLandmarkImage(place.getName());
 
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
 
     }
 
-    private void setCityImage(String cityName) {
+    private void setLandmarkImage(String cityName) {
         Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
         unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
             @Override
@@ -379,7 +379,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void getLandmarkFromIntent(String landmarkID){
+    private void getLandmarkFromIntent(String landmarkID) {
 
         Places.initialize(getApplicationContext(), "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
 
@@ -390,14 +390,13 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
             Place place = response.getPlace();
-            Log.d("GETTINGPLACEID1", "Place found: " + place.getOpeningHours());
             loadLandmark(place);
+            saveLandmarkInformation(place);
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
                 ApiException apiException = (ApiException) exception;
                 int statusCode = apiException.getStatusCode();
                 // Handle error with given status code.
-                Log.e("GETTINGPLACEID1", "Place not found: " + exception.getMessage());
             }
         });
     }
