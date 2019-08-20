@@ -311,12 +311,14 @@ public class TravelGuideActivity extends AppCompatActivity {
             websiteTextView.setText("No Information Available");
         }
 
-        if(place.getPhotoMetadatas() != null){
-            googlePlacesApi.setLandmarkPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
-        }else {
-            Log.d("IMAGERROR", "unsplash");
-            setCityImage(place.getName());
-        }
+//        if(place.getPhotoMetadatas() != null){
+//            googlePlacesApi.setLandmarkPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
+//        }else {
+//            Log.d("IMAGERROR", "unsplash");
+//            setCityImage(place.getName());
+//        }
+
+        setCityImage(place.getName());
 
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
 
@@ -327,7 +329,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
             @Override
             public void onComplete(SearchResults results) {
-                imageProcessing.new SetCityImageRelLayout(landmarkRelativeLayout).execute(results.getResults().get(0).getUrls().getFull());
+                imageProcessing.new SetCityImageRelLayout(landmarkRelativeLayout).execute(results.getResults().get(0).getUrls().getRegular());
             }
 
             @Override
