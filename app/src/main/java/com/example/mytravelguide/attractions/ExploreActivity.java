@@ -455,7 +455,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
             @Override
             public void onComplete(SearchResults results) {
-                imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(0).getUrls().getFull());
+                imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(0).getUrls().getRegular());
             }
 
             @Override
