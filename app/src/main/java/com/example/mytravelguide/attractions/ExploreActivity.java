@@ -2,14 +2,18 @@ package com.example.mytravelguide.attractions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -22,12 +26,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mytravelguide.BuildConfig;
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
+import com.example.mytravelguide.TravelGuideActivity;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.NewAdapter;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +42,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.tabs.TabLayout;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.models.SearchResults;
@@ -100,6 +111,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
+        isStoragePermissionGranted();
         init();
         setUpTabs();
         setUpWidgets();
@@ -221,7 +233,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void getCityDataId(String cityName) {
-        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=800000";
+        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=500000";
         Request cityDataIDRequest = new Request.Builder()
                 .url(url)
                 .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
@@ -245,10 +257,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         getCityLatLngFromJson(cityLatLngRequest);
     }
 
-    private void getCityID(String cityURL) {
+    private void createCityPlaceIdRequest(String cityURL) {
         Request cityLatLngRequest = new Request.Builder().url(cityURL).header("content-type", "application/html").build();
-        getCityIDFromJson(cityLatLngRequest);
+        getCityPlaceIDFromJson(cityLatLngRequest);
     }
+
+    private void createLandmarkPlaceIdRequest(String landmarkURL) {
+        Request request = new Request.Builder().url(landmarkURL).header("content-type", "application/html").build();
+        getLandmarkPlaceIDFromJson(request);
+    }
+
 
     private void landmarksInCityFromJson(String response) {
         ArrayList<String> landmarks = new ArrayList<>();
@@ -273,6 +291,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private void getCityWikiDataID(String respnse) {
         try {
             JSONObject jsonObject = new JSONObject(respnse);
+            Log.d("MMOMOOM", respnse);
             JSONArray data = jsonObject.getJSONArray("data");
             getCityLandmarks(data.getJSONObject(0).get("wikiDataId").toString());
         } catch (JSONException e) {
@@ -306,7 +325,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         });
     }
 
-    private void getCityIDFromJson(Request request) {
+    private void getCityPlaceIDFromJson(Request request) {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -322,7 +341,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                     placeIDObject = new JSONObject(myResponse);
                     JSONArray jsonArray = placeIDObject.getJSONArray("results");
                     placeIDObject = new JSONObject(jsonArray.get(0).toString());
-//                    setCitImage("ChIJD7fiBh9u5kcRYJSMaMOCCwQ");
+//                    setCitImage( placeIDObject.get("place_id").toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -330,14 +349,31 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         });
     }
 
-//    private void setCitImage(String placeID) {
-//        runOnUiThread(() -> {
-//            GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY);
-//            Place place = googlePlacesApi.getPlaceById(placeID);
-//            ImageView cityImage = findViewById(R.id.cityImage);
-//            googlePlacesApi.setPhoto(place.getPhotoMetadatas().get(0), cityImage);
-//        });
-//    }
+    private void getLandmarkPlaceIDFromJson(Request request) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response1) throws IOException {
+                final String myResponse = response1.body().string();
+                JSONObject placeIDObject = null;
+                try {
+                    placeIDObject = new JSONObject(myResponse);
+                    JSONArray jsonArray = placeIDObject.getJSONArray("results");
+                    placeIDObject = new JSONObject(jsonArray.get(0).toString());
+                    Intent intent = new Intent(ExploreActivity.this, TravelGuideActivity.class);
+                    intent.putExtra("landmarkID", placeIDObject.get("place_id").toString());
+                    startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     private void setMapsLatLng(double lat, double lng) {
         runOnUiThread(() -> {
@@ -398,7 +434,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
                 String url = googlePlacesApi.getPlacesByQuery(searchTextView.getText().toString());
                 getCityLatLng(url);
-                getCityID(url);
+                createCityPlaceIdRequest(url);
                 closeKeyboard();
                 editor.putString("CityName", searchTextView.getText().toString());
                 setCityImage(searchTextView.getText().toString());
@@ -442,8 +478,27 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
-    public void onLandmarkSelected(AttractionObject contact) {
-        Toast.makeText(getApplicationContext(), "Selected: " + contact.getPlaceName(), Toast.LENGTH_LONG).show();
+    public void onLandmarkSelected(AttractionObject place) {
+        Toast.makeText(getApplicationContext(), "Selected: " + place.getPlaceName(), Toast.LENGTH_LONG).show();
+        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+        createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName()));
+    }
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v("Permission", "Permission is granted");
+                return true;
+            } else {
+                Log.v("Permission", "Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        } else {
+            Log.v("Permission", "Permission is granted");
+            return true;
+        }
     }
 
 }

@@ -81,6 +81,7 @@ dependencies {
     implementation 'org.apache.commons:com.springsource.org.apache.commons.attributes:2.2.0'
 
     implementation 'com.wirefreethought.geodb:geodb-java-client:1.1.4'
+
     implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-arq-3.12.0.jar')
     implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-cmds-3.12.0.jar')
     implementation files('C:/Users/mahmo/Downloads/apache-jena-3.12.0/apache-jena-3.12.0/lib/jena-core-3.12.0.jar')

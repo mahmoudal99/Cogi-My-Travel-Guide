@@ -111,4 +111,32 @@ public class ImageProcessing {
             bmImage.setImageBitmap(result);
         }
     }
+
+    public class SetCityImageRelLayout extends AsyncTask<String, Void, Bitmap> {
+        RelativeLayout relativeLayout;
+
+        public SetCityImageRelLayout(RelativeLayout relativeLayout) {
+            this.relativeLayout = relativeLayout;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            saveImageBitmap(mIcon11, "city");
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            Drawable drawable = new BitmapDrawable(context.getResources(), result);
+            relativeLayout.setBackground(drawable);
+        }
+    }
 }

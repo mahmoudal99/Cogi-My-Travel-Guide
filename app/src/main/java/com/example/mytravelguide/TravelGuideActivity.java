@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mytravelguide.attractions.ExploreActivity;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.CloudFirestore;
 import com.example.mytravelguide.utils.FirebaseMethods;
@@ -43,10 +44,12 @@ import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.Landmark;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.vision.L;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -60,6 +63,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmarkDetector;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.kc.unsplash.Unsplash;
+import com.kc.unsplash.models.SearchResults;
 
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -142,6 +147,9 @@ public class TravelGuideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_travel_guide);
+        if(getIntent().getStringExtra("landmarkID") != null){
+            getLandmarkFromIntent(getIntent().getStringExtra("landmarkID"));
+        }
         requestPermission();
         setUpTextToSpeech();
         isWriteStoragePermissionGranted();
@@ -303,9 +311,30 @@ public class TravelGuideActivity extends AppCompatActivity {
             websiteTextView.setText("No Information Available");
         }
 
-        googlePlacesApi.setLandmarkPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
+        if(place.getPhotoMetadatas() != null){
+            googlePlacesApi.setLandmarkPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
+        }else {
+            Log.d("IMAGERROR", "unsplash");
+            setCityImage(place.getName());
+        }
+
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
 
+    }
+
+    private void setCityImage(String cityName) {
+        Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
+        unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
+            @Override
+            public void onComplete(SearchResults results) {
+                imageProcessing.new SetCityImageRelLayout(landmarkRelativeLayout).execute(results.getResults().get(0).getUrls().getFull());
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.d("Unsplash Error", error);
+            }
+        });
     }
 
     private void loadPreviousLandmark() {
@@ -343,9 +372,32 @@ public class TravelGuideActivity extends AppCompatActivity {
 
         editor.putString("LandmarkName", place.getName());
         editor.putString("LandmarkOpeningHours", googlePlacesApi.placeOpeningHours(place));
-        editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
+//        editor.putString("LandmarkInformation", landmarkHistoryTextView.getText().toString());
         editor.putString("LandmarkHistory", landmarkHistoryTextView.getText().toString());
         editor.apply();
+    }
+
+    private void getLandmarkFromIntent(String landmarkID){
+
+        Places.initialize(getApplicationContext(), "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+
+        PlacesClient placesClient = Places.createClient(TravelGuideActivity.this);
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS,
+                Place.Field.LAT_LNG, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.PRICE_LEVEL, Place.Field.PHONE_NUMBER, Place.Field.WEBSITE_URI);
+        FetchPlaceRequest request = FetchPlaceRequest.newInstance(landmarkID, placeFields);
+
+        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+            Place place = response.getPlace();
+            Log.d("GETTINGPLACEID1", "Place found: " + place.getOpeningHours());
+            loadLandmark(place);
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                int statusCode = apiException.getStatusCode();
+                // Handle error with given status code.
+                Log.e("GETTINGPLACEID1", "Place not found: " + exception.getMessage());
+            }
+        });
     }
 
     /*---------------------------------------------------------------------- Features ----------------------------------------------------------------------*/
