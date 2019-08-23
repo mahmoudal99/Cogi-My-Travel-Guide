@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,8 +86,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private static final String LANDMARKREQUEST = "LANDMARKREQUEST";
     private static final String CITYLATLNGREQUEST = "CITYLATLNGREQUEST";
 
-    private ImageView backArrow, search, cityImage;
-    private CardView mapCardView;
+    private ImageView backArrow, search, cityImage, closeSearchArrow, blackSearchButton;
+    private CardView mapCardView, searchBarCardView;
     private RecyclerView listView;
     private TextView cityTextView;
     private EditText searchTextView;
@@ -118,7 +120,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         imageProcessing.loadImageFromStorage(cityImage);
         supportMapFragment();
         getCityDataId(cityTextView.getText().toString());
-        searchListner();
     }
 
     @Override
@@ -137,16 +138,18 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void init() {
         tabLayout = findViewById(R.id.tab_layout);
-        imageView = findViewById(R.id.landmarkSearch);
         editText = findViewById(R.id.edit_query);
+        searchBarCardView = findViewById(R.id.searchBarCardView);
+        closeSearchArrow = findViewById(R.id.closeSearchArrow);
         okHttpClient = new OkHttpClient();
+        blackSearchButton = findViewById(R.id.blackSearchButton);
         mapCardView = findViewById(R.id.mapCardView);
         listView = findViewById(R.id.landmarksInCity);
         backArrow = findViewById(R.id.backArrow);
         cityTextView = findViewById(R.id.cityTextView);
         searchTextView = findViewById(R.id.searchTextView);
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        search = findViewById(R.id.search);
+        search = findViewById(R.id.searchButton);
         imageProcessing = new ImageProcessing(ExploreActivity.this);
         cityImage = findViewById(R.id.cityImage);
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
@@ -189,14 +192,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         mapCardView.setVisibility(View.VISIBLE);
         listView.setVisibility(View.GONE);
         editText.setVisibility(View.GONE);
-        imageView.setVisibility(View.GONE);
+        blackSearchButton.setVisibility(View.GONE);
+        searchBarCardView.setVisibility(View.GONE);
     }
 
     private void showLandmarksTabComponents() {
         mapCardView.setVisibility(View.GONE);
         listView.setVisibility(View.VISIBLE);
         editText.setVisibility(View.VISIBLE);
-        imageView.setVisibility(View.VISIBLE);
+        blackSearchButton.setVisibility(View.VISIBLE);
+        searchBarCardView.setVisibility(View.VISIBLE);
     }
 
     private void supportMapFragment() {
@@ -420,16 +425,32 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             if (searchTextView.getVisibility() == View.GONE) {
                 cityTextView.setVisibility(View.GONE);
                 searchTextView.setVisibility(View.VISIBLE);
+                closeSearchArrow.setVisibility(View.VISIBLE);
+                backArrow.setVisibility(View.GONE);
             } else {
                 cityTextView.setVisibility(View.VISIBLE);
                 searchTextView.setVisibility(View.GONE);
+                closeSearchArrow.setVisibility(View.GONE);
+                backArrow.setVisibility(View.VISIBLE);
+            }
+        });
+
+        closeSearchArrow.setOnClickListener(v ->{
+            if(closeSearchArrow.getVisibility() == View.VISIBLE){
+                cityTextView.setVisibility(View.VISIBLE);
+                searchTextView.setVisibility(View.GONE);
+                closeSearchArrow.setVisibility(View.GONE);
+                backArrow.setVisibility(View.VISIBLE);
             }
         });
 
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchTextView.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                cityTextView.setText(searchTextView.getText());
+                String cityName = searchTextView.getText().toString();
+                cityTextView.setText(cityName);
+                closeSearchArrow.setVisibility(View.GONE);
+                backArrow.setVisibility(View.VISIBLE);
                 getCityDataId(searchTextView.getText().toString());
                 GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
                 String url = googlePlacesApi.getPlacesByQuery(searchTextView.getText().toString());
@@ -469,13 +490,13 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
-
-    private void searchListner() {
-        imageView.setOnClickListener(v -> {
-            mAdapter.getFilter().filter(editText.getText().toString());
-            closeKeyboard();
-        });
-    }
+//
+//    private void searchListner() {
+//        imageView.setOnClickListener(v -> {
+//            mAdapter.getFilter().filter(editText.getText().toString());
+//            closeKeyboard();
+//        });
+//    }
 
     @Override
     public void onLandmarkSelected(AttractionObject place) {
@@ -500,6 +521,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             return true;
         }
     }
+
 
 }
 

@@ -26,6 +26,15 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/back_arrow_black" />
 
+            <ImageView
+                android:id="@+id/closeSearchArrow"
+                android:layout_width="@dimen/backArrowDimens"
+                android:layout_height="@dimen/backArrowDimens"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:layout_marginLeft="15dp"
+                android:visibility="gone"/>
+
             <TextView
                 android:id="@+id/cityTextView"
                 android:layout_width="match_parent"
@@ -40,16 +49,18 @@
                 android:id="@+id/searchTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="60dp"
                 android:layout_marginRight="30dp"
-                android:hint="Enter city name"
+                android:hint="Search Cities"
+                android:layout_centerVertical="true"
                 android:imeOptions="actionSearch"
                 android:inputType="textCapSentences"
+                android:background="@null"
                 android:textColor="@color/black"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <ImageView
-                android:id="@+id/search"
+                android:id="@+id/searchButton"
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_alignParentRight="true"
@@ -132,31 +143,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/White"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/edit_query"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/searchBarCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:hint="Landmark"
-                android:imeOptions="actionSearch"
-                android:inputType="textCapSentences"
-                android:textColor="@color/black"
-                android:visibility="gone" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:elevation="8dp"
+                android:padding="1dip"
+                android:visibility="gone"
+                app:cardCornerRadius="4dp">
 
-            <ImageView
-                android:id="@+id/landmarkSearch"
-                android:layout_width="@dimen/backArrowDimens"
-                android:layout_height="@dimen/backArrowDimens"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="end"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/search"
-                android:visibility="gone" />
+                <EditText
+                    android:id="@+id/edit_query"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="30dp"
+                    android:hint="Search Places"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@null"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/blackSearchButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_search_black_24dp"
+                    android:visibility="gone"/>
+
+            </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
 
@@ -185,7 +214,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
             android:background="@drawable/cardview_bg_white"
             android:orientation="vertical">
 

@@ -45,7 +45,7 @@ public class ImageProcessing {
         imageView.setImageDrawable(drawable);
     }
 
-    public void saveImageBitmap(Bitmap bitmap) {
+    void saveImageBitmap(Bitmap bitmap) {
         String path = Environment.getExternalStorageDirectory().toString();
         OutputStream outputStream = null;
         File file = new File(path, "image" + ".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
@@ -65,7 +65,7 @@ public class ImageProcessing {
         }
     }
 
-    public void saveImageBitmap(Bitmap bitmap, String city) {
+    private void saveImageBitmap(Bitmap bitmap, String city) {
         String path = Environment.getExternalStorageDirectory().toString();
         OutputStream outputStream = null;
         File file = new File(path, city + ".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.

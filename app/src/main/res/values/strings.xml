@@ -287,6 +287,9 @@
     <string name="Attractions">Attractions</string>
     <string name="camera">Camera</string>
 
+    <string name="hint_search" translatable="false">Searching for…</string>
+    <string name="search_description" translatable="false">City, Cities</string>
+
     <string name="DateVisited">Date</string>
     <string name="backarrow">Back Arrow</string>
     <string name="place">Place</string>
