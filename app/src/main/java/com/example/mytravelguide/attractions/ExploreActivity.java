@@ -103,7 +103,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-    EditText editText;
+    EditText searchPlacesEditText;
     ImageView imageView;
 
     TabLayout tabLayout;
@@ -138,7 +138,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void init() {
         tabLayout = findViewById(R.id.tab_layout);
-        editText = findViewById(R.id.edit_query);
+        searchPlacesEditText = findViewById(R.id.searchPlacesEditText);
         searchBarCardView = findViewById(R.id.searchBarCardView);
         closeSearchArrow = findViewById(R.id.closeSearchArrow);
         okHttpClient = new OkHttpClient();
@@ -149,6 +149,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         cityTextView = findViewById(R.id.cityTextView);
         searchTextView = findViewById(R.id.searchTextView);
         searchTextView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        searchPlacesEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         search = findViewById(R.id.searchButton);
         imageProcessing = new ImageProcessing(ExploreActivity.this);
         cityImage = findViewById(R.id.cityImage);
@@ -191,7 +192,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private void showMapTabComponents() {
         mapCardView.setVisibility(View.VISIBLE);
         listView.setVisibility(View.GONE);
-        editText.setVisibility(View.GONE);
+        searchPlacesEditText.setVisibility(View.GONE);
         blackSearchButton.setVisibility(View.GONE);
         searchBarCardView.setVisibility(View.GONE);
     }
@@ -199,7 +200,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private void showLandmarksTabComponents() {
         mapCardView.setVisibility(View.GONE);
         listView.setVisibility(View.VISIBLE);
-        editText.setVisibility(View.VISIBLE);
+        searchPlacesEditText.setVisibility(View.VISIBLE);
         blackSearchButton.setVisibility(View.VISIBLE);
         searchBarCardView.setVisibility(View.VISIBLE);
     }
@@ -271,7 +272,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         Request request = new Request.Builder().url(landmarkURL).header("content-type", "application/html").build();
         getLandmarkPlaceIDFromJson(request);
     }
-
 
     private void landmarksInCityFromJson(String response) {
         ArrayList<String> landmarks = new ArrayList<>();
@@ -464,6 +464,15 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                     searchTextView.setVisibility(View.GONE);
                 });
                 return true;
+            }
+            return false;
+        });
+
+        searchPlacesEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchPlacesEditText.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                mAdapter.getFilter().filter(searchPlacesEditText.getText().toString());
+                closeKeyboard();
             }
             return false;
         });
