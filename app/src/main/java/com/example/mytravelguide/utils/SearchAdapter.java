@@ -21,7 +21,7 @@ import java.util.List;
  * Created by ravi on 16/11/17.
  */
 
-public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> implements Filterable {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder> implements Filterable {
     private Context context;
     private List<AttractionObject> contactList;
     private List<AttractionObject> contactListFiltered;
@@ -41,7 +41,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewAdapter.MyViewHolder> im
     }
 
 
-    public NewAdapter(Context context, List<AttractionObject> contactList, LandmarkAdapterListener listener) {
+    public SearchAdapter(Context context, List<AttractionObject> contactList, LandmarkAdapterListener listener) {
         this.context = context;
         this.listener = listener;
         this.contactList = contactList;

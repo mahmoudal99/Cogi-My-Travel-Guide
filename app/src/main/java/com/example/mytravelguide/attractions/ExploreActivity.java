@@ -9,14 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,11 +22,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mytravelguide.BuildConfig;
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
 import com.example.mytravelguide.TravelGuideActivity;
@@ -36,8 +32,7 @@ import com.example.mytravelguide.WikiData;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
-import com.example.mytravelguide.utils.NewAdapter;
-import com.google.android.gms.common.api.ApiException;
+import com.example.mytravelguide.utils.SearchAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -45,10 +40,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.tabs.TabLayout;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.models.SearchResults;
@@ -64,7 +55,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -72,7 +62,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, NewAdapter.LandmarkAdapterListener {
+public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, SearchAdapter.LandmarkAdapterListener {
 
     private static final String PALACE = "Q16560";
     private static final String TOWER = "Q12518";
@@ -106,7 +96,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     GoogleMap mGoogleMap;
     WikiData wikiData;
     ImageProcessing imageProcessing;
-    NewAdapter mAdapter = new NewAdapter(ExploreActivity.this, landmarksArrayList, this);
+    SearchAdapter mAdapter = new SearchAdapter(ExploreActivity.this, landmarksArrayList, this);
 
     //Shared Preference
     SharedPreferences pref;
