@@ -50,6 +50,7 @@ import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.apache.jena.atlas.json.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +79,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private static final String WIKIDATAREQUEST = "WIKIDATAREQUEST";
     private static final String LANDMARKREQUEST = "LANDMARKREQUEST";
     private static final String CITYLATLNGREQUEST = "CITYLATLNGREQUEST";
+    private static final String LANDMARKIDREQUEST = "LANDMARKIDREQUEST";
 
     // Widgets
     private ImageView backArrow, searchImageView, cityImage, closeSearchArrow, blackSearchButton;
@@ -205,6 +207,14 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                         Request cityLatLngRequest = wikiData.getCityLatLng(requestReponse);
                         getCityLatLngFromJson(cityLatLngRequest);
                         break;
+                    case LANDMARKIDREQUEST:
+                        jsonReader = new JsonReader();
+                        JSONObject placeIDObject = jsonReader.getLandmarkPlaceIDFromJson(requestReponse);
+                        try {
+                            openSelectedLandmark(placeIDObject.get("place_id").toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                 }
             }
         });
@@ -264,6 +274,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         double[] doubles = jsonReader.getMapsLatLngFromJson(response);
         setMapsLatLng(doubles[0], doubles[1]);
     }
+
+
 
     public void getLandmarkPlaceIDFromJson(Request request) {
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -437,7 +449,13 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         Toast.makeText(getApplicationContext(), "Selected: " + place.getPlaceName(), Toast.LENGTH_LONG).show();
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
         Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName()));
-        getLandmarkPlaceIDFromJson(request);
+        httpClientCall(request, LANDMARKIDREQUEST);
+    }
+
+    public void openSelectedLandmark(String landmarkId){
+        Intent intent = new Intent(ExploreActivity.this, TravelGuideActivity.class);
+        intent.putExtra("landmarkID", landmarkId);
+        startActivity(intent);
     }
 
     public boolean isStoragePermissionGranted() {

@@ -1,9 +1,19 @@
 package com.example.mytravelguide.utils;
 
+import android.content.Intent;
+
+import com.example.mytravelguide.TravelGuideActivity;
+import com.example.mytravelguide.attractions.ExploreActivity;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -44,6 +54,21 @@ public class JsonReader {
             Set<String> landmarksSet = new LinkedHashSet<>(landmarks);
             List<String> landmarksList = new ArrayList<>(landmarksSet);
             return landmarksList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public JSONObject getLandmarkPlaceIDFromJson(String response) {
+
+        JSONObject placeIDObject = null;
+        try {
+            placeIDObject = new JSONObject(response);
+            JSONArray jsonArray = placeIDObject.getJSONArray("results");
+            placeIDObject = new JSONObject(jsonArray.get(0).toString());
+            return placeIDObject;
         } catch (JSONException e) {
             e.printStackTrace();
         }
