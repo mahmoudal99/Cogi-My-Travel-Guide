@@ -193,7 +193,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 final String requestReponse = response.body().string();
                 switch (requestType) {
                     case LANDMARKREQUEST:
-                        landmarksInCityFromJson(requestReponse);
+                        JsonReader jsonReader = new JsonReader();
+                        List<String> landmarks = jsonReader.getLandmarksInCityFromJson(requestReponse);
+                        landmarksInCity(landmarks);
                         break;
                     case WIKIDATAREQUEST:
                         String result = wikiData.getCityWikiDataID(requestReponse);
@@ -260,28 +262,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private void mapsLatLngResponse(String response){
         JsonReader jsonReader = new JsonReader();
         double[] doubles = jsonReader.getMapsLatLngFromJson(response);
-//        setMapsLatLng((double) requestJsonObject.get("lat"), (double) requestJsonObject.get("lng"));
         setMapsLatLng(doubles[0], doubles[1]);
-    }
-
-    public void landmarksInCityFromJson(String response) {
-        ArrayList<String> landmarks = new ArrayList<>();
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            String value = jsonObject.getString("results");
-            jsonObject = new JSONObject(value);
-            JSONArray jsonArray = jsonObject.getJSONArray("bindings");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject finalObject = jsonArray.getJSONObject(i);
-                jsonObject = new JSONObject(finalObject.getString("name"));
-                landmarks.add(jsonObject.get("value").toString());
-            }
-            Set<String> landmarksSet = new LinkedHashSet<>(landmarks);
-            List<String> landmarksList = new ArrayList<>(landmarksSet);
-            landmarksInCity(landmarksList);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     public void getLandmarkPlaceIDFromJson(Request request) {
