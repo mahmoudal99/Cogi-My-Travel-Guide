@@ -17,12 +17,7 @@ import com.example.mytravelguide.models.AttractionObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ravi on 16/11/17.
- */
-
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder> implements Filterable {
-    private Context context;
     private List<AttractionObject> contactList;
     private List<AttractionObject> contactListFiltered;
     private LandmarkAdapterListener listener;
@@ -42,7 +37,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
 
 
     public SearchAdapter(Context context, List<AttractionObject> contactList, LandmarkAdapterListener listener) {
-        this.context = context;
+        Context context1 = context;
         this.listener = listener;
         this.contactList = contactList;
         this.contactListFiltered = contactList;

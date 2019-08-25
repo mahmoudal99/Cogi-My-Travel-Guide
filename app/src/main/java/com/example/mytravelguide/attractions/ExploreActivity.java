@@ -32,6 +32,7 @@ import com.example.mytravelguide.WikiData;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
+import com.example.mytravelguide.utils.JsonReader;
 import com.example.mytravelguide.utils.SearchAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -189,17 +190,17 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
             @Override
             public void onResponse(Response response) throws IOException {
-                final String myResponse = response.body().string();
+                final String requestReponse = response.body().string();
                 switch (requestType) {
                     case LANDMARKREQUEST:
-                        landmarksInCityFromJson(myResponse);
+                        landmarksInCityFromJson(requestReponse);
                         break;
                     case WIKIDATAREQUEST:
-                        String result = wikiData.getCityWikiDataID(myResponse);
+                        String result = wikiData.getCityWikiDataID(requestReponse);
                         getCityLandmarks(result);
                         break;
                     case CITYLATLNGREQUEST:
-                        Request cityLatLngRequest = wikiData.getCityLatLng(myResponse);
+                        Request cityLatLngRequest = wikiData.getCityLatLng(requestReponse);
                         getCityLatLngFromJson(cityLatLngRequest);
                         break;
                 }
@@ -251,19 +252,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onResponse(Response response) throws IOException {
                 final String requestResponse = response.body().string();
-                JSONObject requestJsonObject = null;
-                try {
-                    requestJsonObject = new JSONObject(requestResponse);
-                    JSONArray resultsJsonArrau = requestJsonObject.getJSONArray("results");
-                    requestJsonObject = new JSONObject(resultsJsonArrau.get(0).toString());
-                    requestJsonObject = requestJsonObject.getJSONObject("geometry");
-                    requestJsonObject = requestJsonObject.getJSONObject("location");
-                    setMapsLatLng((double) requestJsonObject.get("lat"), (double) requestJsonObject.get("lng"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                mapsLatLngResponse(requestResponse);
             }
         });
+    }
+
+    private void mapsLatLngResponse(String response){
+        JsonReader jsonReader = new JsonReader();
+        double[] doubles = jsonReader.getMapsLatLngFromJson(response);
+//        setMapsLatLng((double) requestJsonObject.get("lat"), (double) requestJsonObject.get("lng"));
+        setMapsLatLng(doubles[0], doubles[1]);
     }
 
     public void landmarksInCityFromJson(String response) {
