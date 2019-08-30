@@ -39,13 +39,24 @@ import android.widget.Toast;
 import com.example.mytravelguide.attractions.ExploreActivity;
 import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.CloudFirestore;
+import com.example.mytravelguide.utils.FetchURL;
 import com.example.mytravelguide.utils.FirebaseMethods;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.Landmark;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
+import com.example.mytravelguide.utils.TaskLoadedCallback;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.vision.L;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -103,13 +114,17 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class TravelGuideActivity extends AppCompatActivity {
+public class TravelGuideActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
 
     private static final String TAG = "TravelGuideActivity";
 
     private final static int LOCATION = 3;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;
+
+    MarkerOptions location1, location2;
+    GoogleMap mGoogleMap;
+    private Polyline currentPolyline;
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
@@ -155,6 +170,7 @@ public class TravelGuideActivity extends AppCompatActivity {
         isWriteStoragePermissionGranted();
         init();
         setUpWidgets();
+        supportMapFragment();
         loadPreviousLandmark();
         setUpFirebaseAuthentication();
     }
@@ -197,9 +213,10 @@ public class TravelGuideActivity extends AppCompatActivity {
         mircophone.setOnClickListener(v -> speak());
 
         backArrow.setOnClickListener(v -> {
-            startActivity(new Intent(TravelGuideActivity.this, HomePageActivity.class));
-            textToSpeech.stop();
-            textToSpeech.shutdown();
+//            startActivity(new Intent(TravelGuideActivity.this, HomePageActivity.class));
+//            textToSpeech.stop();
+//            textToSpeech.shutdown();
+            new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), location2.getPosition(), "driving"), "driving");
         });
 
         if (landmarkNameString != null) {
@@ -259,6 +276,42 @@ public class TravelGuideActivity extends AppCompatActivity {
         landmarkTextView.setText("");
         websiteTextView.setText("");
         landmarkHistoryTextView.setText("");
+    }
+
+    private void supportMapFragment() {
+
+        location1 = new MarkerOptions().position(new LatLng(27.658143, 85.3199503) ).title("Location 1");
+        location2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583) ).title("Location 2");
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        mGoogleMap.addMarker(location1);
+        mGoogleMap.addMarker(location2);
+        mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
+        mGoogleMap.setMaxZoomPreference(11);
+        mGoogleMap.setMinZoomPreference(11);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+    }
+
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o";
+        return url;
     }
 
     /*---------------------------------------------------------------------- Locale ----------------------------------------------------------------------*/
@@ -321,6 +374,8 @@ public class TravelGuideActivity extends AppCompatActivity {
         setLandmarkImage(place.getName());
 
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
+
+        new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), location2.getPosition(), "driving"), "driving");
 
     }
 
@@ -633,6 +688,13 @@ public class TravelGuideActivity extends AppCompatActivity {
             textToSpeech.shutdown();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null)
+            currentPolyline.remove();
+        currentPolyline = mGoogleMap.addPolyline((PolylineOptions) values[0]);
     }
 }
 

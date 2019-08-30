@@ -1,19 +1,7 @@
 package com.example.mytravelguide.utils;
-
-import android.content.Intent;
-
-import com.example.mytravelguide.TravelGuideActivity;
-import com.example.mytravelguide.attractions.ExploreActivity;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,9 +9,10 @@ import java.util.Set;
 
 public class JsonReader {
 
-    public JsonReader(){}
+    public JsonReader() {
+    }
 
-    public double[] getMapsLatLngFromJson(String requestResponse){
+    public double[] getMapsLatLngFromJson(String requestResponse) {
         JSONObject requestJsonObject = null;
         try {
             requestJsonObject = new JSONObject(requestResponse);
@@ -31,15 +20,15 @@ public class JsonReader {
             requestJsonObject = new JSONObject(resultsJsonArrau.get(0).toString());
             requestJsonObject = requestJsonObject.getJSONObject("geometry");
             requestJsonObject = requestJsonObject.getJSONObject("location");
-            return new double[] {(double) requestJsonObject.get("lat"), (double) requestJsonObject.get("lng")};
+            return new double[]{(double) requestJsonObject.get("lat"), (double) requestJsonObject.get("lng")};
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return new double[] {0, 0};
+        return new double[]{0, 0};
     }
 
-    public List<String> getLandmarksInCityFromJson(String response){
+    public List<String> getLandmarksInCityFromJson(String response) {
         ArrayList<String> landmarks = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(response);

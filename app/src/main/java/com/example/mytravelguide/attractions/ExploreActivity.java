@@ -208,6 +208,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                         getCityLatLngFromJson(cityLatLngRequest);
                         break;
                     case LANDMARKIDREQUEST:
+                        Log.d("OMOMOMOMO", requestReponse);
                         jsonReader = new JsonReader();
                         JSONObject placeIDObject = jsonReader.getLandmarkPlaceIDFromJson(requestReponse);
                         try {
@@ -269,38 +270,10 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         });
     }
 
-    private void mapsLatLngResponse(String response){
+    private void mapsLatLngResponse(String response) {
         JsonReader jsonReader = new JsonReader();
         double[] doubles = jsonReader.getMapsLatLngFromJson(response);
         setMapsLatLng(doubles[0], doubles[1]);
-    }
-
-
-
-    public void getLandmarkPlaceIDFromJson(Request request) {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Response response1) throws IOException {
-                final String myResponse = response1.body().string();
-                JSONObject placeIDObject = null;
-                try {
-                    placeIDObject = new JSONObject(myResponse);
-                    JSONArray jsonArray = placeIDObject.getJSONArray("results");
-                    placeIDObject = new JSONObject(jsonArray.get(0).toString());
-                    Intent intent = new Intent(ExploreActivity.this, TravelGuideActivity.class);
-                    intent.putExtra("landmarkID", placeIDObject.get("place_id").toString());
-                    startActivity(intent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     // Map Fragment
@@ -444,15 +417,15 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
+    // Landmark Selected
     @Override
     public void onLandmarkSelected(AttractionObject place) {
-        Toast.makeText(getApplicationContext(), "Selected: " + place.getPlaceName(), Toast.LENGTH_LONG).show();
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
         Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName()));
         httpClientCall(request, LANDMARKIDREQUEST);
     }
 
-    public void openSelectedLandmark(String landmarkId){
+    public void openSelectedLandmark(String landmarkId) {
         Intent intent = new Intent(ExploreActivity.this, TravelGuideActivity.class);
         intent.putExtra("landmarkID", landmarkId);
         startActivity(intent);
@@ -474,7 +447,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             return true;
         }
     }
-
 
 }
 

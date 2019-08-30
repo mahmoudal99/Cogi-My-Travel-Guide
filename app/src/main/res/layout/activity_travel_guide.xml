@@ -39,11 +39,11 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -69,7 +69,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/landmark_image_height"
                             android:layout_margin="@dimen/margin_10dp"
-                            android:background="@drawable/blue_mosque"></RelativeLayout>
+                            android:background="@drawable/blue_mosque"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -308,6 +308,26 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/mapCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="1dip"
+                    app:cardCornerRadius="8dp">
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
                 </androidx.cardview.widget.CardView>
 
