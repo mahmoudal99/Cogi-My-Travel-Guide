@@ -312,13 +312,61 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/searchBarCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:elevation="8dp"
+                    android:padding="1dip"
+                    android:backgroundTint="#1e88e5"
+                    app:cardCornerRadius="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/busImage"
+                            android:layout_width="@dimen/searchImageDimens"
+                            android:layout_height="@dimen/searchImageDimens"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:src="@drawable/sports_car" />
+
+                        <ImageView
+                            android:id="@+id/walkingImage"
+                            android:layout_width="@dimen/locationImageDimens"
+                            android:layout_height="@dimen/locationImageDimens"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="2"
+                            android:src="@drawable/bike" />
+
+                        <ImageView
+                            android:id="@+id/cycleImage"
+                            android:layout_width="@dimen/locationImageDimens"
+                            android:layout_height="@dimen/locationImageDimens"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:src="@drawable/hiking" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
                     android:id="@+id/mapCardView"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
                     android:padding="1dip"
                     app:cardCornerRadius="8dp">
 
