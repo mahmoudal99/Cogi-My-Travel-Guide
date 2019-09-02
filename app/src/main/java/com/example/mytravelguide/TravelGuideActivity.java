@@ -124,9 +124,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
-    private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView;
+    private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView, distanceTextView, durationTextView;
     private ImageView landmarkImage, mapImageView, informationImageView;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
+    private LinearLayout tripInformationLinLayout;
 
     // Variables
     private String landmarkNameString;
@@ -193,6 +194,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mapOptionsCardView = findViewById(R.id.mapOptionsCardView);
         mapCardView = findViewById(R.id.mapCardView);
         landmarkImageCardView = findViewById(R.id.landmarkImageCardView);
+        tripInformationLinLayout = findViewById(R.id.tripInformationLinLayout);
 
         landmarkImage = findViewById(R.id.landmarkImage);
         landmark = new Landmark(context);
@@ -206,6 +208,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         numberTextView = findViewById(R.id.number);
         websiteTextView = findViewById(R.id.website);
         landmarkNameString = getIntent().getStringExtra("AttractionName");
+
+        durationTextView = findViewById(R.id.durationText);
+        distanceTextView = findViewById(R.id.distanceText);
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
     }
@@ -240,6 +245,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkImageCardView.setVisibility(View.GONE);
             mapCardView.setVisibility(View.VISIBLE);
             mapOptionsCardView.setVisibility(View.VISIBLE);
+            tripInformationLinLayout.setVisibility(View.VISIBLE);
         });
 
         informationImageView.setOnClickListener(v -> {
@@ -247,6 +253,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkImageCardView.setVisibility(View.VISIBLE);
             mapCardView.setVisibility(View.GONE);
             mapOptionsCardView.setVisibility(View.GONE);
+            tripInformationLinLayout.setVisibility(View.GONE);
         });
     }
 
@@ -291,12 +298,18 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
         try {
             JsonReader jsonReader = new JsonReader();
-            jsonReader.getDirectionsInformation(data.get());
+            List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
+            setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setDistanceDuration(String distance, String duration){
+        durationTextView.setText(duration);
+        distanceTextView.setText(distance);
     }
 
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
@@ -321,7 +334,16 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.addMarker(location1);
         mGoogleMap.addMarker(location2);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-        new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
+        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
+        try {
+            JsonReader jsonReader = new JsonReader();
+            List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
+            setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /*---------------------------------------------------------------------- Locale ----------------------------------------------------------------------*/

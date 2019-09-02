@@ -73,8 +73,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
                     android:backgroundTint="@color/White"
                     android:elevation="8dp"
                     android:padding="1dip"
@@ -300,8 +300,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="@dimen/cardview_margin_top_10dp"
+                    android:layout_marginRight="10dp"
                     android:backgroundTint="#1e88e5"
                     android:elevation="8dp"
                     android:padding="1dip"
@@ -419,6 +419,111 @@
                         tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
                 </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/tripInformationLinLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/distanceCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/margin_10dp"
+                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginRight="@dimen/margin_10dp"
+                        android:layout_marginBottom="@dimen/margin_10dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/cardview_bg"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/cardview_bg_white"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/distanceText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_horizontal"
+                                android:text="20km"
+                                android:textColor="@color/black"
+                                android:textSize="35sp"
+                                app:fontFamily="@font/rancho" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_horizontal"
+                                android:text="Distance"
+                                android:textColor="@color/Red"
+                                android:textSize="@dimen/_24sp"
+                                app:fontFamily="@font/rancho" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/durationCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/margin_10dp"
+                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginRight="@dimen/margin_10dp"
+                        android:layout_marginBottom="@dimen/margin_10dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/cardview_bg"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/cardview_bg_white"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/durationText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_horizontal"
+                                android:text="20 mins"
+                                android:textColor="@color/black"
+                                android:textSize="35sp"
+                                app:fontFamily="@font/rancho" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_horizontal"
+                                android:text="Duration"
+                                android:textColor="@color/Green"
+                                android:textSize="@dimen/_24sp"
+                                app:fontFamily="@font/rancho" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
 
             </LinearLayout>
 
