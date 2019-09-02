@@ -235,6 +235,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         websiteTextView.setText("");
     }
 
+
+    // Google Map
+
     private void supportMapFragment() {
         initializeLocations();
         setUpMapFragment();
@@ -278,6 +281,16 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         String output = "json";
         // Building the url to the web service
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o";
+    }
+
+    private void updateMap(Place place) {
+        LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+        mGoogleMap.clear();
+        location2 = new MarkerOptions().position(latLng).title(place.getName());
+        mGoogleMap.addMarker(location1);
+        mGoogleMap.addMarker(location2);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+        new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
     }
 
     /*---------------------------------------------------------------------- Locale ----------------------------------------------------------------------*/
@@ -332,6 +345,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
             websiteTextView.setText("No Information Available");
         }
+        landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
+        setLandmarkImage(place.getName());
+        updateMap(place);
 
 //        if(place.getPhotoMetadatas() != null){
 //            googlePlacesApi.setLandmarkPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
@@ -339,20 +355,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 //            Log.d("IMAGERROR", "unsplash");
 //            setCityImage(place.getName());
 //        }
-
-        setLandmarkImage(place.getName());
-
-        landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
-
-        LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
-        mGoogleMap.addMarker(location1);
-        mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-        mGoogleMap.clear();
-        location2 = new MarkerOptions().position(latLng).title(place.getName());
-        mGoogleMap.addMarker(location1);
-        mGoogleMap.addMarker(location2);
-        new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
     }
 
     private void setLandmarkImage(String cityName) {
