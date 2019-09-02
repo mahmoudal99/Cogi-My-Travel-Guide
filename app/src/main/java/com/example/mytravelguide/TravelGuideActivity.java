@@ -134,7 +134,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
     private Landmark landmark;
-    private FirebaseMethods firebaseMethods;
 
     // Google
     private GooglePlacesApi googlePlacesApi;
@@ -200,7 +199,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         landmarkNameString = getIntent().getStringExtra("AttractionName");
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
-        firebaseMethods = new FirebaseMethods(TravelGuideActivity.this);
     }
 
     private void setUpWidgets() {
@@ -256,12 +254,15 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+        mGoogleMap.clear();
         mGoogleMap.addMarker(location1);
         mGoogleMap.addMarker(location2);
         mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
         mGoogleMap.setMaxZoomPreference(12);
         mGoogleMap.setMinZoomPreference(12);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+        LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 0.00), pref.getFloat("LandmarkLng", (float) 0.00));
+        new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
     }
 
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
@@ -347,7 +348,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.addMarker(location1);
         mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-
+        mGoogleMap.clear();
+        location2 = new MarkerOptions().position(latLng).title(place.getName());
+        mGoogleMap.addMarker(location1);
+        mGoogleMap.addMarker(location2);
         new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
     }
 
@@ -438,7 +442,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 clearTextViews();
                 loadLandmark(place);
                 saveLandmarkInformation(place);
-                new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), location2.getPosition(), "driving"), "driving");
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
