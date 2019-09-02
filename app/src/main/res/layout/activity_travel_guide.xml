@@ -47,8 +47,9 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
+                    android:id="@+id/landmarkImageCardView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="400dp"
                     android:layout_gravity="center_horizontal|top"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
@@ -58,10 +59,9 @@
 
                     <ImageView
                         android:id="@+id/landmarkImage"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:adjustViewBounds="true"
                         android:scaleType="centerCrop"
                         android:src="@drawable/sphinx" />
 
@@ -301,6 +301,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginTop="@dimen/cardview_margin_top_10dp"
                     android:backgroundTint="#1e88e5"
                     android:elevation="8dp"
                     android:padding="1dip"

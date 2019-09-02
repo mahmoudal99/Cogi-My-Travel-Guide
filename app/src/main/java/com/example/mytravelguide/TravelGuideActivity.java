@@ -124,7 +124,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView;
-    private ImageView landmarkImage;
+    private ImageView landmarkImage, mapImageView, informationImageView;
+    private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
 
     // Variables
     private String landmarkNameString;
@@ -184,6 +185,13 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         imageProcessing = new ImageProcessing(TravelGuideActivity.this);
 
         backArrow = findViewById(R.id.backArrow);
+        mapImageView = findViewById(R.id.mapImageView);
+        informationImageView = findViewById(R.id.informationImageView);
+
+        informationCardView = findViewById(R.id.infoCard);
+        mapOptionsCardView = findViewById(R.id.mapOptionsCardView);
+        mapCardView = findViewById(R.id.mapCardView);
+        landmarkImageCardView = findViewById(R.id.landmarkImageCardView);
 
         landmarkImage = findViewById(R.id.landmarkImage);
         landmark = new Landmark(context);
@@ -224,6 +232,20 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         searchLandmarkButton.setOnClickListener(v -> {
             Intent intent = landmark.landmarkPicker();
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+        });
+
+        mapImageView.setOnClickListener(v -> {
+            informationCardView.setVisibility(View.GONE);
+            landmarkImageCardView.setVisibility(View.GONE);
+            mapCardView.setVisibility(View.VISIBLE);
+            mapOptionsCardView.setVisibility(View.VISIBLE);
+        });
+
+        informationImageView.setOnClickListener(v -> {
+            informationCardView.setVisibility(View.VISIBLE);
+            landmarkImageCardView.setVisibility(View.VISIBLE);
+            mapCardView.setVisibility(View.GONE);
+            mapOptionsCardView.setVisibility(View.GONE);
         });
     }
 
