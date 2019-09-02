@@ -43,6 +43,7 @@ import com.example.mytravelguide.utils.FetchURL;
 import com.example.mytravelguide.utils.FirebaseMethods;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
+import com.example.mytravelguide.utils.JsonReader;
 import com.example.mytravelguide.utils.Landmark;
 import com.example.mytravelguide.utils.NearByLocationsAdapter;
 import com.example.mytravelguide.utils.TaskLoadedCallback;
@@ -287,7 +288,15 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.setMinZoomPreference(12);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
         LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 0.00), pref.getFloat("LandmarkLng", (float) 0.00));
-        new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
+        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
+        try {
+            JsonReader jsonReader = new JsonReader();
+            jsonReader.getDirectionsInformation(data.get());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {

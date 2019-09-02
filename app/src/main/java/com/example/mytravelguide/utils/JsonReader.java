@@ -1,4 +1,7 @@
 package com.example.mytravelguide.utils;
+import android.util.Log;
+
+import org.apache.jena.atlas.json.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +61,30 @@ public class JsonReader {
             JSONArray jsonArray = placeIDObject.getJSONArray("results");
             placeIDObject = new JSONObject(jsonArray.get(0).toString());
             return placeIDObject;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<String> getDirectionsInformation(String jsonData){
+        JSONObject directionJsonData = null;
+
+        try {
+            directionJsonData = new JSONObject(jsonData);
+            JSONArray jsonArray = directionJsonData.getJSONArray("routes");
+            directionJsonData = new JSONObject(jsonArray.get(0).toString());
+            jsonArray = directionJsonData.getJSONArray("legs");
+            directionJsonData = new JSONObject(jsonArray.get(0).toString());
+            String distance = directionJsonData.get("distance").toString();
+            String duration = directionJsonData.get("duration").toString();
+            JSONObject jsonDistance = new JSONObject(distance);
+            JSONObject jsonDuration = new JSONObject(duration);
+            List<String> tripInformation = new ArrayList<>();
+            tripInformation.add(jsonDistance.get("text").toString());
+            tripInformation.add(jsonDuration.get("text").toString());
+            return tripInformation;
         } catch (JSONException e) {
             e.printStackTrace();
         }

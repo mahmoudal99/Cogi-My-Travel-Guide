@@ -13,14 +13,14 @@ import java.net.URL;
 
 public class FetchURL extends AsyncTask<String, Void, String> {
     Context context;
-    String directionMode = "driving";
+    public String directionMode = "driving";
 
     public FetchURL(Context context){
         this.context = context;
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    public String doInBackground(String... strings) {
         // For storing data from web service
         String data = "";
         directionMode = strings[1];
@@ -35,14 +35,14 @@ public class FetchURL extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    public void onPostExecute(String s) {
         super.onPostExecute(s);
         PointsParser parserTask = new PointsParser(context, directionMode);
         // Invokes the thread for parsing the JSON data
         parserTask.execute(s);
     }
 
-    private String downloadUrl(String strUrl) throws IOException {
+    protected String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
