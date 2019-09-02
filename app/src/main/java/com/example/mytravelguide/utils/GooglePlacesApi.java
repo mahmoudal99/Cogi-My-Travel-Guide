@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytravelguide.BuildConfig;
+import com.example.mytravelguide.TravelGuideActivity;
 import com.example.mytravelguide.models.AttractionObject;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.LocalTime;
@@ -53,6 +54,7 @@ public class GooglePlacesApi {
     private List<Place.Field> placeFields;
     private FindCurrentPlaceRequest findCurrentPlaceRequest;
     private FetchPhotoRequest fetchPhotoRequest;
+    public Place place;
 
     public GooglePlacesApi(Context context) {
         this.context = context;
@@ -62,6 +64,11 @@ public class GooglePlacesApi {
 
     public GooglePlacesApi(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public GooglePlacesApi(String apiKey, Context context) {
+        this.apiKey = apiKey;
+        this.context = context;
     }
 
     private void initializePlaceFields() {

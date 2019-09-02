@@ -45,6 +45,15 @@ public class ImageProcessing {
         imageView.setImageDrawable(drawable);
     }
 
+    public void loadLandmarkImageFromStorage(ImageView imageView) {
+        String photoPath = Environment.getExternalStorageDirectory() + "/landmark.jpg";
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
+        Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+        imageView.setImageDrawable(drawable);
+    }
+
     void saveImageBitmap(Bitmap bitmap) {
         String path = Environment.getExternalStorageDirectory().toString();
         OutputStream outputStream = null;
@@ -112,11 +121,11 @@ public class ImageProcessing {
         }
     }
 
-    public class SetCityImageRelLayout extends AsyncTask<String, Void, Bitmap> {
-        RelativeLayout relativeLayout;
+    public class SetLandmarkImage extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
-        public SetCityImageRelLayout(RelativeLayout relativeLayout) {
-            this.relativeLayout = relativeLayout;
+        public SetLandmarkImage(ImageView bmImage) {
+            this.bmImage = bmImage;
         }
 
         protected Bitmap doInBackground(String... urls) {
@@ -135,8 +144,7 @@ public class ImageProcessing {
         }
 
         protected void onPostExecute(Bitmap result) {
-            Drawable drawable = new BitmapDrawable(context.getResources(), result);
-            relativeLayout.setBackground(drawable);
+            bmImage.setImageBitmap(result);
         }
     }
 }

@@ -208,7 +208,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                         getCityLatLngFromJson(cityLatLngRequest);
                         break;
                     case LANDMARKIDREQUEST:
-                        Log.d("OMOMOMOMO", requestReponse);
                         jsonReader = new JsonReader();
                         JSONObject placeIDObject = jsonReader.getLandmarkPlaceIDFromJson(requestReponse);
                         try {
@@ -279,8 +278,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     // Map Fragment
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        double cityLat = Double.parseDouble(Objects.requireNonNull(pref.getString("LandmarkLat", "0.0")));
-        double cityLng = Double.parseDouble(Objects.requireNonNull(pref.getString("LandmarkLng", "0.0")));
+        double cityLat = Double.parseDouble(Objects.requireNonNull(pref.getString("CityLat", "0.0")));
+        double cityLng = Double.parseDouble(Objects.requireNonNull(pref.getString("CityLng", "0.0")));
         LatLng cityLatLng = new LatLng(cityLat, cityLng);
         mGoogleMap = googleMap;
         mGoogleMap.addMarker(new MarkerOptions().position(cityLatLng).title(cityTextView.getText().toString()));
@@ -303,8 +302,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         });
 
-        editor.putString("LandmarkLat", String.valueOf(lat));
-        editor.putString("LandmarkLng", String.valueOf(lng));
+        editor.putString("CityLat", String.valueOf(lat));
+        editor.putString("CityLng", String.valueOf(lng));
         editor.commit();
     }
 

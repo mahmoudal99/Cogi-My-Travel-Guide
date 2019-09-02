@@ -93,7 +93,7 @@ public class Landmark {
 
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
                 Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL, Place.Field.PHONE_NUMBER, Place.Field.VIEWPORT,
-                Place.Field.WEBSITE_URI, Place.Field.ADDRESS);
+                Place.Field.WEBSITE_URI, Place.Field.ADDRESS, Place.Field.LAT_LNG);
 
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(context);
         return intent;
