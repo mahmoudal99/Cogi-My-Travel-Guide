@@ -125,9 +125,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView, distanceTextView, durationTextView;
-    private ImageView landmarkImage, mapImageView, informationImageView;
+    private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, journeyMode;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
-    private LinearLayout tripInformationLinLayout;
+    private LinearLayout tripInformationLinLayout, tripInformationLinLayout2;
 
     // Variables
     private String landmarkNameString;
@@ -188,6 +188,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         backArrow = findViewById(R.id.backArrow);
         mapImageView = findViewById(R.id.mapImageView);
+        carImage = findViewById(R.id.carImage);
+        walkingImageView = findViewById(R.id.walkingImage);
+        journeyMode = findViewById(R.id.journeyMode);
+        cycleImageView = findViewById(R.id.cycleImage);
         informationImageView = findViewById(R.id.informationImageView);
 
         informationCardView = findViewById(R.id.infoCard);
@@ -195,6 +199,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mapCardView = findViewById(R.id.mapCardView);
         landmarkImageCardView = findViewById(R.id.landmarkImageCardView);
         tripInformationLinLayout = findViewById(R.id.tripInformationLinLayout);
+        tripInformationLinLayout2 = findViewById(R.id.tripInformationLinLayout2);
 
         landmarkImage = findViewById(R.id.landmarkImage);
         landmark = new Landmark(context);
@@ -246,6 +251,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             mapCardView.setVisibility(View.VISIBLE);
             mapOptionsCardView.setVisibility(View.VISIBLE);
             tripInformationLinLayout.setVisibility(View.VISIBLE);
+            tripInformationLinLayout2.setVisibility(View.VISIBLE);
         });
 
         informationImageView.setOnClickListener(v -> {
@@ -254,6 +260,67 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             mapCardView.setVisibility(View.GONE);
             mapOptionsCardView.setVisibility(View.GONE);
             tripInformationLinLayout.setVisibility(View.GONE);
+            tripInformationLinLayout2.setVisibility(View.GONE);
+        });
+
+        carImage.setOnClickListener(v -> {
+            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491),  pref.getFloat("LandmarkLng", (float) 85.3208583));
+            mGoogleMap.clear();
+            journeyMode.setImageDrawable(getDrawable(R.drawable.sports_car_blacl));
+            location2 = new MarkerOptions().position(latLng);
+            mGoogleMap.addMarker(location1);
+            mGoogleMap.addMarker(location2);
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+            AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
+            try {
+                JsonReader jsonReader = new JsonReader();
+                List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
+                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        walkingImageView.setOnClickListener(v -> {
+            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491),  pref.getFloat("LandmarkLng", (float) 85.3208583));
+            mGoogleMap.clear();
+            journeyMode.setImageDrawable(getDrawable(R.drawable.hiking_black));
+            location2 = new MarkerOptions().position(latLng);
+            mGoogleMap.addMarker(location1);
+            mGoogleMap.addMarker(location2);
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+            AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "walking"), "walking");
+            try {
+                JsonReader jsonReader = new JsonReader();
+                List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
+                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        cycleImageView.setOnClickListener(v -> {
+            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491),  pref.getFloat("LandmarkLng", (float) 85.3208583));
+            mGoogleMap.clear();
+            journeyMode.setImageDrawable(getDrawable(R.drawable.man_cycling_black));
+            location2 = new MarkerOptions().position(latLng);
+            mGoogleMap.addMarker(location1);
+            mGoogleMap.addMarker(location2);
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+            AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "bicycling"), "bicycling");
+            try {
+                JsonReader jsonReader = new JsonReader();
+                List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
+                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
     }
 

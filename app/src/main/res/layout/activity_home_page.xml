@@ -68,7 +68,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="@string/travel_guide"
+                            android:text="Landmarks"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />
@@ -118,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="Explore"
+                            android:text="Cities"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />

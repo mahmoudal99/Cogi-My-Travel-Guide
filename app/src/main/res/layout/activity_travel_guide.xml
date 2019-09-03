@@ -366,7 +366,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:id="@+id/busImage"
+                                android:id="@+id/carImage"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
@@ -374,7 +374,7 @@
                                 android:src="@drawable/sports_car" />
 
                             <ImageView
-                                android:id="@+id/walkingImage"
+                                android:id="@+id/cycleImage"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
@@ -384,7 +384,7 @@
                                 android:src="@drawable/bike" />
 
                             <ImageView
-                                android:id="@+id/cycleImage"
+                                android:id="@+id/walkingImage"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
@@ -426,6 +426,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_10dp"
                     android:baselineAligned="false"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
 
@@ -515,6 +516,109 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_horizontal"
                                 android:text="Duration"
+                                android:textColor="@color/Green"
+                                android:textSize="@dimen/_24sp"
+                                app:fontFamily="@font/rancho" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tripInformationLinLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:baselineAligned="false"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/modeCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/margin_10dp"
+                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginRight="@dimen/margin_10dp"
+                        android:layout_marginBottom="@dimen/margin_10dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/cardview_bg"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/cardview_bg_white"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/journeyMode"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:src="@drawable/sports_car_blacl" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_horizontal"
+                                android:text="Mode"
+                                android:textColor="@color/Red"
+                                android:textSize="@dimen/_24sp"
+                                app:fontFamily="@font/rancho" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/arrivalCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/margin_10dp"
+                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginRight="@dimen/margin_10dp"
+                        android:layout_marginBottom="@dimen/margin_10dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/cardview_bg"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/cardview_bg_white"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/arrivalText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_horizontal"
+                                android:text="20 mins"
+                                android:textColor="@color/black"
+                                android:textSize="35sp"
+                                app:fontFamily="@font/rancho" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_horizontal"
+                                android:text="Arrival"
                                 android:textColor="@color/Green"
                                 android:textSize="@dimen/_24sp"
                                 app:fontFamily="@font/rancho" />
