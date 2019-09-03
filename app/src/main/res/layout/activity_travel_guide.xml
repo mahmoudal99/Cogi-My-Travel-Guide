@@ -401,7 +401,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/mapCardView"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="380dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
@@ -424,7 +424,7 @@
                     android:id="@+id/tripInformationLinLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginTop="5dp"
                     android:baselineAligned="false"
                     android:visibility="gone"
                     android:orientation="horizontal">
@@ -436,7 +436,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="@dimen/margin_10dp"
-                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="@dimen/margin_10dp"
                         android:layout_marginBottom="@dimen/margin_10dp"
                         android:layout_weight="3"
@@ -460,7 +460,7 @@
                                 android:gravity="center_horizontal"
                                 android:text="20km"
                                 android:textColor="@color/black"
-                                android:textSize="35sp"
+                                android:textSize="30sp"
                                 app:fontFamily="@font/rancho" />
 
                             <TextView
@@ -483,7 +483,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="@dimen/margin_10dp"
-                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="@dimen/margin_10dp"
                         android:layout_marginBottom="@dimen/margin_10dp"
                         android:layout_weight="3"
@@ -507,7 +507,7 @@
                                 android:gravity="center_horizontal"
                                 android:text="20 mins"
                                 android:textColor="@color/black"
-                                android:textSize="35sp"
+                                android:textSize="30sp"
                                 app:fontFamily="@font/rancho" />
 
                             <TextView
@@ -530,9 +530,8 @@
                     android:id="@+id/tripInformationLinLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginTop="5dp"
                     android:baselineAligned="false"
-                    android:visibility="gone"
                     android:orientation="horizontal">
 
 
@@ -542,7 +541,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="@dimen/margin_10dp"
-                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="@dimen/margin_10dp"
                         android:layout_marginBottom="@dimen/margin_10dp"
                         android:layout_weight="3"
@@ -562,7 +561,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_gravity="center"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:src="@drawable/sports_car_blacl" />
 
@@ -572,7 +571,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_horizontal"
                                 android:text="Mode"
-                                android:textColor="@color/Red"
+                                android:textColor="#FF6D00"
                                 android:textSize="@dimen/_24sp"
                                 app:fontFamily="@font/rancho" />
 
@@ -586,7 +585,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="@dimen/margin_10dp"
-                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="@dimen/margin_10dp"
                         android:layout_marginBottom="@dimen/margin_10dp"
                         android:layout_weight="3"
@@ -602,25 +601,16 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/arrivalText"
+                                android:id="@+id/open_closedTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="21dp"
+                                android:layout_marginBottom="21dp"
                                 android:gravity="center_horizontal"
                                 android:text="20 mins"
                                 android:textColor="@color/black"
-                                android:textSize="35sp"
-                                app:fontFamily="@font/rancho" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:gravity="center_horizontal"
-                                android:text="Arrival"
-                                android:textColor="@color/Green"
-                                android:textSize="@dimen/_24sp"
+                                android:textSize="25dp"
                                 app:fontFamily="@font/rancho" />
 
                         </LinearLayout>

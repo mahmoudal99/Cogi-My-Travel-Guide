@@ -124,7 +124,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
-    private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView, distanceTextView, durationTextView;
+    private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView, distanceTextView,
+            durationTextView, open_closedTextView;
     private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, journeyMode;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
     private LinearLayout tripInformationLinLayout, tripInformationLinLayout2;
@@ -216,6 +217,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         durationTextView = findViewById(R.id.durationText);
         distanceTextView = findViewById(R.id.distanceText);
+        open_closedTextView = findViewById(R.id.open_closedTextView);
 
         googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
     }
@@ -264,7 +266,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
 
         carImage.setOnClickListener(v -> {
-            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491),  pref.getFloat("LandmarkLng", (float) 85.3208583));
+            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583));
             mGoogleMap.clear();
             journeyMode.setImageDrawable(getDrawable(R.drawable.sports_car_blacl));
             location2 = new MarkerOptions().position(latLng);
@@ -284,7 +286,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
 
         walkingImageView.setOnClickListener(v -> {
-            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491),  pref.getFloat("LandmarkLng", (float) 85.3208583));
+            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583));
             mGoogleMap.clear();
             journeyMode.setImageDrawable(getDrawable(R.drawable.hiking_black));
             location2 = new MarkerOptions().position(latLng);
@@ -304,7 +306,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
 
         cycleImageView.setOnClickListener(v -> {
-            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491),  pref.getFloat("LandmarkLng", (float) 85.3208583));
+            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583));
             mGoogleMap.clear();
             journeyMode.setImageDrawable(getDrawable(R.drawable.man_cycling_black));
             location2 = new MarkerOptions().position(latLng);
@@ -374,7 +376,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    private void setDistanceDuration(String distance, String duration){
+    private void setDistanceDuration(String distance, String duration) {
         durationTextView.setText(duration);
         distanceTextView.setText(distance);
     }
@@ -464,6 +466,14 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         } else if (place.getWebsiteUri() == null) {
 
             websiteTextView.setText("No Information Available");
+        }
+        if(place.getOpeningHours().getWeekdayText().get(0) != null){
+            if(place.getOpeningHours().getWeekdayText().contains("Closed")){
+                open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(0));
+            }else {
+                open_closedTextView.setText("Opened");
+            }
+
         }
         landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
         setLandmarkImage(place.getName());
