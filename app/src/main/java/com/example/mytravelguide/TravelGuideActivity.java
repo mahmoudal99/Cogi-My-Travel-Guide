@@ -100,8 +100,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.Buffer;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -138,9 +141,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
     private Landmark landmark;
-
-    // Google
-    private GooglePlacesApi googlePlacesApi;
 
     // Google Maps
     private GoogleMap mGoogleMap;
@@ -206,7 +206,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         landmark = new Landmark(context);
         addLandmarkToTimeline = findViewById(R.id.addPlace);
         searchLandmarkButton = findViewById(R.id.search);
-//        landmarkRelativeLayout = findViewById(R.id.landmarkImage);
         landmarkTextView = findViewById(R.id.attractionName);
         landmarkOpeningHours = findViewById(R.id.openingHours);
         landmarkRating = findViewById(R.id.rating);
@@ -218,8 +217,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         durationTextView = findViewById(R.id.durationText);
         distanceTextView = findViewById(R.id.distanceText);
         open_closedTextView = findViewById(R.id.open_closedTextView);
-
-        googlePlacesApi = new GooglePlacesApi(TravelGuideActivity.this);
     }
 
     private void setUpWidgets() {
@@ -248,81 +245,26 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
 
         mapImageView.setOnClickListener(v -> {
-            informationCardView.setVisibility(View.GONE);
-            landmarkImageCardView.setVisibility(View.GONE);
-            mapCardView.setVisibility(View.VISIBLE);
-            mapOptionsCardView.setVisibility(View.VISIBLE);
-            tripInformationLinLayout.setVisibility(View.VISIBLE);
-            tripInformationLinLayout2.setVisibility(View.VISIBLE);
+            showMapWidgets();
         });
 
         informationImageView.setOnClickListener(v -> {
-            informationCardView.setVisibility(View.VISIBLE);
-            landmarkImageCardView.setVisibility(View.VISIBLE);
-            mapCardView.setVisibility(View.GONE);
-            mapOptionsCardView.setVisibility(View.GONE);
-            tripInformationLinLayout.setVisibility(View.GONE);
-            tripInformationLinLayout2.setVisibility(View.GONE);
+            showInformationWidgets();
         });
 
         carImage.setOnClickListener(v -> {
-            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583));
-            mGoogleMap.clear();
+            setJourneyMode("driving");
             journeyMode.setImageDrawable(getDrawable(R.drawable.sports_car_blacl));
-            location2 = new MarkerOptions().position(latLng);
-            mGoogleMap.addMarker(location1);
-            mGoogleMap.addMarker(location2);
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-            AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
-            try {
-                JsonReader jsonReader = new JsonReader();
-                List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
-                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         });
 
         walkingImageView.setOnClickListener(v -> {
-            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583));
-            mGoogleMap.clear();
+            setJourneyMode("walking");
             journeyMode.setImageDrawable(getDrawable(R.drawable.hiking_black));
-            location2 = new MarkerOptions().position(latLng);
-            mGoogleMap.addMarker(location1);
-            mGoogleMap.addMarker(location2);
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-            AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "walking"), "walking");
-            try {
-                JsonReader jsonReader = new JsonReader();
-                List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
-                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         });
 
         cycleImageView.setOnClickListener(v -> {
-            LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583));
-            mGoogleMap.clear();
+            setJourneyMode("bicycling");
             journeyMode.setImageDrawable(getDrawable(R.drawable.man_cycling_black));
-            location2 = new MarkerOptions().position(latLng);
-            mGoogleMap.addMarker(location1);
-            mGoogleMap.addMarker(location2);
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-            AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "bicycling"), "bicycling");
-            try {
-                JsonReader jsonReader = new JsonReader();
-                List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
-                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         });
     }
 
@@ -333,7 +275,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         landmarkTextView.setText("");
         websiteTextView.setText("");
     }
-
 
     // Google Map
 
@@ -351,6 +292,43 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+    }
+
+    private void showMapWidgets() {
+        informationCardView.setVisibility(View.GONE);
+        landmarkImageCardView.setVisibility(View.GONE);
+        mapCardView.setVisibility(View.VISIBLE);
+        mapOptionsCardView.setVisibility(View.VISIBLE);
+        tripInformationLinLayout.setVisibility(View.VISIBLE);
+        tripInformationLinLayout2.setVisibility(View.VISIBLE);
+    }
+
+    private void setJourneyMode(String mode) {
+        LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583));
+        mGoogleMap.clear();
+        location2 = new MarkerOptions().position(latLng);
+        mGoogleMap.addMarker(location1);
+        mGoogleMap.addMarker(location2);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, mode), mode);
+        try {
+            JsonReader jsonReader = new JsonReader();
+            List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
+            setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showInformationWidgets() {
+        informationCardView.setVisibility(View.VISIBLE);
+        landmarkImageCardView.setVisibility(View.VISIBLE);
+        mapCardView.setVisibility(View.GONE);
+        mapOptionsCardView.setVisibility(View.GONE);
+        tripInformationLinLayout.setVisibility(View.GONE);
+        tripInformationLinLayout2.setVisibility(View.GONE);
     }
 
     @Override
@@ -442,7 +420,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     /*---------------------------------------------------------------------- Landmark ----------------------------------------------------------------------*/
 
-
     private void loadLandmark(Place place) {
         if (place.getName().equals("The Blue Mosque")) {
             landmarkTextView.setText(context.getString(R.string.sultan_ahmed_mosque));
@@ -467,24 +444,18 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
             websiteTextView.setText("No Information Available");
         }
-        if(place.getOpeningHours().getWeekdayText().get(0) != null){
-            if(place.getOpeningHours().getWeekdayText().contains("Closed")){
-                open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(0));
-            }else {
+
+        if (place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1) != null) {
+            if (place.getOpeningHours().getWeekdayText().contains("Closed")) {
+                open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+            } else {
                 open_closedTextView.setText("Opened");
             }
 
         }
-        landmarkOpeningHours.setText(googlePlacesApi.placeOpeningHours(place));
+        landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
         setLandmarkImage(place.getName());
         updateMap(place);
-
-//        if(place.getPhotoMetadatas() != null){
-//            googlePlacesApi.setLandmarkPhoto(Objects.requireNonNull(place.getPhotoMetadatas()).get(0), landmarkRelativeLayout);
-//        }else {
-//            Log.d("IMAGERROR", "unsplash");
-//            setCityImage(place.getName());
-//        }
     }
 
     private void setLandmarkImage(String cityName) {
@@ -506,6 +477,13 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         landmarkNameString = pref.getString("LandmarkName", "Landmark");
         landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
         landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
+
+        if (pref.getString("LandmarkOpenClosed", "Opened").contains("Closed")) {
+            open_closedTextView.setText(pref.getString("LandmarkOpenClosed", "Opened"));
+        } else {
+            open_closedTextView.setText("Opened");
+        }
+
         numberTextView.setText(pref.getString("LandmarkNumber", ""));
         websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
         landmarkRating.setText(pref.getString("LandmarkRating", ""));
@@ -533,10 +511,14 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             editor.putString("LandmarkAddress", place.getAddress());
         }
 
+        if (place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1) != null) {
+            editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+            editor.putString("LandmarkOpenClosed", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+        }
+
         editor.putString("LandmarkName", place.getName());
         editor.putFloat("LandmarkLat", (float) place.getLatLng().latitude);
         editor.putFloat("LandmarkLng", (float) place.getLatLng().longitude);
-        editor.putString("LandmarkOpeningHours", googlePlacesApi.placeOpeningHours(place));
         editor.apply();
     }
 
@@ -562,7 +544,12 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
     }
 
-    /*---------------------------------------------------------------------- Activity Result ----------------------------------------------------------------------*/
+    private int getDayOfWeek() {
+        DayOfWeek day = LocalDate.now().getDayOfWeek();
+        return day.getValue();
+    }
+
+    /*---------------------------------------------------------------------- Activity Result -------------------------------------------------------------*/
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -597,7 +584,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    /*---------------------------------------------------------------------- Permission Requests ----------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------- Permission Requests -------------------------------------------------------- */
 
     private void requestPermission() {
         if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -631,7 +618,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    /*---------------------------------------------------------------------- Firebase ----------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------- Firebase ---------------------------------------------------------------------*/
 
     private void setUpFirebaseAuthentication() {
         authentication = FirebaseAuth.getInstance();
@@ -671,40 +658,3 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         currentPolyline = mGoogleMap.addPolyline((PolylineOptions) values[0]);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
