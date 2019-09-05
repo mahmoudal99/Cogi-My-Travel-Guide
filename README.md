@@ -7,3 +7,9 @@ Android Travel App for guiding tourist on their trips by giving detailed informa
  
   <img src="https://user-images.githubusercontent.com/42293856/64340476-2f042180-cfde-11e9-9eb6-7ca049420187.png" width="240" height="470">
 </p>
+
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/42293856/64340574-61158380-cfde-11e9-8ae3-40750bac8118.png" width="240" height="470"> 
+  
+ <img src="https://user-images.githubusercontent.com/42293856/64340597-6d99dc00-cfde-11e9-923b-90e1f4609573.png" width="240" height="470">
+</p>
