@@ -18,7 +18,7 @@
             android:layout_width="@dimen/travel_guide_logo_width"
             android:layout_height="@dimen/travel_guide_logo_height"
             android:layout_gravity="center"
-            android:layout_marginTop="-40dp"
+            android:layout_marginTop="-30dp"
             android:src="@drawable/logo_white" />
 
 

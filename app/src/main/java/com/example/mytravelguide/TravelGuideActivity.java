@@ -346,7 +346,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         try {
             JsonReader jsonReader = new JsonReader();
             List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
-            setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+            if(tripInformation != null){
+                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
