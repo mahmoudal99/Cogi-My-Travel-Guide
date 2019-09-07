@@ -32,7 +32,7 @@
                 android:text="Timeline"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_28sp"
-                app:fontFamily="@font/rancho" />
+                app:fontFamily="@font/pompiere" />
 
         </RelativeLayout>
 
@@ -56,7 +56,7 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="@color/Grey" />
+            android:background="#2196f3" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

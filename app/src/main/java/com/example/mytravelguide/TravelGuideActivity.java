@@ -26,10 +26,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
+import android.text.InputType;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -77,9 +81,16 @@ import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmarkD
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.models.SearchResults;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Protocol;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -105,6 +116,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -121,6 +133,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class TravelGuideActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
 
     private static final String TAG = "TravelGuideActivity";
+    private static final String STARTINGPOINTREQUEST = "STARTINGPOINTREQUEST";
     private final static int LOCATION = 3;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;
@@ -132,6 +145,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, journeyMode;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
     private LinearLayout tripInformationLinLayout, tripInformationLinLayout2;
+    private EditText searchStartingPointEditText;
 
     // Variables
     private String landmarkNameString;
@@ -155,6 +169,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     // Classes
     private ImageProcessing imageProcessing;
+    private WikiData wikiData;
+    private OkHttpClient okHttpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +195,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void init() {
+        wikiData = new WikiData();
+        okHttpClient = new OkHttpClient();
         context = TravelGuideActivity.this;
 
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
@@ -217,6 +235,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         durationTextView = findViewById(R.id.durationText);
         distanceTextView = findViewById(R.id.distanceText);
         open_closedTextView = findViewById(R.id.open_closedTextView);
+
+        searchStartingPointEditText = findViewById(R.id.searchStartingPoint);
     }
 
     private void setUpWidgets() {
@@ -266,6 +286,49 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             setJourneyMode("bicycling");
             journeyMode.setImageDrawable(getDrawable(R.drawable.man_cycling_black));
         });
+
+        searchStartingPointEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchStartingPointEditText.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+
+                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+                Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(searchStartingPointEditText.getText().toString()));
+                httpClientCall(request, STARTINGPOINTREQUEST);
+                closeKeyboard();
+            }
+            return false;
+        });
+    }
+
+    private void httpClientCall(Request request, String requestType) {
+        okHttpClient.setProtocols(Collections.singletonList(Protocol.HTTP_1_1));
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Log.d("City WIKIDATA Id" + "Error", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                final String requestReponse = response.body().string();
+                switch (requestType) {
+                    case STARTINGPOINTREQUEST:
+                        JsonReader jsonReader = new JsonReader();
+                        JSONObject placeIDObject = jsonReader.getLandmarkPlaceIDFromJson(requestReponse);
+                        try {
+                            getStartingPointLatLng(placeIDObject.get("place_id").toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                }
+            }
+        });
+    }
+
+    private void closeKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     private void clearTextViews() {
@@ -346,7 +409,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         try {
             JsonReader jsonReader = new JsonReader();
             List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
-            if(tripInformation != null){
+            if (tripInformation != null) {
                 setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
             }
         } catch (ExecutionException e) {
@@ -380,6 +443,27 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
         mGoogleMap.clear();
         location2 = new MarkerOptions().position(latLng).title(place.getName());
+        mGoogleMap.addMarker(location1);
+        mGoogleMap.addMarker(location2);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
+        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
+        try {
+            JsonReader jsonReader = new JsonReader();
+            List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
+            setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void newStartingPoint(Place place){
+        LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+        mGoogleMap.clear();
+        location1 = new MarkerOptions().position(latLng).title("Starting Point");
+        LatLng landmarkLatLng = new LatLng(pref.getFloat("LandmarkLat", (float) 0.00), pref.getFloat("LandmarkLng", (float) 0.00));
+        location2 = new MarkerOptions().position(landmarkLatLng).title(pref.getString("LandmarkName", "Landmark"));
         mGoogleMap.addMarker(location1);
         mGoogleMap.addMarker(location2);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
@@ -537,6 +621,25 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             Place place = response.getPlace();
             loadLandmark(place);
             saveLandmarkInformation(place);
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                int statusCode = apiException.getStatusCode();
+                // Handle error with given status code.
+            }
+        });
+    }
+
+    private void getStartingPointLatLng(String id){
+        Places.initialize(getApplicationContext(), "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+
+        PlacesClient placesClient = Places.createClient(TravelGuideActivity.this);
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS,
+                Place.Field.LAT_LNG, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.PRICE_LEVEL, Place.Field.PHONE_NUMBER, Place.Field.WEBSITE_URI);
+        FetchPlaceRequest request = FetchPlaceRequest.newInstance(id, placeFields);
+
+        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+            newStartingPoint(response.getPlace());
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
                 ApiException apiException = (ApiException) exception;

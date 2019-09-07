@@ -2,6 +2,7 @@ package com.example.mytravelguide.utils;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,25 +19,25 @@ import java.util.Random;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyViewHolder>  {
+public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyViewHolder> {
 
     private ArrayList<VisitedPlaceObject> places;
     private Context context;
-    private View divider;
-    private String[] colours = {"#D50000", "#00C853", "#2979FF", "#FFFF00", "#FF3D00", "#6200EA"};
-
+    private ImageView tourist;
+    int index = 0;
+    int[] drawables = {R.drawable.tourist1, R.drawable.tourist2, R.drawable.tourist3, R.drawable.tourist4};
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView placeName, dateVisited;
         ImageView placeImage;
+
         MyViewHolder(View view) {
             super(view);
             placeName = view.findViewById(R.id.placeName);
             placeImage = view.findViewById(R.id.placeImage);
-            divider = view.findViewById(R.id.divider);
+            tourist = view.findViewById(R.id.touristImg);
         }
     }
-
 
     public TimelineAdapter(ArrayList<VisitedPlaceObject> places, Context context) {
         this.places = places;
@@ -56,10 +57,14 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
 
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
-        Random random = new Random();
-        int index = random.nextInt(6);
-        divider.setBackgroundColor(Color.parseColor(colours[index]));
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);
+
+        if (index == 4) {
+            index = 0;
+        } else {
+            tourist.setImageDrawable(context.getResources().getDrawable(drawables[index]));
+            index += 1;
+        }
         googlePlacesApi.setLandmarkImageWithBitmap(placeModel.photoMetadata, holder.placeImage);
     }
 
