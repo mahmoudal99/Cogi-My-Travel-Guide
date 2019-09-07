@@ -143,8 +143,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView, distanceTextView,
-            durationTextView, open_closedTextView;
-    private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, journeyMode;
+            durationTextView, open_closedTextView, noLandmarkSelected;
+    private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, journeyMode, noLandmarkImage;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
     private LinearLayout tripInformationLinLayout, tripInformationLinLayout2;
     private EditText searchStartingPointEditText;
@@ -205,6 +205,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         wikiData = new WikiData();
         okHttpClient = new OkHttpClient();
         context = TravelGuideActivity.this;
+        noLandmarkSelected = findViewById(R.id.noLandmarkSelected);
+        noLandmarkImage = findViewById(R.id.noLandmarkImage);
 
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
@@ -307,7 +309,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         searchStartingPointEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         searchStartingPointEditText.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", TravelGuideActivity.this);
                 Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(searchStartingPointEditText.getText().toString()));
                 httpClientCall(request, STARTINGPOINTREQUEST);
                 closeKeyboard();
@@ -555,11 +557,22 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             }
 
         }
-        setLandmarkImage(place.getName());
+
+
+        if (place.getName().contains("Great Sphinx of Giza")) {
+            if (place.getPhotoMetadatas() != null) {
+                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY, TravelGuideActivity.this);
+                googlePlacesApi.setLandmarkImageWithBitmap(place.getPhotoMetadatas().get(0), landmarkImage);
+            }
+        } else {
+            setLandmarkImage(place.getName());
+        }
+
         updateMap(place);
     }
 
     private void setLandmarkImage(String cityName) {
+
         Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
         unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
             @Override
@@ -572,26 +585,34 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 Log.d("Unsplash Error", error);
             }
         });
+
     }
 
     private void loadPreviousLandmark() {
-        landmarkNameString = pref.getString("LandmarkName", "Landmark");
-        landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
-        landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
-
-        if (pref.getString("LandmarkOpenClosed", "Opened").contains("Closed")) {
-            open_closedTextView.setText(pref.getString("LandmarkOpenClosed", "Opened"));
+        if (pref.getString("LandmarkName", "Landmark").contains("Landmark")) {
+            Log.d("No Previous Landmark", "Landmark");
         } else {
-            open_closedTextView.setText("Opened");
+            noLandmarkSelected.setVisibility(View.GONE);
+            noLandmarkImage.setVisibility(View.GONE);
+            landmarkNameString = pref.getString("LandmarkName", "Landmark");
+            landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
+            landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
+
+            if (pref.getString("LandmarkOpenClosed", "Opened").contains("Closed")) {
+                open_closedTextView.setText(pref.getString("LandmarkOpenClosed", "Opened"));
+            } else {
+                open_closedTextView.setText("Opened");
+            }
+
+            numberTextView.setText(pref.getString("LandmarkNumber", ""));
+            websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
+            landmarkRating.setText(pref.getString("LandmarkRating", ""));
+            landmarkAddress.setText(pref.getString("LandmarkAddress", ""));
+            String placeID = pref.getString("LandmarkID", null);
+            Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
+            imageProcessing.loadLandmarkImageFromStorage(landmarkImage);
         }
 
-        numberTextView.setText(pref.getString("LandmarkNumber", ""));
-        websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
-        landmarkRating.setText(pref.getString("LandmarkRating", ""));
-        landmarkAddress.setText(pref.getString("LandmarkAddress", ""));
-        String placeID = pref.getString("LandmarkID", null);
-        Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
-        imageProcessing.loadLandmarkImageFromStorage(landmarkImage);
     }
 
     private void saveLandmarkInformation(Place place) {

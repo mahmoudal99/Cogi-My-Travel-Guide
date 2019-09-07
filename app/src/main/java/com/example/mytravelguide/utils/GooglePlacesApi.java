@@ -62,13 +62,11 @@ public class GooglePlacesApi {
         placesClient = Places.createClient(context);
     }
 
-    public GooglePlacesApi(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
     public GooglePlacesApi(String apiKey, Context context) {
         this.apiKey = apiKey;
         this.context = context;
+        Places.initialize(context, API_KEY);
+        placesClient = Places.createClient(context);
     }
 
     private void initializePlaceFields() {
@@ -81,7 +79,7 @@ public class GooglePlacesApi {
     }
 
     private void fetchPhotoRequest(PhotoMetadata photo) {
-        fetchPhotoRequest = FetchPhotoRequest.builder(photo).build();
+
     }
 
     public ArrayList<AttractionObject> getNearByLocations(ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter) {
@@ -148,7 +146,7 @@ public class GooglePlacesApi {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkImageWithBitmap(PhotoMetadata photo, ImageView imageView) {
-        fetchPhotoRequest(photo);
+        fetchPhotoRequest = FetchPhotoRequest.builder(photo).build();
         placesClient.fetchPhoto(fetchPhotoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
             imageView.setImageBitmap(bitmap);

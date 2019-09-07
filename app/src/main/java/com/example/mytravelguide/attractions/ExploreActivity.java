@@ -382,7 +382,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         backArrow.setVisibility(View.VISIBLE);
         Request request = wikiData.getCityDataId(cityName);
         httpClientCall(request, WIKIDATAREQUEST);
-        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", ExploreActivity.this);
         String url = googlePlacesApi.getPlacesByQuery(cityName);
         Request latLngReqiest = wikiData.getCityLatLng(url);
         getCityLatLngFromJson(latLngReqiest);
@@ -419,7 +419,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     // Landmark Selected
     @Override
     public void onLandmarkSelected(AttractionObject place) {
-        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
+        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", ExploreActivity.this);
         Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName()));
         httpClientCall(request, LANDMARKIDREQUEST);
     }

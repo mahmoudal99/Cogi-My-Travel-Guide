@@ -25,7 +25,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
     private Context context;
     private ImageView tourist;
     int index = 0;
-    int[] drawables = {R.drawable.tourist1, R.drawable.tourist2, R.drawable.tourist3, R.drawable.tourist4};
+    int[] drawables = {R.drawable.tourist1, R.drawable.tourist2, R.drawable.tourist3, R.drawable.tourist4, R.drawable.tourist6, R.drawable.tourist7, R.drawable.tourist8};
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView placeName, dateVisited;
