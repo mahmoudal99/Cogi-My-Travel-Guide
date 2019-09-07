@@ -30,26 +30,24 @@ public class Landmark {
 
     private static final String API_KEY = BuildConfig.APIKEY;
     private Context context;
-
     private Map<String, String> placeMap;
-
-    boolean landmarkAdded = false;
+    private boolean landmarkAdded = false;
 
     public Landmark(Context context) {
         this.context = context;
         placeMap = new HashMap<>();
     }
 
-    public void setLandmarkAddedTrue() {
+    private void setLandmarkAddedTrue() {
         landmarkAdded = true;
     }
 
-    public void addLandmarkToTimeline(FirebaseUser currentUser, String placeID, String landmarkName) {
-
+    private void addLandmarkToTimeline(FirebaseUser currentUser, String placeID, String landmarkName, String dateVisited) {
         if (placeID == null) {
             Toast.makeText(context, "Landmark not added: No Id available", Toast.LENGTH_SHORT).show();
         } else {
             placeMap.put("Place Name", landmarkName);
+            placeMap.put("Date Visited", dateVisited);
             placeMap.put("ID", placeID);
 
             CloudFirestore cloudFirestore = new CloudFirestore(placeMap, currentUser);
@@ -59,7 +57,7 @@ public class Landmark {
         }
     }
 
-    public void checkLandmarkAlreadyAdded(String landmarkName, String placeID, FirebaseUser currentUser) {
+    public void checkLandmarkAlreadyAdded(String landmarkName, String placeID, FirebaseUser currentUser, String dateVisited) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(context.getString(R.string.VisitedPlaces)).document(currentUser.getUid()).collection(context.getString(R.string.MyPlaces))
                 .get()
@@ -73,7 +71,7 @@ public class Landmark {
                             }
                         }
                     }
-                    addLandmarkToTimeline(currentUser, placeID, landmarkName);
+                    addLandmarkToTimeline(currentUser, placeID, landmarkName, dateVisited);
                 });
     }
 

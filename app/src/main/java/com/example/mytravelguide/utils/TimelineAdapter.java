@@ -36,6 +36,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
             placeName = view.findViewById(R.id.placeName);
             placeImage = view.findViewById(R.id.placeImage);
             tourist = view.findViewById(R.id.touristImg);
+            dateVisited = view.findViewById(R.id.dateVisited);
         }
     }
 
@@ -57,6 +58,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
 
         VisitedPlaceObject placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
+        holder.dateVisited.setText(placeModel.dateVisited);
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);
 
         if (index == 4) {

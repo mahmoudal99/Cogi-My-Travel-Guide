@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +34,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -172,6 +174,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private WikiData wikiData;
     private OkHttpClient okHttpClient;
 
+    // Dialog
+    DatePickerDialog datePickerDialog;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,6 +201,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void init() {
+        datePickerDialog = new DatePickerDialog(TravelGuideActivity.this);
         wikiData = new WikiData();
         okHttpClient = new OkHttpClient();
         context = TravelGuideActivity.this;
@@ -253,7 +260,17 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         addLandmarkToTimeline.setOnClickListener(v -> {
             if (landmarkNameString != null) {
-                landmark.checkLandmarkAlreadyAdded(landmarkNameString, pref.getString("LandmarkID", null), currentUser);
+                datePickerDialog.setTitle("Date Visited");
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                        (view, year, monthOfYear, dayOfMonth) -> landmark.checkLandmarkAlreadyAdded(landmarkNameString,
+                                pref.getString("LandmarkID", null), currentUser,
+                                dayOfMonth + "-" + (monthOfYear + 1) + "-" + year), mYear, mMonth, mDay);
+                datePickerDialog.show();
             } else {
                 Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
             }
@@ -290,8 +307,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         searchStartingPointEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         searchStartingPointEditText.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
-
                 GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
                 Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(searchStartingPointEditText.getText().toString()));
                 httpClientCall(request, STARTINGPOINTREQUEST);
@@ -458,7 +473,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    private void newStartingPoint(Place place){
+    private void newStartingPoint(Place place) {
         LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
         mGoogleMap.clear();
         location1 = new MarkerOptions().position(latLng).title("Starting Point");
@@ -531,15 +546,15 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             websiteTextView.setText("No Information Available");
         }
 
-        if (place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1) != null) {
+        if (place.getOpeningHours() != null) {
             if (place.getOpeningHours().getWeekdayText().contains("Closed")) {
                 open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
             } else {
                 open_closedTextView.setText("Opened");
             }
 
         }
-        landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
         setLandmarkImage(place.getName());
         updateMap(place);
     }
@@ -597,7 +612,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             editor.putString("LandmarkAddress", place.getAddress());
         }
 
-        if (place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1) != null) {
+        if (place.getOpeningHours() != null) {
             editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
             editor.putString("LandmarkOpenClosed", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
         }
@@ -630,7 +645,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
     }
 
-    private void getStartingPointLatLng(String id){
+    private void getStartingPointLatLng(String id) {
         Places.initialize(getApplicationContext(), "AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o");
 
         PlacesClient placesClient = Places.createClient(TravelGuideActivity.this);
@@ -762,4 +777,5 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             currentPolyline.remove();
         currentPolyline = mGoogleMap.addPolyline((PolylineOptions) values[0]);
     }
+
 }

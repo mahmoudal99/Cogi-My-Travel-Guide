@@ -28,6 +28,16 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_20sp" />
 
+    <TextView
+        android:id="@+id/dateVisited"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/rancho"
+        android:gravity="center"
+        android:text="Date Visited"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_20sp" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/landmarkImageCardView"
         android:layout_width="200dp"

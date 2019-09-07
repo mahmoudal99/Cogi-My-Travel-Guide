@@ -108,7 +108,8 @@ public class TimelineActivity extends AppCompatActivity {
 
                                     placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                                         Place place = response.getPlace();
-                                        callAdapter(Objects.requireNonNull(document.get("Place Name")).toString(), Objects.requireNonNull(place.getPhotoMetadatas()).get(0));
+                                        Log.d("MOMOMOM", place.getName());
+                                        callAdapter(Objects.requireNonNull(document.get("Place Name")).toString(), document.get("Date Visited").toString(), Objects.requireNonNull(place.getPhotoMetadatas()).get(0));
 
                                     }).addOnFailureListener((exception) -> {
                                         if (exception instanceof ApiException) {
@@ -127,10 +128,11 @@ public class TimelineActivity extends AppCompatActivity {
                 });
     }
 
-    private void callAdapter(String name, PhotoMetadata photoMetadata) {
+    private void callAdapter(String name, String dateVisited, PhotoMetadata photoMetadata) {
         VisitedPlaceObject landmark = new VisitedPlaceObject();
         landmark.placeName = name;
         landmark.photoMetadata = photoMetadata;
+        landmark.dateVisited = dateVisited;
         landmarksList.add(landmark);
         timelineAdapter.notifyDataSetChanged();
     }
