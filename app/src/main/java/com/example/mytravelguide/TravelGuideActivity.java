@@ -132,7 +132,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class TravelGuideActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
+public class TravelGuideActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback, View.OnClickListener {
 
     private static final String TAG = "TravelGuideActivity";
     private static final String STARTINGPOINTREQUEST = "STARTINGPOINTREQUEST";
@@ -269,7 +269,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                        (view, year, monthOfYear, dayOfMonth) -> landmark.checkLandmarkAlreadyAdded(landmarkNameString,
+                        (view, year, monthOfYear, dayOfMonth) -> landmark.checkLandmarkAlreadyAdded(pref.getString("LandmarkName", "Landmark"),
                                 pref.getString("LandmarkID", null), currentUser,
                                 dayOfMonth + "-" + (monthOfYear + 1) + "-" + year), mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -291,20 +291,35 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             showInformationWidgets();
         });
 
+
         carImage.setOnClickListener(v -> {
-            setJourneyMode("driving");
-            journeyMode.setImageDrawable(getDrawable(R.drawable.sports_car_blacl));
+
+            if (searchStartingPointEditText.getHint().equals("Starting Point")) {
+                Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
+            } else {
+                setJourneyMode("driving");
+                journeyMode.setImageDrawable(getDrawable(R.drawable.sports_car_blacl));
+            }
         });
 
         walkingImageView.setOnClickListener(v -> {
-            setJourneyMode("walking");
-            journeyMode.setImageDrawable(getDrawable(R.drawable.hiking_black));
+            if(searchStartingPointEditText.getHint().equals("Starting Point")){
+                Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
+            }else {
+                setJourneyMode("walking");
+                journeyMode.setImageDrawable(getDrawable(R.drawable.hiking_black));
+            }
         });
 
         cycleImageView.setOnClickListener(v -> {
-            setJourneyMode("bicycling");
-            journeyMode.setImageDrawable(getDrawable(R.drawable.man_cycling_black));
+            if(searchStartingPointEditText.getHint().equals("Starting Point")){
+                Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
+            }else {
+                setJourneyMode("bicycling");
+                journeyMode.setImageDrawable(getDrawable(R.drawable.man_cycling_black));
+            }
         });
+
 
         searchStartingPointEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         searchStartingPointEditText.setOnKeyListener((v, keyCode, event) -> {
@@ -415,30 +430,20 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.clear();
-        mGoogleMap.addMarker(location1);
         mGoogleMap.addMarker(location2);
         mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
         mGoogleMap.setMaxZoomPreference(12);
         mGoogleMap.setMinZoomPreference(12);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-        LatLng latLng = new LatLng(pref.getFloat("LandmarkLat", (float) 0.00), pref.getFloat("LandmarkLng", (float) 0.00));
-        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
-        try {
-            JsonReader jsonReader = new JsonReader();
-            List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
-            if (tripInformation != null) {
-                setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location2.getPosition()));
+        durationTextView.setText("");
+        distanceTextView.setText("");
+        journeyMode.setVisibility(View.INVISIBLE);
     }
 
     private void setDistanceDuration(String distance, String duration) {
         durationTextView.setText(duration);
         distanceTextView.setText(distance);
+        journeyMode.setVisibility(View.VISIBLE);
     }
 
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
@@ -460,19 +465,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
         mGoogleMap.clear();
         location2 = new MarkerOptions().position(latLng).title(place.getName());
-        mGoogleMap.addMarker(location1);
         mGoogleMap.addMarker(location2);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
-        try {
-            JsonReader jsonReader = new JsonReader();
-            List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
-            setDistanceDuration(tripInformation.get(0), tripInformation.get(1));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location2.getPosition()));
     }
 
     private void newStartingPoint(Place place) {
@@ -484,7 +478,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.addMarker(location1);
         mGoogleMap.addMarker(location2);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
-        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), latLng, "driving"), "driving");
+        durationTextView.setText("");
+        distanceTextView.setText("");
+        journeyMode.setVisibility(View.INVISIBLE);
+        AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), location2.getPosition(), "driving"), "driving");
         try {
             JsonReader jsonReader = new JsonReader();
             List<String> tripInformation = jsonReader.getDirectionsInformation(data.get());
@@ -799,4 +796,51 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         currentPolyline = mGoogleMap.addPolyline((PolylineOptions) values[0]);
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

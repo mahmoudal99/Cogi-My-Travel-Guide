@@ -480,7 +480,7 @@
                                 android:gravity="center_horizontal"
                                 android:text="20km"
                                 android:textColor="@color/black"
-                                android:textSize="30sp"
+                                android:textSize="24sp"
                                 app:fontFamily="@font/rancho" />
 
                             <TextView
@@ -527,7 +527,7 @@
                                 android:gravity="center_horizontal"
                                 android:text="20 mins"
                                 android:textColor="@color/black"
-                                android:textSize="30sp"
+                                android:textSize="24sp"
                                 app:fontFamily="@font/rancho" />
 
                             <TextView
@@ -552,7 +552,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:baselineAligned="false"
-                    android:visibility="gone"
                     android:orientation="horizontal">
 
 
@@ -579,8 +578,8 @@
 
                             <ImageView
                                 android:id="@+id/journeyMode"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
@@ -631,7 +630,7 @@
                                 android:gravity="center_horizontal"
                                 android:text="20 mins"
                                 android:textColor="@color/black"
-                                android:textSize="25dp"
+                                android:textSize="24sp"
                                 app:fontFamily="@font/rancho" />
 
                         </LinearLayout>

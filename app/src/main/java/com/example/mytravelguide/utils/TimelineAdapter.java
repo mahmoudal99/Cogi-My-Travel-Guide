@@ -61,7 +61,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         holder.dateVisited.setText(placeModel.dateVisited);
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);
 
-        if (index == 4) {
+        if (index == 7) {
             index = 0;
         } else {
             tourist.setImageDrawable(context.getResources().getDrawable(drawables[index]));
