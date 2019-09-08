@@ -144,7 +144,6 @@ public class GooglePlacesApi {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkImageWithBitmap(PhotoMetadata photo, ImageView imageView) {
         fetchPhotoRequest = FetchPhotoRequest.builder(photo).build();
         placesClient.fetchPhoto(fetchPhotoRequest).addOnSuccessListener((fetchPhotoResponse) -> {

@@ -298,7 +298,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
             } else {
                 setJourneyMode("driving");
-                journeyMode.setImageDrawable(getDrawable(R.drawable.sports_car_blacl));
+                journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.sports_car_blacl));
             }
         });
 
@@ -307,7 +307,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
             }else {
                 setJourneyMode("walking");
-                journeyMode.setImageDrawable(getDrawable(R.drawable.hiking_black));
+                journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.hiking_black));
             }
         });
 
@@ -316,7 +316,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
             }else {
                 setJourneyMode("bicycling");
-                journeyMode.setImageDrawable(getDrawable(R.drawable.man_cycling_black));
+                journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.man_cycling_black));
             }
         });
 
@@ -683,8 +683,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     }
 
     private int getDayOfWeek() {
-        DayOfWeek day = LocalDate.now().getDayOfWeek();
-        return day.getValue();
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     /*---------------------------------------------------------------------- Activity Result -------------------------------------------------------------*/
