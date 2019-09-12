@@ -68,7 +68,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="Landmarks"
+                            android:text="@string/landmarks"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />
@@ -118,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_horizontal"
-                            android:text="Cities"
+                            android:text="@string/cities"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
                             app:fontFamily="@font/rancho" />

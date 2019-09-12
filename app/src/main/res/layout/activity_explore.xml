@@ -31,9 +31,9 @@
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_arrow_back_black_24dp"
                 android:layout_marginLeft="15dp"
-                android:visibility="gone"/>
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/cityTextView"
@@ -49,15 +49,15 @@
                 android:id="@+id/searchTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="60dp"
                 android:layout_marginRight="30dp"
-                android:hint="Search Cities"
-                android:layout_centerVertical="true"
+                android:background="@null"
+                android:hint="@string/search_cities"
                 android:imeOptions="actionSearch"
                 android:inputType="textCapSentences"
-                android:background="@null"
                 android:textColor="@color/black"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/searchButton"
@@ -142,8 +142,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/White"
             android:layout_marginTop="20dp"
+            android:background="@color/White"
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
@@ -163,12 +163,12 @@
                     android:id="@+id/searchPlacesEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="30dp"
-                    android:hint="Search Places"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="40dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginRight="30dp"
                     android:background="@null"
+                    android:hint="@string/search_places"
                     android:imeOptions="actionSearch"
                     android:inputType="textCapSentences"
                     android:textColor="@color/black"
@@ -179,11 +179,11 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_search_black_24dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </androidx.cardview.widget.CardView>
 
@@ -195,8 +195,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
             android:padding="1dip"
             app:cardCornerRadius="8dp">
 

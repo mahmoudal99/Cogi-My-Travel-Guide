@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/rancho"
         android:gravity="center"
-        android:text="Date Visited"
+        android:text="@string/date_visited"
         android:textColor="@color/black"
         android:textSize="@dimen/_20sp" />
 

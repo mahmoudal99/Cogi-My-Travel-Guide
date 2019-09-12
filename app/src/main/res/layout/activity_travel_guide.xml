@@ -30,7 +30,7 @@
                 android:layout_gravity="center_vertical"
                 android:fontFamily="@font/pompiere"
                 android:gravity="center_horizontal"
-                android:text="Landmark"
+                android:text="@string/landmark"
                 android:textColor="@color/black"
                 android:textSize="26sp" />
 
@@ -80,7 +80,7 @@
                         android:fontFamily="@font/rancho"
                         android:layout_marginBottom="30dp"
                         android:gravity="center_horizontal"
-                        android:text="No Landmark Selected"
+                        android:text="@string/no_landmark_selected"
                         android:textColor="@color/black"
                         android:textSize="26sp" />
 
@@ -214,7 +214,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="monospace"
                                 android:padding="@dimen/information_padding_10dp"
-                                android:text="Address:"
+                                android:text="@string/address"
                                 android:textColor="@color/LightBlue"
                                 android:textSize="@dimen/_14sp" />
 
@@ -265,7 +265,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="monospace"
                                 android:padding="@dimen/information_padding_10dp"
-                                android:text="Number:"
+                                android:text="@string/number"
                                 android:textColor="#FF6D00"
                                 android:textSize="@dimen/_14sp" />
 
@@ -292,7 +292,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="monospace"
                                 android:padding="@dimen/information_padding_10dp"
-                                android:text="Website:"
+                                android:text="@string/website"
                                 android:textColor="#607D8B"
                                 android:textSize="@dimen/_14sp" />
 
@@ -368,7 +368,7 @@
                                     android:layout_marginRight="30dp"
                                     android:layout_marginBottom="5dp"
                                     android:background="@null"
-                                    android:hint="Starting Point"
+                                    android:hint="@string/starting_point"
                                     android:imeOptions="actionSearch"
                                     android:inputType="textCapSentences"
                                     android:textColor="@color/White"
@@ -488,7 +488,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_horizontal"
-                                android:text="Distance"
+                                android:text="@string/distance"
                                 android:textColor="@color/Red"
                                 android:textSize="@dimen/_24sp"
                                 app:fontFamily="@font/rancho" />
@@ -535,7 +535,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_horizontal"
-                                android:text="Duration"
+                                android:text="@string/duration"
                                 android:textColor="@color/Green"
                                 android:textSize="@dimen/_24sp"
                                 app:fontFamily="@font/rancho" />
@@ -552,6 +552,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:baselineAligned="false"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
 
@@ -590,7 +591,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_horizontal"
-                                android:text="Mode"
+                                android:text="@string/mode"
                                 android:textColor="#FF6D00"
                                 android:textSize="@dimen/_24sp"
                                 app:fontFamily="@font/rancho" />

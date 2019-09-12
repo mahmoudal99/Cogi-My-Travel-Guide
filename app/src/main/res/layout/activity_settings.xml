@@ -42,7 +42,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:text="ACCOUNT"
+            android:text="@string/account_caps"
             android:textSize="@dimen/_17sp" />
 
         <LinearLayout
@@ -65,7 +65,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
                     android:paddingBottom="10dp"
-                    android:text="Account"
+                    android:text="@string/account"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20sp" />
 
@@ -112,7 +112,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
                     android:paddingBottom="10dp"
-                    android:text="Location"
+                    android:text="@string/location"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20sp" />
 
@@ -147,7 +147,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
                     android:paddingBottom="10dp"
-                    android:text="Notification"
+                    android:text="@string/notification"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20sp" />
 

@@ -42,7 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private FirebaseMethods firebaseMethods;
 
-    private String[] Languages = {"English", "French", "Arabic"};
+    private String[] Languages = {"English", "French", "Spanish"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
                 setLocale("fr");
                 recreate();
             } else if (which == 2) {
-                setLocale("ar");
+                setLocale("es");
                 recreate();
             }
 

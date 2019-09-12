@@ -148,9 +148,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             startActivity(backIntent);
         });
 
-        searchImageView.setOnClickListener(v -> {
-            toggleSearchWidgets(searchEditText.getVisibility());
-        });
+        searchImageView.setOnClickListener(v -> toggleSearchWidgets(searchEditText.getVisibility()));
 
         closeSearchArrow.setOnClickListener(v -> {
             if (closeSearchArrow.getVisibility() == View.VISIBLE) {
@@ -215,6 +213,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                    case "GGGG":
+                        Log.d("MOMOMOM", requestReponse);
                 }
             }
         });
@@ -228,6 +229,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             httpClientCall(cityLandmarksRequest, LANDMARKREQUEST);
         }
     }
+
 
     private void landmarksInCity(List<String> landmarks) {
         for (String landmark : landmarks) {
@@ -309,8 +311,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
     // Tabs
     private void setUpTabs() {
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("Landmarks"));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.map)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.landmarks)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         setUpViewager();
     }

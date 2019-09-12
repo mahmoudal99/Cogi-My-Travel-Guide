@@ -542,15 +542,15 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             Linkify.addLinks(websiteTextView, Linkify.WEB_URLS);
         } else if (place.getWebsiteUri() == null) {
 
-            websiteTextView.setText("No Information Available");
+            websiteTextView.setText(getResources().getString(R.string.no_infotmation_available));
         }
 
         if (place.getOpeningHours() != null) {
-            if (place.getOpeningHours().getWeekdayText().contains("Closed")) {
+            if (place.getOpeningHours().getWeekdayText().contains(getResources().getString(R.string.close))) {
                 open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
                 landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
             } else {
-                open_closedTextView.setText("Opened");
+                open_closedTextView.setText(getResources().getString(R.string.open));
             }
 
         }
@@ -596,9 +596,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
 
             if (pref.getString("LandmarkOpenClosed", "Opened").contains("Closed")) {
-                open_closedTextView.setText(pref.getString("LandmarkOpenClosed", "Opened"));
+                open_closedTextView.setText(getResources().getString(R.string.close));
             } else {
-                open_closedTextView.setText("Opened");
+                open_closedTextView.setText(getResources().getString(R.string.open));
             }
 
             numberTextView.setText(pref.getString("LandmarkNumber", ""));

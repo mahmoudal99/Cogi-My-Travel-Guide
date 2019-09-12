@@ -22,7 +22,6 @@
     <string name="America">Amérique</string>
     <string name="Europe">L\'Europe</string>
     <string name="Asia">Asie</string>
-    <string name="landmarks">Landmarks</string>
 
     <string name="discover">The Giza Necropolis is the site on the Giza Plateau in Egypt that includes the Great Pyramid of Giza, the Pyramid of Khafre, and the Pyramid of Menkaure, along with their associated pyramid complexes and the Great Sphinx of Giza.</string>
 
@@ -54,12 +53,12 @@
     <string name="price">Prix:</string>
     <string name="rating">Évaluation:</string>
     <string name="about">About</string>
-    <string name="language">Language</string>
+    <string name="language">La langue</string>
     <string name="password_capital">PASSWORD</string>
     <string name="password">Password</string>
-    <string name="log_out_capital">LOG OUT</string>
+    <string name="log_out_capital">CONNECTEZ - OUT</string>
     <string name="log_out">Connectez - Out</string>
-    <string name="timeline">Chronologie</string>
+    <string name="timeline">Ma Chronologie</string>
 
     <string name="landmark">Bâtiment Historique</string>
     <string name="VisitedPlaces">VisitedPlaces</string>
@@ -74,5 +73,26 @@
 
     // Settings Layout
     <string name="settings">Réglages</string>
+    <string name="search_cities">Rechercher des villes</string>
+    <string name="cities">Villes</string>
+    <string name="search_places">Rechercher des lieux</string>
+    <string name="account">Compte</string>
+    <string name="location">Emplacement</string>
+    <string name="notification">Notification</string>
+    <string name="account_caps">COMPTE</string>
+    <string name="no_landmark_selected">Aucun point de repère sélectionné</string>
+    <string name="address">Adresse:</string>
+    <string name="number">Nombre:</string>
+    <string name="website">Site Internet:</string>
+    <string name="starting_point">Starting Point</string>
+    <string name="distance">Distance</string>
+    <string name="duration">Durée</string>
+    <string name="mode">Mode</string>
+    <string name="date_visited">Date de visite</string>
+    <string name="landmarks">Repères</string>
+    <string name="map">Carte</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermé</string>
+    <string name="no_infotmation_available">Pas d\'information disponible</string>
 
 </resources>
