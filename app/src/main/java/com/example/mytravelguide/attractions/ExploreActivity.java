@@ -82,7 +82,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private static final String LANDMARKIDREQUEST = "LANDMARKIDREQUEST";
 
     // Widgets
-    private ImageView backArrow, searchImageView, cityImage, closeSearchArrow, blackSearchButton;
+    private ImageView backArrow, searchImageView, cityImage, closeSearchArrow, blackSearchButton, noCityImage;
     private CardView mapCardView, searchBarCardView;
     private RecyclerView listView;
     private TextView cityTextView, searchPlacesEditText;
@@ -113,6 +113,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         isStoragePermissionGranted();
         okHttpClient = new OkHttpClient();
         init();
+        toggleCityImageVisibility();
         setUpTabs();
         setUpWidgets();
         imageProcessing.loadImageFromStorage(cityImage);
@@ -130,6 +131,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         mapCardView = findViewById(R.id.mapCardView);
         listView = findViewById(R.id.landmarksInCity);
         backArrow = findViewById(R.id.backArrow);
+        noCityImage = findViewById(R.id.noCityImage);
         cityTextView = findViewById(R.id.cityTextView);
         searchEditText = findViewById(R.id.searchTextView);
         searchEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -141,6 +143,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         editor = pref.edit();
         editor.apply();
     }
+
 
     private void setUpWidgets() {
         backArrow.setOnClickListener(v -> {
@@ -160,7 +163,13 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         searchEditText.setOnKeyListener((v, keyCode, event) -> {
             String cityName = searchEditText.getText().toString();
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                cityTextView.setText(cityName);
+                String cityLat = pref.getString("CityLat", null);
+                if (cityLat == null) {
+                    cityTextView.setText(getResources().getString(R.string.city));
+                } else {
+                    cityTextView.setText(cityName);
+                }
+
                 handleCitySearchResult(cityName);
                 return true;
             }
@@ -176,7 +185,21 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             return false;
         });
 
-        cityTextView.setText(pref.getString("CityName", "Berlin"));
+        cityTextView.setText(pref.getString("CityName", "City"));
+    }
+
+    private void toggleCityImageVisibility() {
+        String cityLat = pref.getString("CityLat", null);
+        if (cityLat == null) {
+            cityImage.setVisibility(View.INVISIBLE);
+            noCityImage.setVisibility(View.VISIBLE);
+            mapCardView.setVisibility(View.INVISIBLE);
+            cityTextView.setText(getResources().getString(R.string.city));
+        } else {
+            cityImage.setVisibility(View.VISIBLE);
+            noCityImage.setVisibility(View.INVISIBLE);
+            mapCardView.setVisibility(View.VISIBLE);
+        }
     }
 
     // WikiData
@@ -342,11 +365,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void showMapTabComponents() {
-        mapCardView.setVisibility(View.VISIBLE);
         listView.setVisibility(View.GONE);
         searchPlacesEditText.setVisibility(View.GONE);
         blackSearchButton.setVisibility(View.GONE);
         searchBarCardView.setVisibility(View.GONE);
+        String cityLat = pref.getString("CityLat", null);
+        if (cityLat == null) {
+            mapCardView.setVisibility(View.INVISIBLE);
+        } else {
+            mapCardView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showLandmarksTabComponents() {
@@ -389,6 +417,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         Request latLngReqiest = wikiData.getCityLatLng(url);
         getCityLatLngFromJson(latLngReqiest);
         closeKeyboard();
+        toggleCityImageVisibility();
         editor.putString("CityName", cityName);
         setCityImage(cityName);
         runOnUiThread(() -> {

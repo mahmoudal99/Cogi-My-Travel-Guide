@@ -345,5 +345,7 @@
     <string name="open">Open</string>
     <string name="close">Closed</string>
     <string name="no_infotmation_available">No Information Available</string>
+    <string name="city">City</string>
+    <string name="search_for_a_city_to_explore">Search For a City to Explore</string>
 
 </resources>

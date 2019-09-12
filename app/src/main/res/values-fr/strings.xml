@@ -94,5 +94,7 @@
     <string name="open">Ouvrir</string>
     <string name="close">Fermé</string>
     <string name="no_infotmation_available">Pas d\'information disponible</string>
+    <string name="city">Ville</string>
+    <string name="search_for_a_city_to_explore">Rechercher une ville à explorer</string>
 
 </resources>
