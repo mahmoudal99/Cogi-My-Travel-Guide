@@ -1,350 +1,48 @@
 <resources>
     <string name="app_name">My Travel Guide</string>
 
-    <string name="style_json" translatable="false">[
-  {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#ebe3cd"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#523735"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#f5f1e6"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#c9b2a6"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#dcd2be"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#ae9e90"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape.natural",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#93817c"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#a5b076"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#447530"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#f5f1e6"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#fdfcf8"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#f8c967"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#e9bc62"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway.controlled_access",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e98d58"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway.controlled_access",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#db8555"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#806b63"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#8f7d77"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#ebe3cd"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.station",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dfd2ae"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#b9d3c2"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#92998d"
-      }
-    ]
-  }
-]
-]</string>
+    <string name="near_by">Cerca de ubicaciones</string>
 
-    // Facebook
-    <string name="facebook_app_id" translatable="false">2519286871435597</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb2519286871435597</string>
-
-    <string name="logo">Logo</string>
-    <string name="travel_guide">Travel Guide</string>
-
-    // Sign In Strings
-    <string name="Email">Email</string>
-    <string name="Password">Password</string>
-    <string name="Login">Login</string>
-    <string name="CreateAccount">Create Account</string>
-    <string name="ContactUs">Contact Us</string>
-    <string name="auth_failed">Incorrect Email or Password</string>
-
-    // Sign Up
-    <string name="FirstName">First Name</string>
-    <string name="Surname">Surname</string>
-    <string name="SignUp">Sign Up</string>
-
-    // Continents
-    <string name="Africa">Africa</string>
-    <string name="America">America</string>
-    <string name="Europe">Europe</string>
-    <string name="Asia">Asia</string>
-
-    <string name="discover">The Giza Necropolis is the site on the Giza Plateau in Egypt that includes the Great Pyramid of Giza, the Pyramid of Khafre, and the Pyramid of Menkaure, along with their associated pyramid complexes and the Great Sphinx of Giza.</string>
-
-    // About
-    <string name="About">Sed ut perspiciatis unde omnis iste natus dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</string>
-
-    // Visited
-    <string name="Visited">Visited</string>
-
-    // Landmark
-    <string name="PlaceName">Name</string>
-
-    // Home Page Strings
-    <string name="planet">Planet</string>
-    <string name="Attractions">Attractions</string>
-    <string name="camera">Camera</string>
-
-    <string name="hint_search" translatable="false">Searching for…</string>
-    <string name="search_description" translatable="false">City, Cities</string>
-
-    <string name="DateVisited">Date</string>
-    <string name="backarrow">Back Arrow</string>
-    <string name="place">Lugar</string>
-
-    <string name="choose_photo">Choose Photo</string>
-    <string name="my_location">Mi ubicacion</string>
-    <string name="Attraction">Attraction</string>
-
-    <string name="near_by">Lugares cercanos</string>
     <string name="information">Información</string>
-    <string name="opening_hours">Horario de apertura:</string>
+    <string name="opening_hours">Horario:</string>
     <string name="price">Precio:</string>
     <string name="rating">Clasificación:</string>
-    <string name="about">About</string>
-    <string name="language">Idioma</string>
-    <string name="password_capital">PASSWORD</string>
-    <string name="password">Password</string>
-    <string name="log_out_capital">CERRAR SESIÓN</string>
-    <string name="log_out">Cerrar sesión</string>
-    <string name="timeline">Mi línea de tiempo</string>
-
-    <string name="landmark">Landmark</string>
-    <string name="VisitedPlaces">VisitedPlaces</string>
-    <string name="MyPlaces">MyPlaces</string>
-    <string name="change_password">Change Password</string>
-    <string name="current_password">Current Password</string>
-    <string name="new_password">New Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="submit">Submit</string>
-    <string name="history">Historia</string>
-
-    // Settings Layout
-    <string name="settings">Configuraciones</string>
-    <string name="sultan_ahmed_mosque" translatable="false">Sultan Ahmed Mosque</string>
-    <string name="search_cities">Buscar ciudades</string>
-    <string name="search_places">Buscar lugares</string>
-    <string name="cities">Ciudades</string>
-    <string name="account">Cuenta</string>
-    <string name="location">Ubicación</string>
-    <string name="notification">Notificación</string>
-    <string name="account_caps">CUENTA</string>
-    <string name="no_landmark_selected">Ningún hito seleccionado</string>
     <string name="address">Dirección:</string>
     <string name="number">Número:</string>
     <string name="website">Sitio web:</string>
+
+    <string name="language">Lengua</string>
+
+    <string name="settings">Configuración</string>
+    <string name="log_out_capital">CERRAR SESIÓN</string>
+    <string name="log_out">Cerrar sesión</string>
+    <string name="account_caps">Cuenta</string>
+    <string name="notification">Notificación</string>
+    <string name="account">Cuenta</string>
+    <string name="location">Ubicación</string>
+
+    <string name="timeline">línea de tiempo</string>
+    <string name="landmark">Punto de referencia</string>
+    <string name="cities">Ciudades</string>
+
+    <string name="search_cities">Buscar ciudades</string>
+    <string name="search_places">Buscar lugares</string>
+
+    <string name="date_visited">Fecha de visita</string>
+    <string name="landmarks">Señales</string>
+    <string name="map">Mapa</string>
+
+    <string name="city">Ciudad</string>
+
     <string name="starting_point">Punto de partida</string>
     <string name="distance">Distancia</string>
     <string name="duration">Duración</string>
     <string name="mode">Modo</string>
-    <string name="date_visited">Fecha de visita</string>
-    <string name="landmarks">Repères</string>
-    <string name="map">Mapa</string>
     <string name="open">Abierto</string>
     <string name="close">Cerrado</string>
+
+    <string name="no_landmark_selected">Sin punto de referencia seleccionado</string>
     <string name="no_infotmation_available">No hay información disponible</string>
-    <string name="city">Ciudad</string>
-    <string name="search_for_a_city_to_explore">Busque una ciudad para explorar</string>
+    <string name="search_for_a_city_to_explore">Buscar una ciudad para explorar</string>
 
 </resources>

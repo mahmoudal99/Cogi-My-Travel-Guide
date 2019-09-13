@@ -247,105 +247,54 @@
     // Facebook
     <string name="facebook_app_id" translatable="false">2519286871435597</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb2519286871435597</string>
-
-    <string name="logo">Logo</string>
-    <string name="travel_guide">Travel Guide</string>
-
-    // Sign In Strings
-    <string name="Email">Email</string>
-    <string name="Password">Password</string>
-    <string name="Login">Login</string>
-    <string name="CreateAccount">Create Account</string>
-    <string name="ContactUs">Contact Us</string>
-    <string name="auth_failed">Incorrect Email or Password</string>
-
-    // Sign Up
-    <string name="FirstName">First Name</string>
-    <string name="Surname">Surname</string>
-    <string name="SignUp">Sign Up</string>
-
-    // Continents
-    <string name="Africa">Africa</string>
-    <string name="America">America</string>
-    <string name="Europe">Europe</string>
-    <string name="Asia">Asia</string>
-
-    <string name="discover">The Giza Necropolis is the site on the Giza Plateau in Egypt that includes the Great Pyramid of Giza, the Pyramid of Khafre, and the Pyramid of Menkaure, along with their associated pyramid complexes and the Great Sphinx of Giza.</string>
-
-    // About
-    <string name="About">Sed ut perspiciatis unde omnis iste natus dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</string>
-
-    // Visited
-    <string name="Visited">Visited</string>
-
-    // Landmark
-    <string name="PlaceName">Name</string>
-
-    // Home Page Strings
-    <string name="planet">Planet</string>
-    <string name="Attractions">Attractions</string>
-    <string name="camera">Camera</string>
-
+    <string name="VisitedPlaces" translatable="false">VisitedPlaces</string>
     <string name="hint_search" translatable="false">Searching for…</string>
     <string name="search_description" translatable="false">City, Cities</string>
-
-    <string name="DateVisited">Date</string>
-    <string name="backarrow">Back Arrow</string>
-    <string name="place">Place</string>
-
-    <string name="choose_photo">Choose Photo</string>
-    <string name="my_location">My Location</string>
-    <string name="Attraction">Attraction</string>
+    <string name="sultan_ahmed_mosque" translatable="false">Sultan Ahmed Mosque</string>
+    <string name="MyPlaces" translatable="false">MyPlaces</string>
 
     <string name="near_by">Near By Locations</string>
+
     <string name="information">Information</string>
     <string name="opening_hours">Opening Hours:</string>
     <string name="price">Price:</string>
     <string name="rating">Rating:</string>
-    <string name="about">About</string>
-    <string name="language">Language</string>
-    <string name="password_capital">PASSWORD</string>
-    <string name="password">Password</string>
-    <string name="log_out_capital">LOG OUT</string>
-    <string name="log_out">Log Out</string>
-    <string name="timeline">Timeline</string>
-
-    <string name="landmark">Landmark</string>
-    <string name="VisitedPlaces">VisitedPlaces</string>
-    <string name="MyPlaces">MyPlaces</string>
-    <string name="change_password">Change Password</string>
-    <string name="current_password">Current Password</string>
-    <string name="new_password">New Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="submit">Submit</string>
-
-    <string name="history">History</string>
-
-    // Settings Layout
-    <string name="settings">Settings</string>
-    <string name="sultan_ahmed_mosque" translatable="false">Sultan Ahmed Mosque</string>
-    <string name="search_cities">Search Cities</string>
-    <string name="search_places">Search Places</string>
-    <string name="cities">Cities</string>
-    <string name="account">Account</string>
-    <string name="location">Location</string>
-    <string name="notification">Notification</string>
-    <string name="account_caps">ACCOUNT</string>
-    <string name="no_landmark_selected">No Landmark Selected</string>
     <string name="address">Address:</string>
     <string name="number">Number:</string>
     <string name="website">Website:</string>
+
+    <string name="language">Language</string>
+
+    <string name="settings">Settings</string>
+    <string name="log_out_capital">LOG OUT</string>
+    <string name="log_out">Log Out</string>
+    <string name="account_caps">ACCOUNT</string>
+    <string name="notification">Notification</string>
+    <string name="account">Account</string>
+    <string name="location">Location</string>
+
+    <string name="timeline">Timeline</string>
+    <string name="landmark">Landmark</string>
+    <string name="cities">Cities</string>
+
+    <string name="search_cities">Search Cities</string>
+    <string name="search_places">Search Places</string>
+
+    <string name="date_visited">Date Visited</string>
+    <string name="landmarks">Landmarks</string>
+    <string name="map">Map</string>
+
+    <string name="city">City</string>
+
     <string name="starting_point">Starting Point</string>
     <string name="distance">Distance</string>
     <string name="duration">Duration</string>
     <string name="mode">Mode</string>
-    <string name="date_visited">Date Visited</string>
-    <string name="landmarks">Landmarks</string>
-    <string name="map">Map</string>
     <string name="open">Open</string>
     <string name="close">Closed</string>
+
+    <string name="no_landmark_selected">No Landmark Selected</string>
     <string name="no_infotmation_available">No Information Available</string>
-    <string name="city">City</string>
     <string name="search_for_a_city_to_explore">Search For a City to Explore</string>
 
 </resources>

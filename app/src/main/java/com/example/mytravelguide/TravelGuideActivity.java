@@ -21,6 +21,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -132,7 +134,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class TravelGuideActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback, View.OnClickListener {
+public class TravelGuideActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback, View.OnClickListener, LocationListener {
 
     private static final String TAG = "TravelGuideActivity";
     private static final String STARTINGPOINTREQUEST = "STARTINGPOINTREQUEST";
@@ -303,18 +305,18 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
 
         walkingImageView.setOnClickListener(v -> {
-            if(searchStartingPointEditText.getHint().equals("Starting Point")){
+            if (searchStartingPointEditText.getHint().equals("Starting Point")) {
                 Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 setJourneyMode("walking");
                 journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.hiking_black));
             }
         });
 
         cycleImageView.setOnClickListener(v -> {
-            if(searchStartingPointEditText.getHint().equals("Starting Point")){
+            if (searchStartingPointEditText.getHint().equals("Starting Point")) {
                 Toast.makeText(this, "Select Starting Point", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 setJourneyMode("bicycling");
                 journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.man_cycling_black));
             }
@@ -380,7 +382,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     private void initializeLocations() {
         location1 = new MarkerOptions().position(new LatLng(48.8566, 2.3522)).title("Location 1");
-        location2 = new MarkerOptions().position(new LatLng(pref.getFloat("LandmarkLat", (float) 27.667491), pref.getFloat("LandmarkLng", (float) 85.3208583))).title("Location 2");
+        location2 = new MarkerOptions().position(new LatLng(pref.getFloat("LandmarkLat", (float) 0.0), pref.getFloat("LandmarkLng", (float) 0.0))).title("Location 2");
     }
 
     private void setUpMapFragment() {
@@ -432,7 +434,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.clear();
         mGoogleMap.addMarker(location2);
         mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
-        mGoogleMap.setMaxZoomPreference(12);
+        mGoogleMap.setMaxZoomPreference(15);
         mGoogleMap.setMinZoomPreference(12);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location2.getPosition()));
         durationTextView.setText("");
@@ -550,6 +552,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
                 landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
             } else {
+                open_closedTextView.setVisibility(View.VISIBLE);
                 open_closedTextView.setText(getResources().getString(R.string.open));
             }
 
@@ -596,8 +599,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
 
             if (pref.getString("LandmarkOpenClosed", "Opened").contains("Closed")) {
+                open_closedTextView.setVisibility(View.VISIBLE);
                 open_closedTextView.setText(getResources().getString(R.string.close));
             } else {
+                open_closedTextView.setVisibility(View.VISIBLE);
                 open_closedTextView.setText(getResources().getString(R.string.open));
             }
 
@@ -798,6 +803,30 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
+            mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Your Location"));
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }

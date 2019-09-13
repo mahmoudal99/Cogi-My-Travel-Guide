@@ -630,6 +630,7 @@
                                 android:layout_marginBottom="21dp"
                                 android:gravity="center_horizontal"
                                 android:text="20 mins"
+                                android:visibility="invisible"
                                 android:textColor="@color/black"
                                 android:textSize="24sp"
                                 app:fontFamily="@font/rancho" />

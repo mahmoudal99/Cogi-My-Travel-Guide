@@ -147,8 +147,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void setUpWidgets() {
         backArrow.setOnClickListener(v -> {
-            Intent backIntent = new Intent(ExploreActivity.this, HomePageActivity.class);
-            startActivity(backIntent);
+//            Intent backIntent = new Intent(ExploreActivity.this, HomePageActivity.class);
+//            startActivity(backIntent);
+            test();
         });
 
         searchImageView.setOnClickListener(v -> toggleSearchWidgets(searchEditText.getVisibility()));
@@ -253,6 +254,12 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+    public void test() {
+        String[] types = {PALACE, TOWER, CASTLE, TOURISTATTRACTION, ARCHAELOGICALSITE, MOSQUE, TEMPLE, CHURCH, SYNAGOGUE};
+        String getPlacesInCityURL = "https://localhost:3000/cities/Berlin";
+        Request cityLandmarksRequest = new Request.Builder().url(getPlacesInCityURL).header("content-type", "application/html").build();
+        httpClientCall(cityLandmarksRequest, "GGGG");
+    }
 
     private void landmarksInCity(List<String> landmarks) {
         for (String landmark : landmarks) {

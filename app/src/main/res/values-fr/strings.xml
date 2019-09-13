@@ -1,100 +1,48 @@
 <resources>
     <string name="app_name">My Travel Guide</string>
 
-    <string name="logo">Logo</string>
-    <string name="travel_guide">Guide de voyage</string>
+    <string name="near_by">À proximité par endroits</string>
 
-    // Sign In Strings
-    <string name="Email">Email</string>
-    <string name="Password">Mot de passe</string>
-    <string name="Login">S\'identifier</string>
-    <string name="CreateAccount">Créer un compte</string>
-    <string name="ContactUs">Contactez nous</string>
-    <string name="auth_failed">Email ou mot de passe incorrect</string>
+    <string name="information">renseignements</string>
+    <string name="opening_hours">heures:</string>
+    <string name="price">prix:</string>
+    <string name="rating">classement:</string>
+    <string name="address">adresse:</string>
+    <string name="number">nombre:</string>
+    <string name="website">site internet:</string>
 
-    // Sign Up
-    <string name="FirstName">First Name</string>
-    <string name="Surname">Surname</string>
-    <string name="SignUp">Sign Up</string>
+    <string name="language">langage</string>
 
-    // Continents
-    <string name="Africa">Afrique</string>
-    <string name="America">Amérique</string>
-    <string name="Europe">L\'Europe</string>
-    <string name="Asia">Asie</string>
+    <string name="settings">Paramètres</string>
+    <string name="log_out_capital">fermer la session</string>
+    <string name="log_out">fermer la session</string>
+    <string name="account_caps">compte-rendu</string>
+    <string name="notification">notification</string>
+    <string name="account">compte-rendu</string>
+    <string name="location">position</string>
 
-    <string name="discover">The Giza Necropolis is the site on the Giza Plateau in Egypt that includes the Great Pyramid of Giza, the Pyramid of Khafre, and the Pyramid of Menkaure, along with their associated pyramid complexes and the Great Sphinx of Giza.</string>
-
-    // About
-    <string name="About">Sed ut perspiciatis unde omnis iste natus dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</string>
-
-    // Visited
-    <string name="Visited">A visité</string>
-
-    // Landmark
-    <string name="PlaceName">Name</string>
-
-    // Home Page Strings
-    <string name="planet">Planet</string>
-    <string name="Attractions">Attractions</string>
-    <string name="camera">Camera</string>
-
-    <string name="DateVisited">Date</string>
-    <string name="backarrow">Back Arrow</string>
-    <string name="place">Place</string>
-
-    <string name="choose_photo">Choose Photo</string>
-    <string name="my_location">My Location</string>
-    <string name="Attraction">Attraction</string>
-
-    <string name="near_by">Emplacements Proches</string>
-    <string name="information">Information</string>
-    <string name="opening_hours">Heures D\'ouverture:</string>
-    <string name="price">Prix:</string>
-    <string name="rating">Évaluation:</string>
-    <string name="about">About</string>
-    <string name="language">La langue</string>
-    <string name="password_capital">PASSWORD</string>
-    <string name="password">Password</string>
-    <string name="log_out_capital">CONNECTEZ - OUT</string>
-    <string name="log_out">Connectez - Out</string>
-    <string name="timeline">Ma Chronologie</string>
-
-    <string name="landmark">Bâtiment Historique</string>
-    <string name="VisitedPlaces">VisitedPlaces</string>
-    <string name="MyPlaces">MyPlaces</string>
-    <string name="change_password">Change Password</string>
-    <string name="current_password">Current Password</string>
-    <string name="new_password">New Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="submit">Submit</string>
-
-    <string name="history">L\'histoire</string>
-
-    // Settings Layout
-    <string name="settings">Réglages</string>
-    <string name="search_cities">Rechercher des villes</string>
+    <string name="timeline">calendrier</string>
+    <string name="landmark">point de repère</string>
     <string name="cities">Villes</string>
+
+    <string name="search_cities">Rechercher des villes</string>
     <string name="search_places">Rechercher des lieux</string>
-    <string name="account">Compte</string>
-    <string name="location">Emplacement</string>
-    <string name="notification">Notification</string>
-    <string name="account_caps">COMPTE</string>
-    <string name="no_landmark_selected">Aucun point de repère sélectionné</string>
-    <string name="address">Adresse:</string>
-    <string name="number">Nombre:</string>
-    <string name="website">Site Internet:</string>
-    <string name="starting_point">Starting Point</string>
-    <string name="distance">Distance</string>
-    <string name="duration">Durée</string>
-    <string name="mode">Mode</string>
+
     <string name="date_visited">Date de visite</string>
     <string name="landmarks">Repères</string>
-    <string name="map">Carte</string>
-    <string name="open">Ouvrir</string>
-    <string name="close">Fermé</string>
-    <string name="no_infotmation_available">Pas d\'information disponible</string>
-    <string name="city">Ville</string>
-    <string name="search_for_a_city_to_explore">Rechercher une ville à explorer</string>
+    <string name="map">carte</string>
+
+    <string name="city">ville</string>
+
+    <string name="starting_point">point de départ</string>
+    <string name="distance">distance</string>
+    <string name="duration">durée</string>
+    <string name="mode">mode</string>
+    <string name="open">garder l\'esprit ouvert</string>
+    <string name="close">fermé</string>
+
+    <string name="no_landmark_selected">Aucun repère sélectionné</string>
+    <string name="no_infotmation_available">Aucune information disponible</string>
+    <string name="search_for_a_city_to_explore">Recherche d\'une ville à explorer</string>
 
 </resources>
