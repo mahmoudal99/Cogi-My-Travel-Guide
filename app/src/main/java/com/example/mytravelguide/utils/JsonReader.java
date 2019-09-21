@@ -91,4 +91,59 @@ public class JsonReader {
 
         return null;
     }
+
+    public List<String> getCityPopulationFromJson(String response){
+        JSONObject populationJsonData = null;
+        List<String> cityInformation = new ArrayList<>();
+        try {
+            populationJsonData = new JSONObject(response);
+            if(populationJsonData.toString().contains("landmarks")){
+                cityInformation.add("null");
+                cityInformation.add(populationJsonData.get("landmarks").toString());
+                return cityInformation;
+            }else {
+                Log.d("MOMOMOM", "NULL");
+                cityInformation.add(populationJsonData.get("population").toString());
+                cityInformation.add("null");
+                return cityInformation;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

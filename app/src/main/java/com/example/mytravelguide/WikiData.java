@@ -35,8 +35,8 @@ public class WikiData {
 
     public WikiData() { }
 
-    public Request getCityDataId(String cityName) {
-        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=500000";
+    public Request getCityDataId(String cityName, String population) {
+        String url = "https://wft-geo-db.p.mashape.com/v1/geo/cities?namePrefix=" + cityName + "&minPopulation=" + population;
         Request cityDataIDRequest = new Request.Builder()
                 .url(url)
                 .header("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com")
@@ -45,6 +45,11 @@ public class WikiData {
         return cityDataIDRequest;
     }
 
+    public Request callCityDataApi(String cityName) {
+        String getPlacesInCityURL = "https://my-travel-guide-f9642.appspot.com/cities/" + cityName;
+        Request cityPopulationRequest = new Request.Builder().url(getPlacesInCityURL).header("content-type", "application/html").build();
+        return cityPopulationRequest;
+    }
 
     public Request getCityLatLng(String cityJsonUrl) {
         Request cityLatLngRequest = new Request.Builder().url(cityJsonUrl).header("content-type", "application/html").build();

@@ -154,7 +154,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/timelinePageImageHeight"
                     android:layout_gravity="center|bottom"
-                    android:contentDescription="@string/planet"
                     android:src="@drawable/timeline" />
 
                 <TextView

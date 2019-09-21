@@ -26,7 +26,7 @@
             android:fontFamily="@font/rancho"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="@string/Attraction"
+            android:text="Attraction "
             android:textColor="@color/black"
             android:textSize="@dimen/_20sp"
             android:textStyle="bold"
