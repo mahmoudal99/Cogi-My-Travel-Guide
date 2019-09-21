@@ -44,8 +44,12 @@ public class HomePageActivity extends AppCompatActivity {
     private static int NUM_PAGES = 0;
     private ArrayList<ImageModel> imageModelArrayList;
 
-    private int[] myImageList = new int[]{R.drawable.sphinx, R.drawable.taj_mahal, R.drawable.petra, R.drawable.alhambra};
-    private String[] imageNames = new String[]{"Sphinx of Giza", "Taj Mahal", "Petra", "Alhambra"};
+    private String[] myImageList = new String[]{"https://images.unsplash.com/photo-1539650116574-8efeb43e2750?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjgzMjIyfQ",
+                                                "https://images.unsplash.com/photo-1542743408-218cc173cda0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjgzMjIyfQ",
+                                                "https://images.unsplash.com/photo-1501232060322-aa87215ab531?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjgzMjIyfQ",
+                                               "https://images.unsplash.com/photo-1503970999490-4404449dc349?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjgzMjIyfQ"};
+
+    private String[] imageNames = new String[]{"Giza Necropolis", "Jerusalem", "Petra", "Rome"};
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override

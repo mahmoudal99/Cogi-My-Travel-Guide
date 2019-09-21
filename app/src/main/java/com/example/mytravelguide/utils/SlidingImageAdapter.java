@@ -32,6 +32,7 @@ public class SlidingImageAdapter extends PagerAdapter {
     private LayoutInflater inflater;
     private Context context;
     private Button exploreButton;
+    private ImageProcessing imageProcessing;
 
 
     public SlidingImageAdapter(Context context, ArrayList<ImageModel> imageModelArrayList) {
@@ -61,8 +62,8 @@ public class SlidingImageAdapter extends PagerAdapter {
         final ImageView settingsImage = imageLayout.findViewById(R.id.settings);
         TextView landmarkName = imageLayout.findViewById(R.id.landmarkName);
         settingsImage.setOnClickListener(v -> context.startActivity(new Intent(context, SettingsActivity.class)));
-
-        imageView.setImageResource(imageModelArrayList.get(position).getImage_drawable());
+        imageProcessing = new ImageProcessing(context);
+        imageProcessing.new SetLandmarkImage(imageView).execute(imageModelArrayList.get(position).getImage_drawable());
         landmarkName.setText(imageModelArrayList.get(position).getImage_name());
 
         exploreButton.setOnClickListener(v -> {

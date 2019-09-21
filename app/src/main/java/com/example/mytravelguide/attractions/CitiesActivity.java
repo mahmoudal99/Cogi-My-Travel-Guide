@@ -550,6 +550,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onComplete(SearchResults results) {
                 String[] cityImageStrings = new String[4];
+                Log.d("CITYURL", results.getResults().get(1).getUrls().getRegular());
                 cityImageStrings[0] = results.getResults().get(0).getUrls().getRegular();
                 cityImageStrings[1] = results.getResults().get(1).getUrls().getRegular();
                 cityImageStrings[2] = results.getResults().get(2).getUrls().getRegular();
