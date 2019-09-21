@@ -199,6 +199,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private void init() {
         datePickerDialog = new DatePickerDialog(TravelGuideActivity.this);
         wikiData = new WikiData();
+        viewPager = findViewById(R.id.viewPager);
         okHttpClient = new OkHttpClient();
         context = TravelGuideActivity.this;
         noLandmarkSelected = findViewById(R.id.noLandmarkSelected);
@@ -552,14 +553,17 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         }
 
-
         if (place.getName().contains("Great Sphinx of Giza")) {
             if (place.getPhotoMetadatas() != null) {
                 GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY, TravelGuideActivity.this);
                 googlePlacesApi.setLandmarkImageWithBitmap(place.getPhotoMetadatas().get(0), landmarkImage);
+                landmarkImageCardView.setVisibility(View.VISIBLE);
+                viewPager.setVisibility(View.GONE);
             }
         } else {
             setLandmarkImage(place.getName());
+            landmarkImageCardView.setVisibility(View.GONE);
+            viewPager.setVisibility(View.VISIBLE);
         }
 
         updateMap(place);

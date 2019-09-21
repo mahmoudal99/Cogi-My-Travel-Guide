@@ -274,7 +274,15 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
                         jsonReader = new JsonReader();
                         JSONObject placeIDObject = jsonReader.getLandmarkPlaceIDFromJson(requestReponse);
                         try {
-                            openSelectedLandmark(placeIDObject.get("place_id").toString());
+                            if(placeIDObject != null){
+                                openSelectedLandmark(placeIDObject.get("place_id").toString());
+                            }else {
+                                runOnUiThread(() -> {
+                                    Toast.makeText(CitiesActivity.this, "Place Not Available", Toast.LENGTH_SHORT).show();
+                                });
+
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
