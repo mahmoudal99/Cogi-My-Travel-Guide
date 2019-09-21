@@ -5,11 +5,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.animation.ArgbEvaluator;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -19,41 +18,31 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.graphics.pdf.PdfDocument;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mytravelguide.attractions.ExploreActivity;
-import com.example.mytravelguide.models.AttractionObject;
-import com.example.mytravelguide.utils.CloudFirestore;
 import com.example.mytravelguide.utils.FetchURL;
-import com.example.mytravelguide.utils.FirebaseMethods;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.JsonReader;
 import com.example.mytravelguide.utils.Landmark;
-import com.example.mytravelguide.utils.NearByLocationsAdapter;
+import com.example.mytravelguide.utils.Model;
+import com.example.mytravelguide.utils.SwipeViewAdapter;
 import com.example.mytravelguide.utils.TaskLoadedCallback;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
@@ -66,23 +55,14 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.vision.L;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.api.client.util.IOUtils;
-import com.google.api.services.customsearch.model.Search;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmarkDetector;
-import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.models.SearchResults;
 import com.squareup.okhttp.Callback;
@@ -91,46 +71,20 @@ import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.commons.logging.LogFactory;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.Buffer;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -150,6 +104,12 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
     private LinearLayout tripInformationLinLayout, tripInformationLinLayout2;
     private EditText searchStartingPointEditText;
+
+    ViewPager viewPager;
+    SwipeViewAdapter adapter;
+    List<Model> models;
+    Integer[] colors = null;
+    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     // Variables
     private String landmarkNameString;
@@ -194,6 +154,42 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         supportMapFragment();
         loadPreviousLandmark();
         setUpFirebaseAuthentication();
+
+    }
+
+    private void createModels(String[] imageStrings) {
+        models = new ArrayList<>();
+        models.add(new Model(imageStrings[0]));
+        models.add(new Model(imageStrings[1]));
+        models.add(new Model(imageStrings[2]));
+        models.add(new Model(imageStrings[3]));
+        callSwipeViewAdapter();
+    }
+
+    private void callSwipeViewAdapter() {
+        adapter = new SwipeViewAdapter(models, this);
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(adapter);
+        viewPager.setPadding(130, 0, 130, 0);
+        setUpViewPager();
+    }
+
+    private void setUpViewPager() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d("SwipeViewPager", String.valueOf(position));
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d("SwipeViewPager", String.valueOf(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     private void getIncomingIntent() {
@@ -577,7 +573,12 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
             @Override
             public void onComplete(SearchResults results) {
-                imageProcessing.new SetLandmarkImage(landmarkImage).execute(results.getResults().get(0).getUrls().getRegular());
+                String[] landmarkImageStrings = new String[4];
+                landmarkImageStrings[0] = results.getResults().get(0).getUrls().getRegular();
+                landmarkImageStrings[1] = results.getResults().get(1).getUrls().getRegular();
+                landmarkImageStrings[2] = results.getResults().get(2).getUrls().getRegular();
+                landmarkImageStrings[3] = results.getResults().get(3).getUrls().getRegular();
+                createModels(landmarkImageStrings);
             }
 
             @Override

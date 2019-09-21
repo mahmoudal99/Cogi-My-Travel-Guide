@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
 
 
     public SearchAdapter(Context context, List<AttractionObject> contactList, LandmarkAdapterListener listener) {
-        Context context1 = context;
         this.listener = listener;
         this.contactList = contactList;
         this.contactListFiltered = contactList;
@@ -56,6 +57,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final AttractionObject attractionObject = contactListFiltered.get(position);
         holder.name.setText(attractionObject.getPlaceName());
+        Log.d("HEUIHIUDIU", attractionObject.getPlaceName());
     }
 
     @Override

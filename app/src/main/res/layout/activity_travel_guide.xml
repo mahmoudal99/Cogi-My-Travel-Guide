@@ -55,6 +55,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
                     android:padding="1dip"
+                    android:visibility="gone"
                     app:cardCornerRadius="8dp">
 
                     <ImageView
@@ -86,6 +87,16 @@
 
 
                 </androidx.cardview.widget.CardView>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:foregroundGravity="center"
+                    android:id="@+id/viewPager"
+                    android:layout_centerInParent="true"
+                    android:overScrollMode="never"
+                    android:clipToPadding="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+                </androidx.viewpager.widget.ViewPager>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/optionsTab"

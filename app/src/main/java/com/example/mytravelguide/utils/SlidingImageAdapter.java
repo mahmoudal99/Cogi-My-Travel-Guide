@@ -6,14 +6,17 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.mytravelguide.HomePageActivity;
 import com.example.mytravelguide.R;
+import com.example.mytravelguide.attractions.CitiesActivity;
 import com.example.mytravelguide.models.ImageModel;
 import com.example.mytravelguide.settings.SettingsActivity;
 
@@ -28,6 +31,7 @@ public class SlidingImageAdapter extends PagerAdapter {
     private ArrayList<ImageModel> imageModelArrayList;
     private LayoutInflater inflater;
     private Context context;
+    private Button exploreButton;
 
 
     public SlidingImageAdapter(Context context, ArrayList<ImageModel> imageModelArrayList) {
@@ -52,13 +56,21 @@ public class SlidingImageAdapter extends PagerAdapter {
         View imageLayout = inflater.inflate(R.layout.sliding_image_item, view, false);
 
         assert imageLayout != null;
-        final ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
+        final ImageView imageView = imageLayout.findViewById(R.id.image);
+        Button exploreButton = imageLayout.findViewById(R.id.exploreButton);
         final ImageView settingsImage = imageLayout.findViewById(R.id.settings);
         TextView landmarkName = imageLayout.findViewById(R.id.landmarkName);
         settingsImage.setOnClickListener(v -> context.startActivity(new Intent(context, SettingsActivity.class)));
 
         imageView.setImageResource(imageModelArrayList.get(position).getImage_drawable());
         landmarkName.setText(imageModelArrayList.get(position).getImage_name());
+
+        exploreButton.setOnClickListener(v -> {
+            Intent intent = new Intent(context, CitiesActivity.class);
+            intent.putExtra("cityName", imageModelArrayList.get(position).getImage_name());
+            context.startActivity(intent);
+            Toast.makeText(context, imageModelArrayList.get(position).getImage_name().toString(), Toast.LENGTH_SHORT).show();
+        });
 
         view.addView(imageLayout, 0);
 

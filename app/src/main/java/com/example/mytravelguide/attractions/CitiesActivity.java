@@ -50,8 +50,6 @@ import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.jena.atlas.json.JsonObject;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,13 +57,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.regex.Pattern;
 
-public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, SearchAdapter.LandmarkAdapterListener {
+public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallback, SearchAdapter.LandmarkAdapterListener {
 
     private static final String PALACE = "Q16560";
     private static final String TOWER = "Q12518";
@@ -87,7 +83,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private ImageView backArrow, searchImageView, cityImage, closeSearchArrow, blackSearchButton, noCityImage;
     private CardView mapCardView, searchBarCardView;
     private RecyclerView listView;
-    private TextView cityTextView, searchPlacesEditText;
+    private TextView cityTextView, searchPlacesEditText, noLandmarkSelected;
     private EditText searchEditText;
     private TabLayout tabLayout;
 
@@ -101,7 +97,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     GoogleMap mGoogleMap;
     WikiData wikiData;
     ImageProcessing imageProcessing;
-    SearchAdapter mAdapter = new SearchAdapter(ExploreActivity.this, landmarksArrayList, this);
+    SearchAdapter mAdapter = new SearchAdapter(CitiesActivity.this, landmarksArrayList, this);
 
     //Shared Preference
     SharedPreferences pref;
@@ -113,18 +109,24 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_explore);
         wikiData = new WikiData();
         isStoragePermissionGranted();
+
         okHttpClient = new OkHttpClient();
         init();
         toggleCityImageVisibility();
         setUpTabs();
         setUpWidgets();
         imageProcessing.loadImageFromStorage(cityImage);
+        handleIncomingIntent(cityTextView.getText().toString());
         supportMapFragment();
-
+        if(getIntent().hasExtra("cityName")){
+            String cityName = getIntent().getStringExtra("cityName");
+            handleIncomingIntent(cityName);
+        }
     }
 
     private void init() {
         tabLayout = findViewById(R.id.tab_layout);
+        noLandmarkSelected = findViewById(R.id.noLandmarkSelected);
         searchPlacesEditText = findViewById(R.id.searchPlacesEditText);
         searchBarCardView = findViewById(R.id.searchBarCardView);
         closeSearchArrow = findViewById(R.id.closeSearchArrow);
@@ -138,17 +140,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         searchEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         searchPlacesEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         searchImageView = findViewById(R.id.searchButton);
-        imageProcessing = new ImageProcessing(ExploreActivity.this);
+        imageProcessing = new ImageProcessing(CitiesActivity.this);
         cityImage = findViewById(R.id.cityImage);
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
         editor.apply();
     }
 
-
     private void setUpWidgets() {
         backArrow.setOnClickListener(v -> {
-            Intent backIntent = new Intent(ExploreActivity.this, HomePageActivity.class);
+            Intent backIntent = new Intent(CitiesActivity.this, HomePageActivity.class);
             startActivity(backIntent);
         });
 
@@ -256,26 +257,37 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void landmarksInCity(List<String> landmarks) {
+
         for (String landmark : landmarks) {
+            Log.d("LANDMARKS3", landmark);
             AttractionObject attractionObject = new AttractionObject();
             attractionObject.setPlaceName(landmark);
             if (Pattern.compile("[0-9]").matcher(landmark).find()) {
                 Log.d("Invalid Landmark", "Not added");
             } else {
+                Log.d("ISADDED ", "ADDED");
                 landmarksArrayList.add(attractionObject);
             }
         }
-        SearchAdapter mAdapter = new SearchAdapter(ExploreActivity.this, landmarksArrayList, this);
-        loadNearByLocations();
+        Log.d("ISADDED ", "Finished" +  landmarksArrayList.size());
+        listView = findViewById(R.id.landmarksInCity);
+        loadNearByLocations(mAdapter, landmarksArrayList);
     }
 
-    private void loadNearByLocations() {
+    private void loadNearByLocations(SearchAdapter adapter, List<AttractionObject> landmarksArrayList1) {
         runOnUiThread(() -> {
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            listView.setLayoutManager(mLayoutManager);
-            listView.setItemAnimator(new DefaultItemAnimator());
-            listView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+            if(landmarksArrayList1.size() == 0){
+                Log.d("HEUIHIUDIU", "REPLAY" + landmarksArrayList1.size());
+                handleIncomingIntent(cityTextView.getText().toString());
+            }else {
+                Log.d("HEUIHIUDIU", "ADAPTER" + landmarksArrayList1.size());
+                SearchAdapter mAdapter = new SearchAdapter(CitiesActivity.this, landmarksArrayList1, CitiesActivity.this);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(CitiesActivity.this);
+                listView.setLayoutManager(mLayoutManager);
+                listView.setAdapter(adapter);
+                mAdapter.notifyDataSetChanged();
+            }
+
         });
     }
 
@@ -310,12 +322,14 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
         if (cityInformationList.get(0).contains("null")) {
             // Load Landmarks
+            Log.d("LOADING", "Landmarks");
             String landmarksString = cityInformationList.get(1);
             landmarksArray = landmarksString.split(", ");
             arrayList.addAll(Arrays.asList(landmarksArray));
             landmarksInCity(arrayList);
         } else {
             // Get Population
+            Log.d("LOADING", "Population");
             if (cityInformationList.get(0).length() >= 7) {
                 String population = "1000000";
                 Request request = wikiData.getCityDataId(cityTextView.getText().toString(), population);
@@ -340,8 +354,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         mGoogleMap = googleMap;
         mGoogleMap.addMarker(new MarkerOptions().position(cityLatLng).title(cityTextView.getText().toString()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(cityLatLng));
-
-        mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
         mGoogleMap.setMaxZoomPreference(11);
         mGoogleMap.setMinZoomPreference(11);
     }
@@ -438,15 +450,40 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         backArrow.setVisibility(View.VISIBLE);
     }
 
+    private void handleIncomingIntent(String cityName){
+        Request request = wikiData.callCityDataApi(cityName);
+        httpClientCall(request, CITYPOPULATIONREQUEST);
+        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
+        if(cityName.contains("Petra")){
+            String url = googlePlacesApi.getPlacesByQuery(cityName + ", Jordan");
+            Request latLngReqiest = wikiData.getCityLatLng(url);
+            getCityLatLngFromJson(latLngReqiest);
+        }
+        editor.putString("CityName", cityName);
+        setCityImage(cityName);
+        cityTextView.setText(cityName);
+        runOnUiThread(() -> {
+            cityTextView.setVisibility(View.VISIBLE);
+            searchEditText.setVisibility(View.GONE);
+        });
+        noLandmarkSelected.setVisibility(View.GONE);
+        landmarksArrayList.clear();
+    }
+
     private void handleCitySearchResult(String cityName) {
         closeSearchArrow.setVisibility(View.GONE);
         backArrow.setVisibility(View.VISIBLE);
         Request request = wikiData.callCityDataApi(cityName);
         httpClientCall(request, CITYPOPULATIONREQUEST);
-        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", ExploreActivity.this);
+        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
         String url = googlePlacesApi.getPlacesByQuery(cityName);
-        Request latLngReqiest = wikiData.getCityLatLng(url);
-        getCityLatLngFromJson(latLngReqiest);
+        if(cityName.contains("Petra")){
+            setMapsLatLng(30.328, 35.444);
+        }else {
+            Request latLngReqiest = wikiData.getCityLatLng(url);
+            getCityLatLngFromJson(latLngReqiest);
+        }
+
         closeKeyboard();
         toggleCityImageVisibility();
         editor.putString("CityName", cityName);
@@ -455,6 +492,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             cityTextView.setVisibility(View.VISIBLE);
             searchEditText.setVisibility(View.GONE);
         });
+        noLandmarkSelected.setVisibility(View.GONE);
         landmarksArrayList.clear();
     }
 
@@ -463,7 +501,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
             @Override
             public void onComplete(SearchResults results) {
-                imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(0).getUrls().getRegular());
+                imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(1).getUrls().getRegular());
             }
 
             @Override
@@ -481,13 +519,13 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     // Landmark Selected
     @Override
     public void onLandmarkSelected(AttractionObject place) {
-        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", ExploreActivity.this);
+        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
         Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName()));
         httpClientCall(request, LANDMARKIDREQUEST);
     }
 
     public void openSelectedLandmark(String landmarkId) {
-        Intent intent = new Intent(ExploreActivity.this, TravelGuideActivity.class);
+        Intent intent = new Intent(CitiesActivity.this, TravelGuideActivity.class);
         intent.putExtra("landmarkID", landmarkId);
         startActivity(intent);
     }
