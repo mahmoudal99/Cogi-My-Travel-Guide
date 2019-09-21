@@ -33,7 +33,9 @@ import com.example.mytravelguide.models.AttractionObject;
 import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.JsonReader;
+import com.example.mytravelguide.utils.Model;
 import com.example.mytravelguide.utils.SearchAdapter;
+import com.example.mytravelguide.utils.SwipeViewAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -87,6 +89,9 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private EditText searchEditText;
     private TabLayout tabLayout;
 
+    ViewPager viewPager;
+    SwipeViewAdapter adapter;
+    List<Model> models;
 
     private OkHttpClient okHttpClient;
 
@@ -122,6 +127,41 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
             String cityName = getIntent().getStringExtra("cityName");
             handleIncomingIntent(cityName);
         }
+    }
+
+    private void createModels(String[] imageStrings) {
+        models = new ArrayList<>();
+        models.add(new Model(imageStrings[0]));
+        models.add(new Model(imageStrings[1]));
+        models.add(new Model(imageStrings[2]));
+        models.add(new Model(imageStrings[3]));
+        callSwipeViewAdapter();
+    }
+
+    private void callSwipeViewAdapter() {
+        adapter = new SwipeViewAdapter(models, this);
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(adapter);
+        viewPager.setPadding(130, 0, 130, 0);
+        setUpViewPager();
+    }
+
+    private void setUpViewPager() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d("SwipeViewPager", String.valueOf(position));
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d("SwipeViewPager", String.valueOf(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     private void init() {
@@ -501,7 +541,12 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
             @Override
             public void onComplete(SearchResults results) {
-                imageProcessing.new SetCityImage(cityImage).execute(results.getResults().get(1).getUrls().getRegular());
+                String[] cityImageStrings = new String[4];
+                cityImageStrings[0] = results.getResults().get(0).getUrls().getRegular();
+                cityImageStrings[1] = results.getResults().get(1).getUrls().getRegular();
+                cityImageStrings[2] = results.getResults().get(2).getUrls().getRegular();
+                cityImageStrings[3] = results.getResults().get(3).getUrls().getRegular();
+                createModels(cityImageStrings);
             }
 
             @Override

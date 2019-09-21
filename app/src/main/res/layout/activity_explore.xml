@@ -74,6 +74,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="220dp"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
@@ -110,6 +111,16 @@
                 android:textSize="26sp" />
 
         </androidx.cardview.widget.CardView>
+
+        <androidx.viewpager.widget.ViewPager
+            android:foregroundGravity="center"
+            android:id="@+id/viewPager"
+            android:layout_centerInParent="true"
+            android:overScrollMode="never"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+        </androidx.viewpager.widget.ViewPager>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

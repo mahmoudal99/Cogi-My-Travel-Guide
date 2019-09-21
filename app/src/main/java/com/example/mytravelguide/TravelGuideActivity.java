@@ -108,8 +108,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     ViewPager viewPager;
     SwipeViewAdapter adapter;
     List<Model> models;
-    Integer[] colors = null;
-    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     // Variables
     private String landmarkNameString;
@@ -138,7 +136,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     // Dialog
     DatePickerDialog datePickerDialog;
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    private int mYear, mMonth, mDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
