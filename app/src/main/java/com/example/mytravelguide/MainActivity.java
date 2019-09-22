@@ -7,9 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import com.example.mytravelguide.authentication.SignInActivity;
 
@@ -18,23 +21,16 @@ public class MainActivity extends AppCompatActivity {
     ImageView companyLogo;
     Animation fromTopAnimation;
     SharedPreferences sharedPreferences;
-
+    String path = "android.resource://" + "com.example.mytravelguide" + "/" + R.raw.easy_ease;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        setUpAnimation();
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        startAnimation();
+        loadActivity();
     }
 
-    private void setUpAnimation() {
-        companyLogo = findViewById(R.id.company_logo);
-        fromTopAnimation = AnimationUtils.loadAnimation(this, R.anim.fromtop);
-        companyLogo.setAnimation(fromTopAnimation);
-    }
 
     private void openSignInPage() {
         Intent intent = new Intent(MainActivity.this, SignInActivity.class);
@@ -43,12 +39,18 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void startAnimation() {
+    private void loadActivity() {
 
         if (!sharedPreferences.getBoolean("animationLoaded", false)) {
 
             Handler handler = new Handler();
             handler.postDelayed(this::openSignInPage, 10000);
+
+            VideoView mVideoView = findViewById(R.id.videoViewRelative);
+            mVideoView.setVideoPath(path);
+            mVideoView.setMediaController(new MediaController(this));
+            mVideoView.requestFocus();
+            mVideoView.start();
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("animationLoaded", true);
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             openSignInPage();
         }
     }
+
 }
 
 

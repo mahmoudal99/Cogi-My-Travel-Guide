@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/MainBlue"
     android:orientation="vertical">
 
+    <VideoView android:id="@+id/videoViewRelative"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    </VideoView>
+
     <ImageView
         android:id="@+id/company_logo"
-        android:layout_width="@dimen/LogoWidth"
+        android:layout_width="100dp"
         android:layout_height="@dimen/LogoHeight"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/LogoMarginTop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-40dp"
         android:src="@drawable/company_logo" />
 
-</LinearLayout>
+</RelativeLayout>
