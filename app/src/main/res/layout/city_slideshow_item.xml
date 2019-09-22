@@ -18,7 +18,6 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:src="@drawable/tourist9"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 android:layout_centerVertical="true"

@@ -100,11 +100,13 @@ public class JsonReader {
             if(populationJsonData.toString().contains("landmarks")){
                 cityInformation.add("null");
                 cityInformation.add(populationJsonData.get("landmarks").toString());
+                cityInformation.add(populationJsonData.get("country").toString());
                 return cityInformation;
             }else {
                 Log.d("MOMOMOM", "NULL");
                 cityInformation.add(populationJsonData.get("population").toString());
                 cityInformation.add("null");
+                cityInformation.add(populationJsonData.get("country").toString());
                 return cityInformation;
             }
         }catch (JSONException e){

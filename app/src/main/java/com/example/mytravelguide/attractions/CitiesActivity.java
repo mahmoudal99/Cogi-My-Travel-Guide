@@ -121,11 +121,13 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         setUpTabs();
         setUpWidgets();
         imageProcessing.loadImageFromStorage(cityImage);
-        handleIncomingIntent(cityTextView.getText().toString());
+
         supportMapFragment();
-        if(getIntent().hasExtra("cityName")){
+        if (getIntent().hasExtra("cityName")) {
             String cityName = getIntent().getStringExtra("cityName");
             handleIncomingIntent(cityName);
+        } else {
+            handleIncomingIntent(cityTextView.getText().toString());
         }
     }
 
@@ -274,13 +276,12 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
                         jsonReader = new JsonReader();
                         JSONObject placeIDObject = jsonReader.getLandmarkPlaceIDFromJson(requestReponse);
                         try {
-                            if(placeIDObject != null){
+                            if (placeIDObject != null) {
                                 openSelectedLandmark(placeIDObject.get("place_id").toString());
-                            }else {
+                            } else {
                                 runOnUiThread(() -> {
                                     Toast.makeText(CitiesActivity.this, "Place Not Available", Toast.LENGTH_SHORT).show();
                                 });
-
                             }
 
                         } catch (JSONException e) {
@@ -317,17 +318,17 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
                 landmarksArrayList.add(attractionObject);
             }
         }
-        Log.d("ISADDED ", "Finished" +  landmarksArrayList.size());
+        Log.d("ISADDED ", "Finished" + landmarksArrayList.size());
         listView = findViewById(R.id.landmarksInCity);
         loadNearByLocations(mAdapter, landmarksArrayList);
     }
 
     private void loadNearByLocations(SearchAdapter adapter, List<AttractionObject> landmarksArrayList1) {
         runOnUiThread(() -> {
-            if(landmarksArrayList1.size() == 0){
+            if (landmarksArrayList1.size() == 0) {
                 Log.d("HEUIHIUDIU", "REPLAY" + landmarksArrayList1.size());
                 handleIncomingIntent(cityTextView.getText().toString());
-            }else {
+            } else {
                 Log.d("HEUIHIUDIU", "ADAPTER" + landmarksArrayList1.size());
                 SearchAdapter mAdapter = new SearchAdapter(CitiesActivity.this, landmarksArrayList1, CitiesActivity.this);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(CitiesActivity.this);
@@ -370,14 +371,12 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
 
         if (cityInformationList.get(0).contains("null")) {
             // Load Landmarks
-            Log.d("LOADING", "Landmarks");
             String landmarksString = cityInformationList.get(1);
             landmarksArray = landmarksString.split(", ");
             arrayList.addAll(Arrays.asList(landmarksArray));
             landmarksInCity(arrayList);
         } else {
             // Get Population
-            Log.d("LOADING", "Population");
             if (cityInformationList.get(0).length() >= 7) {
                 String population = "1000000";
                 Request request = wikiData.getCityDataId(cityTextView.getText().toString(), population);
@@ -498,18 +497,34 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         backArrow.setVisibility(View.VISIBLE);
     }
 
-    private void handleIncomingIntent(String cityName){
+    private void handleIncomingIntent(String cityName) {
         Request request = wikiData.callCityDataApi(cityName);
         httpClientCall(request, CITYPOPULATIONREQUEST);
+        loadCity(cityName);
+    }
+
+    private void loadCity(String name) {
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
-        if(cityName.contains("Petra")){
-            String url = googlePlacesApi.getPlacesByQuery(cityName + ", Jordan");
+
+        editor.putString("CityName", name);
+        if(name.contains("Petra")){
+            setCityImage(name + ", Jordan");
+            String url = googlePlacesApi.getPlacesByQuery(name + ", Jordan");
+            Request latLngReqiest = wikiData.getCityLatLng(url);
+            getCityLatLngFromJson(latLngReqiest);
+        }else if (name.contains("Palermo")){
+            setCityImage(name + ", city");
+            String url = googlePlacesApi.getPlacesByQuery(name);
+            Request latLngReqiest = wikiData.getCityLatLng(url);
+            getCityLatLngFromJson(latLngReqiest);
+        }else {
+            setCityImage(name);
+            String url = googlePlacesApi.getPlacesByQuery(name);
             Request latLngReqiest = wikiData.getCityLatLng(url);
             getCityLatLngFromJson(latLngReqiest);
         }
-        editor.putString("CityName", cityName);
-        setCityImage(cityName);
-        cityTextView.setText(cityName);
+
+        cityTextView.setText(name);
         runOnUiThread(() -> {
             cityTextView.setVisibility(View.VISIBLE);
             searchEditText.setVisibility(View.GONE);
@@ -523,25 +538,9 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         backArrow.setVisibility(View.VISIBLE);
         Request request = wikiData.callCityDataApi(cityName);
         httpClientCall(request, CITYPOPULATIONREQUEST);
-        GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
-        String url = googlePlacesApi.getPlacesByQuery(cityName);
-        if(cityName.contains("Petra")){
-            setMapsLatLng(30.328, 35.444);
-        }else {
-            Request latLngReqiest = wikiData.getCityLatLng(url);
-            getCityLatLngFromJson(latLngReqiest);
-        }
-
+        loadCity(cityName);
         closeKeyboard();
         toggleCityImageVisibility();
-        editor.putString("CityName", cityName);
-        setCityImage(cityName);
-        runOnUiThread(() -> {
-            cityTextView.setVisibility(View.VISIBLE);
-            searchEditText.setVisibility(View.GONE);
-        });
-        noLandmarkSelected.setVisibility(View.GONE);
-        landmarksArrayList.clear();
     }
 
     private void setCityImage(String cityName) {
@@ -574,7 +573,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onLandmarkSelected(AttractionObject place) {
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
-        Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName()));
+        Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName() + "%20" + cityTextView.getText().toString()));
         httpClientCall(request, LANDMARKIDREQUEST);
     }
 

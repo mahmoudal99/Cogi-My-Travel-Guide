@@ -41,6 +41,8 @@ import com.example.mytravelguide.utils.GooglePlacesApi;
 import com.example.mytravelguide.utils.ImageProcessing;
 import com.example.mytravelguide.utils.JsonReader;
 import com.example.mytravelguide.utils.Landmark;
+import com.example.mytravelguide.utils.LandmarkSwipeModel;
+import com.example.mytravelguide.utils.LandmarkSwipeViewAdapter;
 import com.example.mytravelguide.utils.Model;
 import com.example.mytravelguide.utils.SwipeViewAdapter;
 import com.example.mytravelguide.utils.TaskLoadedCallback;
@@ -56,6 +58,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -106,8 +109,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private EditText searchStartingPointEditText;
 
     ViewPager viewPager;
-    SwipeViewAdapter adapter;
-    List<Model> models;
+    LandmarkSwipeViewAdapter adapter;
+    List<LandmarkSwipeModel> models;
 
     // Variables
     private String landmarkNameString;
@@ -155,17 +158,17 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     }
 
-    private void createModels(String[] imageStrings) {
+    private void createModels(PhotoMetadata[] imageStrings) {
         models = new ArrayList<>();
-        models.add(new Model(imageStrings[0]));
-        models.add(new Model(imageStrings[1]));
-        models.add(new Model(imageStrings[2]));
-        models.add(new Model(imageStrings[3]));
+        models.add(new LandmarkSwipeModel(imageStrings[0]));
+        models.add(new LandmarkSwipeModel(imageStrings[1]));
+        models.add(new LandmarkSwipeModel(imageStrings[2]));
+        models.add(new LandmarkSwipeModel(imageStrings[3]));
         callSwipeViewAdapter();
     }
 
     private void callSwipeViewAdapter() {
-        adapter = new SwipeViewAdapter(models, this);
+        adapter = new LandmarkSwipeViewAdapter(models, this);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
         viewPager.setPadding(130, 0, 130, 0);
@@ -282,10 +285,12 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         mapImageView.setOnClickListener(v -> {
             showMapWidgets();
+            viewPager.setVisibility(View.GONE);
         });
 
         informationImageView.setOnClickListener(v -> {
             showInformationWidgets();
+            viewPager.setVisibility(View.VISIBLE);
         });
 
 
@@ -553,15 +558,25 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         }
 
-        if (place.getName().contains("Great Sphinx of Giza")) {
-            if (place.getPhotoMetadatas() != null) {
-                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY, TravelGuideActivity.this);
-                googlePlacesApi.setLandmarkImageWithBitmap(place.getPhotoMetadatas().get(0), landmarkImage);
-                landmarkImageCardView.setVisibility(View.VISIBLE);
-                viewPager.setVisibility(View.GONE);
-            }
-        } else {
-            setLandmarkImage(place.getName());
+//        if (place.getName().contains("Great Sphinx of Giza")) {
+//            if (place.getPhotoMetadatas() != null) {
+//                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY, TravelGuideActivity.this);
+//                googlePlacesApi.setLandmarkImageWithBitmap(place.getPhotoMetadatas().get(0), landmarkImage);
+//                landmarkImageCardView.setVisibility(View.VISIBLE);
+//                viewPager.setVisibility(View.GONE);
+//            }
+//        } else {
+//            setLandmarkImage(place.getPhotoMetadatas());
+//            Log.d("METADATA1", place.getPhotoMetadatas().get(0).toString() +
+//                    place.getPhotoMetadatas().get(1).toString() + place.getPhotoMetadatas().get(2));
+//            landmarkImageCardView.setVisibility(View.GONE);
+//            viewPager.setVisibility(View.VISIBLE);
+//        }
+
+        if (place.getPhotoMetadatas() != null) {
+            setLandmarkImage(place.getPhotoMetadatas());
+            Log.d("METADATA1", place.getPhotoMetadatas().get(0).toString() +
+                    place.getPhotoMetadatas().get(1).toString() + place.getPhotoMetadatas().get(2));
             landmarkImageCardView.setVisibility(View.GONE);
             viewPager.setVisibility(View.VISIBLE);
         }
@@ -569,26 +584,13 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         updateMap(place);
     }
 
-    private void setLandmarkImage(String cityName) {
-
-        Unsplash unsplash = new Unsplash("73a58cad473ac4376a1ed2c4f27cfeb08cfa77e8492f4cdfc2814085794d6100");
-        unsplash.searchPhotos(cityName, new Unsplash.OnSearchCompleteListener() {
-            @Override
-            public void onComplete(SearchResults results) {
-                String[] landmarkImageStrings = new String[4];
-                landmarkImageStrings[0] = results.getResults().get(0).getUrls().getRegular();
-                landmarkImageStrings[1] = results.getResults().get(1).getUrls().getRegular();
-                landmarkImageStrings[2] = results.getResults().get(2).getUrls().getRegular();
-                landmarkImageStrings[3] = results.getResults().get(3).getUrls().getRegular();
-                createModels(landmarkImageStrings);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.d("Unsplash Error", error);
-            }
-        });
-
+    private void setLandmarkImage(List<PhotoMetadata> photoMetadataList) {
+        PhotoMetadata[] landmarkImageStrings = new PhotoMetadata[4];
+        landmarkImageStrings[0] = photoMetadataList.get(0);
+        landmarkImageStrings[1] = photoMetadataList.get(1);
+        landmarkImageStrings[2] = photoMetadataList.get(2);
+        landmarkImageStrings[3] = photoMetadataList.get(3);
+        createModels(landmarkImageStrings);
     }
 
     private void loadPreviousLandmark() {
