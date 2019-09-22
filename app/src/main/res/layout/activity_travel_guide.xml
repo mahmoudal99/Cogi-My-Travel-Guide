@@ -21,6 +21,7 @@
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:src="@drawable/back_arrow_black" />
 
             <TextView
@@ -391,6 +392,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/linearLayoutMode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"

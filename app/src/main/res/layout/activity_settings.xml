@@ -32,7 +32,7 @@
                 android:text="@string/settings"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_28sp"
-                app:fontFamily="@font/rancho" />
+                app:fontFamily="@font/pompiere" />
         </RelativeLayout>
 
 

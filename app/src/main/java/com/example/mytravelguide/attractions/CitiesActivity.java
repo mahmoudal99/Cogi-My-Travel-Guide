@@ -113,7 +113,6 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
         wikiData = new WikiData();
-        isStoragePermissionGranted();
 
         okHttpClient = new OkHttpClient();
         init();
@@ -196,6 +195,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         });
 
         searchImageView.setOnClickListener(v -> toggleSearchWidgets(searchEditText.getVisibility()));
+        searchPlacesEditText.setHint("Search Places in " + cityTextView.getText().toString());
 
         closeSearchArrow.setOnClickListener(v -> {
             if (closeSearchArrow.getVisibility() == View.VISIBLE) {
@@ -224,7 +224,12 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         searchPlacesEditText.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 mAdapter.getFilter().filter(searchPlacesEditText.getText().toString());
-                closeKeyboard();
+                if(landmarksArrayList.contains(searchPlacesEditText.getText().toString())){
+                    Log.d("SEARCHTING", "yes");
+                }else {
+                    Log.d("SEARCHTING", "no");
+                }
+//                closeKeyboard();
             }
             return false;
         });
@@ -308,17 +313,14 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private void landmarksInCity(List<String> landmarks) {
 
         for (String landmark : landmarks) {
-            Log.d("LANDMARKS3", landmark);
             AttractionObject attractionObject = new AttractionObject();
             attractionObject.setPlaceName(landmark);
             if (Pattern.compile("[0-9]").matcher(landmark).find()) {
                 Log.d("Invalid Landmark", "Not added");
             } else {
-                Log.d("ISADDED ", "ADDED");
                 landmarksArrayList.add(attractionObject);
             }
         }
-        Log.d("ISADDED ", "Finished" + landmarksArrayList.size());
         listView = findViewById(R.id.landmarksInCity);
         loadNearByLocations(mAdapter, landmarksArrayList);
     }
@@ -326,10 +328,8 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private void loadNearByLocations(SearchAdapter adapter, List<AttractionObject> landmarksArrayList1) {
         runOnUiThread(() -> {
             if (landmarksArrayList1.size() == 0) {
-                Log.d("HEUIHIUDIU", "REPLAY" + landmarksArrayList1.size());
                 handleIncomingIntent(cityTextView.getText().toString());
             } else {
-                Log.d("HEUIHIUDIU", "ADAPTER" + landmarksArrayList1.size());
                 SearchAdapter mAdapter = new SearchAdapter(CitiesActivity.this, landmarksArrayList1, CitiesActivity.this);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(CitiesActivity.this);
                 listView.setLayoutManager(mLayoutManager);
@@ -339,6 +339,8 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
 
         });
     }
+
+
 
     // JSON Calls
     public void getCityLatLngFromJson(Request request) {
@@ -369,26 +371,32 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         List<String> arrayList = new ArrayList<>();
         List<String> cityInformationList = jsonReader.getCityPopulationFromJson(response);
 
-        if (cityInformationList.get(0).contains("null")) {
-            // Load Landmarks
-            String landmarksString = cityInformationList.get(1);
-            landmarksArray = landmarksString.split(", ");
-            arrayList.addAll(Arrays.asList(landmarksArray));
-            landmarksInCity(arrayList);
-        } else {
-            // Get Population
-            if (cityInformationList.get(0).length() >= 7) {
-                String population = "1000000";
-                Request request = wikiData.getCityDataId(cityTextView.getText().toString(), population);
-                httpClientCall(request, WIKIDATAREQUEST);
+        if(cityInformationList != null){
+            if (cityInformationList.get(0).contains("null")) {
+                // Load Landmarks
+                String landmarksString = cityInformationList.get(1);
+                landmarksArray = landmarksString.split(", ");
+                arrayList.addAll(Arrays.asList(landmarksArray));
+                landmarksInCity(arrayList);
             } else {
-                StringBuilder population = new StringBuilder(cityInformationList.get(0));
-                for (int i = 1; i < cityInformationList.get(0).length(); i++) {
-                    population.setCharAt(i, '0');
+                // Get Population
+                if (cityInformationList.get(0).length() >= 7) {
+                    String population = "1000000";
+                    Request request = wikiData.getCityDataId(cityTextView.getText().toString(), population);
+                    httpClientCall(request, WIKIDATAREQUEST);
+                } else {
+                    StringBuilder population = new StringBuilder(cityInformationList.get(0));
+                    for (int i = 1; i < cityInformationList.get(0).length(); i++) {
+                        population.setCharAt(i, '0');
+                    }
+                    Request request = wikiData.getCityDataId(cityTextView.getText().toString(), population.toString());
+                    httpClientCall(request, WIKIDATAREQUEST);
                 }
-                Request request = wikiData.getCityDataId(cityTextView.getText().toString(), population.toString());
-                httpClientCall(request, WIKIDATAREQUEST);
             }
+        }else {
+            runOnUiThread(() -> {
+                Toast.makeText(this, "City Not Available", Toast.LENGTH_SHORT).show();
+            });
         }
     }
 
@@ -498,7 +506,9 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void handleIncomingIntent(String cityName) {
+        cityName = cityName.substring(0,1).toUpperCase() + cityName.substring(1).toLowerCase();
         Request request = wikiData.callCityDataApi(cityName);
+        searchPlacesEditText.setHint("Search Places in " + cityName);
         httpClientCall(request, CITYPOPULATIONREQUEST);
         loadCity(cityName);
     }
@@ -507,17 +517,17 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
 
         editor.putString("CityName", name);
-        if(name.contains("Petra")){
+        if (name.contains("Petra")) {
             setCityImage(name + ", Jordan");
             String url = googlePlacesApi.getPlacesByQuery(name + ", Jordan");
             Request latLngReqiest = wikiData.getCityLatLng(url);
             getCityLatLngFromJson(latLngReqiest);
-        }else if (name.contains("Palermo")){
+        } else if (name.contains("Palermo") || name.contains("Amman") || name.contains("Granada")) {
             setCityImage(name + ", city");
             String url = googlePlacesApi.getPlacesByQuery(name);
             Request latLngReqiest = wikiData.getCityLatLng(url);
             getCityLatLngFromJson(latLngReqiest);
-        }else {
+        } else {
             setCityImage(name);
             String url = googlePlacesApi.getPlacesByQuery(name);
             Request latLngReqiest = wikiData.getCityLatLng(url);
@@ -534,12 +544,14 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void handleCitySearchResult(String cityName) {
+        cityName = cityName.substring(0,1).toUpperCase() + cityName.substring(1);
         closeSearchArrow.setVisibility(View.GONE);
         backArrow.setVisibility(View.VISIBLE);
         Request request = wikiData.callCityDataApi(cityName);
         httpClientCall(request, CITYPOPULATIONREQUEST);
         loadCity(cityName);
-        closeKeyboard();
+        searchPlacesEditText.setHint("Search Places in " + cityName);
+//        closeKeyboard();
         toggleCityImageVisibility();
     }
 
@@ -564,10 +576,10 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         });
     }
 
-    private void closeKeyboard() {
-        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-    }
+//    private void closeKeyboard() {
+//        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+//    }
 
     // Landmark Selected
     @Override
@@ -580,24 +592,8 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     public void openSelectedLandmark(String landmarkId) {
         Intent intent = new Intent(CitiesActivity.this, TravelGuideActivity.class);
         intent.putExtra("landmarkID", landmarkId);
+        intent.putExtra("city", cityTextView.getText().toString());
         startActivity(intent);
-    }
-
-    public boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.v("Permission", "Permission is granted");
-                return true;
-            } else {
-                Log.v("Permission", "Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        } else {
-            Log.v("Permission", "Permission is granted");
-            return true;
-        }
     }
 
 }

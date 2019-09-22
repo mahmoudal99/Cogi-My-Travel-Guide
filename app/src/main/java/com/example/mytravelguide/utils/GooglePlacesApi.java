@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mytravelguide.BuildConfig;
 import com.example.mytravelguide.TravelGuideActivity;
 import com.example.mytravelguide.models.AttractionObject;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.LocalTime;
 import com.google.android.libraries.places.api.model.OpeningHours;
@@ -175,16 +176,6 @@ public class GooglePlacesApi {
         return "No Information Available";
     }
 
-    public Place getPlaceById(String id) {
-        initializePlaceFields();
-        FetchPlaceRequest request = FetchPlaceRequest.builder(id, placeFields).build();
-        FetchPlaceResponse fetchPlaceResponse = placesClient.fetchPlace(request).getResult();
-        if (fetchPlaceResponse != null) {
-            Place place = fetchPlaceResponse.getPlace();
-            return place;
-        }
-        return null;
-    }
 
     public String getPlacesByQuery(String query, Param... extraParams) {
         try {

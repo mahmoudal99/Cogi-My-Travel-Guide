@@ -24,6 +24,7 @@
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:src="@drawable/back_arrow_black" />
 
             <ImageView
@@ -39,6 +40,10 @@
                 android:id="@+id/cityTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
                 android:fontFamily="@font/pompiere"
                 android:gravity="center_horizontal"
                 android:text="Giza Necropolis"
@@ -66,7 +71,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_gravity="end"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="20dp"
                 android:src="@drawable/search" />
 
         </RelativeLayout>
