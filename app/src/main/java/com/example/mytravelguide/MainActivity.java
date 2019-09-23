@@ -17,11 +17,9 @@ import android.widget.VideoView;
 import com.example.mytravelguide.authentication.SignInActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    ImageView companyLogo;
-    Animation fromTopAnimation;
     SharedPreferences sharedPreferences;
     String path = "android.resource://" + "com.example.mytravelguide" + "/" + R.raw.easy_ease;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         loadActivity();
     }
-
 
     private void openSignInPage() {
         Intent intent = new Intent(MainActivity.this, SignInActivity.class);
