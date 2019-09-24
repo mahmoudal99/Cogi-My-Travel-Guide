@@ -70,7 +70,14 @@ public class WikiData {
         try {
             JSONObject jsonObject = new JSONObject(respnse);
             JSONArray data = jsonObject.getJSONArray("data");
-            return data.getJSONObject(0).get("wikiDataId").toString();
+
+            try {
+                return data.getJSONObject(0).get("wikiDataId").toString();
+            }catch (JSONException e){
+                Log.d("JSONException", e.getMessage());
+            }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
