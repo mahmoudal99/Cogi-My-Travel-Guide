@@ -12,10 +12,9 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.cogi.mytravelguide.BuildConfig;
 import com.cogi.mytravelguide.R;
-import com.cogi.mytravelguide.TravelGuideActivity;
 import com.cogi.mytravelguide.utils.GooglePlacesApi;
 import com.cogi.mytravelguide.utils.ImageProcessing;
-import com.cogi.mytravelguide.utils.LandmarkSwipeModel;
+import com.cogi.mytravelguide.models.LandmarkSwipeModel;
 
 import java.util.List;
 

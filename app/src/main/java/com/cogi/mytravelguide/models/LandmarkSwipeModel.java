@@ -1,4 +1,4 @@
-package com.cogi.mytravelguide.utils;
+package com.cogi.mytravelguide.models;
 
 
 import com.google.android.libraries.places.api.model.PhotoMetadata;

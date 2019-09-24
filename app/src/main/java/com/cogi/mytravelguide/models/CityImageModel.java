@@ -1,11 +1,11 @@
-package com.cogi.mytravelguide.utils;
+package com.cogi.mytravelguide.models;
 
 
-public class Model {
+public class CityImageModel {
 
     private String image;
 
-    public Model(String image) {
+    public CityImageModel(String image) {
         this.image = image;
     }
 

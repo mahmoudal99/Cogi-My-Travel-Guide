@@ -14,23 +14,23 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.utils.ImageProcessing;
-import com.cogi.mytravelguide.utils.Model;
+import com.cogi.mytravelguide.models.CityImageModel;
 
 public class SwipeViewAdapter extends PagerAdapter {
 
-    private List<Model> models;
+    private List<CityImageModel> cityImageModels;
     private LayoutInflater layoutInflater;
     private Context context;
     private ImageProcessing imageProcessing;
 
-    public SwipeViewAdapter(List<Model> models, Context context) {
-        this.models = models;
+    public SwipeViewAdapter(List<CityImageModel> cityImageModels, Context context) {
+        this.cityImageModels = cityImageModels;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return models.size();
+        return cityImageModels.size();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SwipeViewAdapter extends PagerAdapter {
 
         imageView = view.findViewById(R.id.image);
         imageProcessing = new ImageProcessing(context);
-        imageProcessing.new SetLandmarkImage(imageView).execute(models.get(position).getImage());
+        imageProcessing.new SetLandmarkImage(imageView).execute(cityImageModels.get(position).getImage());
 
         container.addView(view, 0);
         return view;

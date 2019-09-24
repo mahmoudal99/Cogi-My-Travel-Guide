@@ -39,7 +39,7 @@ import com.cogi.mytravelguide.utils.GooglePlacesApi;
 import com.cogi.mytravelguide.utils.ImageProcessing;
 import com.cogi.mytravelguide.utils.JsonReader;
 import com.cogi.mytravelguide.utils.Landmark;
-import com.cogi.mytravelguide.utils.LandmarkSwipeModel;
+import com.cogi.mytravelguide.models.LandmarkSwipeModel;
 import com.cogi.mytravelguide.adapters.LandmarkSwipeViewAdapter;
 import com.cogi.mytravelguide.utils.TaskLoadedCallback;
 import com.google.android.gms.common.api.ApiException;

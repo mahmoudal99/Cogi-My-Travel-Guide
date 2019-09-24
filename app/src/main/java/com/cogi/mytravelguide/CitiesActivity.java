@@ -19,10 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cogi.mytravelguide.models.AttractionObject;
+import com.cogi.mytravelguide.models.CityImageModel;
 import com.cogi.mytravelguide.utils.GooglePlacesApi;
 import com.cogi.mytravelguide.utils.ImageProcessing;
 import com.cogi.mytravelguide.utils.JsonReader;
-import com.cogi.mytravelguide.utils.Model;
 import com.cogi.mytravelguide.adapters.SearchAdapter;
 import com.cogi.mytravelguide.adapters.SwipeViewAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -80,7 +80,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
 
     ViewPager viewPager;
     SwipeViewAdapter adapter;
-    List<Model> models;
+    List<CityImageModel> cityImageModels;
 
     private OkHttpClient okHttpClient;
 
@@ -120,16 +120,16 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void createModels(String[] imageStrings) {
-        models = new ArrayList<>();
-        models.add(new Model(imageStrings[0]));
-        models.add(new Model(imageStrings[1]));
-        models.add(new Model(imageStrings[2]));
-        models.add(new Model(imageStrings[3]));
+        cityImageModels = new ArrayList<>();
+        cityImageModels.add(new CityImageModel(imageStrings[0]));
+        cityImageModels.add(new CityImageModel(imageStrings[1]));
+        cityImageModels.add(new CityImageModel(imageStrings[2]));
+        cityImageModels.add(new CityImageModel(imageStrings[3]));
         callSwipeViewAdapter();
     }
 
     private void callSwipeViewAdapter() {
-        adapter = new SwipeViewAdapter(models, this);
+        adapter = new SwipeViewAdapter(cityImageModels, this);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
         viewPager.setPadding(130, 0, 130, 0);
