@@ -449,7 +449,7 @@
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="fill_parent"
-                        tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+                        tools:context="com.cogi.mapwithmarker.MapsMarkerActivity" />
 
                 </androidx.cardview.widget.CardView>
 

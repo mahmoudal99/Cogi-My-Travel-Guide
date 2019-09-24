@@ -1,4 +1,4 @@
-package com.example.mytravelguide;
+package com.cogi.mytravelguide;
 
 import android.content.Context;
 
@@ -16,12 +16,12 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class cogiInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.mytravelguide", appContext.getPackageName());
+        assertEquals("com.cogi.mytravelguide", appContext.getPackageName());
     }
 }

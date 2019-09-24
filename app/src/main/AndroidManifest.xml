@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.mytravelguide">
+    package="com.cogi.mytravelguide">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -16,8 +16,8 @@
     <dist:module dist:instant="true" />
 
     <application
-        android:hardwareAccelerated="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -27,10 +27,11 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4366992646548791~2487384199"/>
+            android:value="ca-app-pub-4366992646548791~2487384199" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -46,13 +47,28 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o" />
 
-        <activity android:name=".settings.SettingsActivity" />
-        <activity android:name=".TimelineActivity" />
-        <activity android:name=".TravelGuideActivity" />
-        <activity android:name=".attractions.CitiesActivity" />
-        <activity android:name=".HomePageActivity" />
-        <activity android:name=".authentication.SignInActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".TimelineActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TravelGuideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".attractions.CitiesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HomePageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".authentication.SignInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

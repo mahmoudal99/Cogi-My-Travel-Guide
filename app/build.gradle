@@ -5,7 +5,7 @@ com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = 
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.mytravelguide"
+        applicationId "com.cogi.mytravelguide"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
@@ -24,6 +24,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField('String', "APIKEY", GOOGLE_API_KEY)
         }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 
     packagingOptions {
