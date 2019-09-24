@@ -48,7 +48,7 @@
             android:value="AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o" />
 
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".SettingsActivity"
             android:screenOrientation="portrait" />
 
         <activity
@@ -58,7 +58,7 @@
             android:name=".TravelGuideActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".attractions.CitiesActivity"
+            android:name=".CitiesActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".HomePageActivity"

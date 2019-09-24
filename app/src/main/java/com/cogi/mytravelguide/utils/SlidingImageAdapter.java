@@ -14,11 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.cogi.mytravelguide.HomePageActivity;
 import com.cogi.mytravelguide.R;
-import com.cogi.mytravelguide.attractions.CitiesActivity;
+import com.cogi.mytravelguide.CitiesActivity;
 import com.cogi.mytravelguide.models.ImageModel;
-import com.cogi.mytravelguide.settings.SettingsActivity;
+import com.cogi.mytravelguide.SettingsActivity;
 
 import java.util.ArrayList;
 

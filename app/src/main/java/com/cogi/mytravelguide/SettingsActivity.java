@@ -1,4 +1,4 @@
-package com.cogi.mytravelguide.settings;
+package com.cogi.mytravelguide;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,20 +12,13 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cogi.mytravelguide.HomePageActivity;
-import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.utils.FirebaseMethods;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Locale;
-import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 

@@ -1,34 +1,23 @@
-package com.cogi.mytravelguide.attractions;
+package com.cogi.mytravelguide;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cogi.mytravelguide.HomePageActivity;
-import com.cogi.mytravelguide.R;
-import com.cogi.mytravelguide.TravelGuideActivity;
-import com.cogi.mytravelguide.WikiData;
 import com.cogi.mytravelguide.models.AttractionObject;
 import com.cogi.mytravelguide.utils.GooglePlacesApi;
 import com.cogi.mytravelguide.utils.ImageProcessing;
@@ -41,7 +30,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.tabs.TabLayout;
 import com.kc.unsplash.Unsplash;
@@ -346,7 +334,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         if (landmarksArrayList.size() > 0){
             loadNearByLocations(mAdapter, landmarksArrayList, true);
         }else {
-            Log.d("NO Landmarks", "no");
+            Log.d("No Landmarks", "Landmarks Not Available in this city");
         }
 
     }

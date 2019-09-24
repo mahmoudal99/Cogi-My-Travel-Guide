@@ -34,7 +34,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cogi.mytravelguide.attractions.CitiesActivity;
 import com.cogi.mytravelguide.utils.FetchURL;
 import com.cogi.mytravelguide.utils.GooglePlacesApi;
 import com.cogi.mytravelguide.utils.ImageProcessing;
@@ -296,7 +295,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         carImage.setOnClickListener(v -> {
             setJourneyMode("driving");
-            journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.sports_car_blacl));
+            journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.sports_car_black));
         });
 
 
