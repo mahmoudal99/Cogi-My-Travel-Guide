@@ -1,4 +1,4 @@
-package com.cogi.mytravelguide.utils;
+package com.cogi.mytravelguide.adapters;
 
 
 import android.content.Context;
@@ -7,23 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.cogi.mytravelguide.BuildConfig;
 import com.cogi.mytravelguide.R;
-import com.cogi.mytravelguide.TravelGuideActivity;
+import com.cogi.mytravelguide.utils.ImageProcessing;
+import com.cogi.mytravelguide.utils.Model;
 
-import java.util.List;
+public class SwipeViewAdapter extends PagerAdapter {
 
-public class LandmarkSwipeViewAdapter extends PagerAdapter {
-
-    private List<LandmarkSwipeModel> models;
+    private List<Model> models;
     private LayoutInflater layoutInflater;
     private Context context;
     private ImageProcessing imageProcessing;
 
-    public LandmarkSwipeViewAdapter(List<LandmarkSwipeModel> models, Context context) {
+    public SwipeViewAdapter(List<Model> models, Context context) {
         this.models = models;
         this.context = context;
     }
@@ -47,8 +47,8 @@ public class LandmarkSwipeViewAdapter extends PagerAdapter {
         ImageView imageView;
 
         imageView = view.findViewById(R.id.image);
-        GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY, context);
-        googlePlacesApi.setLandmarkImageWithBitmap(models.get(position).getImage(), imageView);
+        imageProcessing = new ImageProcessing(context);
+        imageProcessing.new SetLandmarkImage(imageView).execute(models.get(position).getImage());
 
         container.addView(view, 0);
         return view;

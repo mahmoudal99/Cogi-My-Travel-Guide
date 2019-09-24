@@ -1,8 +1,6 @@
-package com.cogi.mytravelguide.utils;
+package com.cogi.mytravelguide.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +10,9 @@ import android.widget.TextView;
 
 import com.cogi.mytravelguide.models.VisitedPlaceObject;
 import com.cogi.mytravelguide.R;
+import com.cogi.mytravelguide.utils.GooglePlacesApi;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;

@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.cogi.mytravelguide.models.VisitedPlaceObject;
-import com.cogi.mytravelguide.utils.TimelineAdapter;
+import com.cogi.mytravelguide.adapters.TimelineAdapter;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;

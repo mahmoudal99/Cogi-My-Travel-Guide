@@ -1,4 +1,4 @@
-package com.cogi.mytravelguide.utils;
+package com.cogi.mytravelguide.adapters;
 
 import android.content.Context;
 

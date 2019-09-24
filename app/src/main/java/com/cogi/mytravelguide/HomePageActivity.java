@@ -15,7 +15,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.cogi.mytravelguide.models.ImageModel;
-import com.cogi.mytravelguide.utils.SlidingImageAdapter;
+import com.cogi.mytravelguide.adapters.SlidingImageAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;

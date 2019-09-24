@@ -1,4 +1,4 @@
-package com.cogi.mytravelguide.utils;
+package com.cogi.mytravelguide.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.CitiesActivity;
 import com.cogi.mytravelguide.models.ImageModel;
 import com.cogi.mytravelguide.SettingsActivity;
+import com.cogi.mytravelguide.utils.ImageProcessing;
 
 import java.util.ArrayList;
 
