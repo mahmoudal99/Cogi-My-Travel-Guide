@@ -16,9 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cogi.mytravelguide.BuildConfig;
-import com.cogi.mytravelguide.TravelGuideActivity;
-import com.cogi.mytravelguide.models.AttractionObject;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.cogi.mytravelguide.models.LandmarkModel;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.LocalTime;
 import com.google.android.libraries.places.api.model.OpeningHours;
@@ -28,8 +26,6 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.maps.errors.ApiException;
@@ -55,7 +51,6 @@ public class GooglePlacesApi {
     private List<Place.Field> placeFields;
     private FindCurrentPlaceRequest findCurrentPlaceRequest;
     private FetchPhotoRequest fetchPhotoRequest;
-    public Place place;
 
     public GooglePlacesApi(Context context) {
         this.context = context;
@@ -79,11 +74,7 @@ public class GooglePlacesApi {
         findCurrentPlaceRequest = FindCurrentPlaceRequest.builder(placeFields).build();
     }
 
-    private void fetchPhotoRequest(PhotoMetadata photo) {
-
-    }
-
-    public ArrayList<AttractionObject> getNearByLocations(ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter) {
+    public ArrayList<LandmarkModel> getNearByLocations(ArrayList<LandmarkModel> attractionObjects, RecyclerView.Adapter mAdapter) {
         initializePlaceFields();
         findCurrentPlaceRequest();
 
@@ -102,18 +93,28 @@ public class GooglePlacesApi {
         return attractionObjects;
     }
 
-    private void loadPlaceLikelihoods(List<PlaceLikelihood> placeLikelihoods, ArrayList<AttractionObject> attractionObjects, RecyclerView.Adapter mAdapter) {
+    public String getNearbyPlaces(double lat, double lng, double radius) {
+        try {
+            String uri = buildUrl(METHOD_NEARBY_SEARCH, String.format("key=%s&location=%f,%f&radius=%f", apiKey, lat, lng, radius));
+            Log.d("LONELY1", uri);
+            return uri;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void loadPlaceLikelihoods(List<PlaceLikelihood> placeLikelihoods, ArrayList<LandmarkModel> attractionObjects, RecyclerView.Adapter adapter) {
         for (PlaceLikelihood placeLikelihood : placeLikelihoods) {
-            AttractionObject attractionObject = new AttractionObject();
-            attractionObject.placeName = placeLikelihood.getPlace().getName();
-            attractionObjects.add(attractionObject);
-            mAdapter.notifyDataSetChanged();
+            LandmarkModel landmarkModel = new LandmarkModel();
+            landmarkModel.placeName = placeLikelihood.getPlace().getName();
+            attractionObjects.add(landmarkModel);
+            adapter.notifyDataSetChanged();
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkPhoto(PhotoMetadata photo, RelativeLayout relativeLayout) {
-        fetchPhotoRequest(photo);
         placesClient.fetchPhoto(fetchPhotoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
             ImageProcessing imageProcessing = new ImageProcessing(context);
@@ -130,7 +131,6 @@ public class GooglePlacesApi {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setLandmarkPhoto(PhotoMetadata photo, ImageView imageView) {
-        fetchPhotoRequest(photo);
         placesClient.fetchPhoto(fetchPhotoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
             bitmap = fetchPhotoResponse.getBitmap();
             ImageProcessing imageProcessing = new ImageProcessing(context);
@@ -158,39 +158,9 @@ public class GooglePlacesApi {
         });
     }
 
-    public String placeOpeningHours(Place place) {
-        if (place.getOpeningHours() != null) {
-            OpeningHours openingHours;
-            openingHours = place.getOpeningHours();
-            List<Period> periods = Objects.requireNonNull(openingHours).getPeriods();
-            Period period = periods.get(0);
-            TimeOfWeek timeOfWeekOpen = period.getOpen();
-            TimeOfWeek timeOfWeekClose = period.getClose();
-            LocalTime localTimeOpen = Objects.requireNonNull(timeOfWeekOpen).getTime();
-            if (timeOfWeekClose != null) {
-                LocalTime localTimeClose = timeOfWeekClose.getTime();
-                return localTimeOpen.getHours() + ":00" + " - " + localTimeClose.getHours() + ":00";
-            }
-            return localTimeOpen.getHours() + ":00";
-        }
-        return "No Information Available";
-    }
-
-
     public String getPlacesByQuery(String query, Param... extraParams) {
         try {
             String uri = buildUrl(METHOD_TEXT_SEARCH, String.format("query=%s&key=%s", query, apiKey), extraParams);
-            return uri;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String getNearbyPlaces(double lat, double lng, double radius) {
-        try {
-            String uri = buildUrl(METHOD_NEARBY_SEARCH, String.format("key=%s&location=%f,%f&radius=%f", apiKey, lat, lng, radius));
-            Log.d("LONELY1", uri);
             return uri;
         } catch (Exception e) {
             e.printStackTrace();
@@ -224,10 +194,6 @@ public class GooglePlacesApi {
             return new Param(name);
         }
 
-        public Param value(Object value) {
-            this.value = value.toString();
-            return this;
-        }
     }
 }
 

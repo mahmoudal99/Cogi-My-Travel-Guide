@@ -19,9 +19,7 @@ import com.cogi.mytravelguide.models.CityImageModel;
 public class SwipeViewAdapter extends PagerAdapter {
 
     private List<CityImageModel> cityImageModels;
-    private LayoutInflater layoutInflater;
     private Context context;
-    private ImageProcessing imageProcessing;
 
     public SwipeViewAdapter(List<CityImageModel> cityImageModels, Context context) {
         this.cityImageModels = cityImageModels;
@@ -41,13 +39,12 @@ public class SwipeViewAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-        layoutInflater = LayoutInflater.from(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.city_slideshow_item, container, false);
 
         ImageView imageView;
-
         imageView = view.findViewById(R.id.image);
-        imageProcessing = new ImageProcessing(context);
+        ImageProcessing imageProcessing = new ImageProcessing(context);
         imageProcessing.new SetLandmarkImage(imageView).execute(cityImageModels.get(position).getImage());
 
         container.addView(view, 0);

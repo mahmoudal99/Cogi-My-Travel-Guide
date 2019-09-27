@@ -18,13 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cogi.mytravelguide.models.AttractionObject;
+import com.cogi.mytravelguide.models.LandmarkModel;
 import com.cogi.mytravelguide.models.CityImageModel;
 import com.cogi.mytravelguide.utils.GooglePlacesApi;
 import com.cogi.mytravelguide.utils.ImageProcessing;
 import com.cogi.mytravelguide.utils.JsonReader;
 import com.cogi.mytravelguide.adapters.SearchAdapter;
 import com.cogi.mytravelguide.adapters.SwipeViewAdapter;
+import com.cogi.mytravelguide.utils.WikiData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -85,13 +86,13 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private OkHttpClient okHttpClient;
 
     // Variables
-    List<AttractionObject> landmarksArrayList = new ArrayList<>();
+    List<LandmarkModel> landmarksArrayList = new ArrayList<>();
 
     // Classes
     GoogleMap mGoogleMap;
     WikiData wikiData;
     ImageProcessing imageProcessing;
-    SearchAdapter mAdapter = new SearchAdapter(CitiesActivity.this, landmarksArrayList, this);
+    SearchAdapter mAdapter = new SearchAdapter(landmarksArrayList, this);
 
     //Shared Preference
     SharedPreferences pref;
@@ -322,7 +323,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private void landmarksInCity(List<String> landmarks) {
 
         for (String landmark : landmarks) {
-            AttractionObject attractionObject = new AttractionObject();
+            LandmarkModel attractionObject = new LandmarkModel();
             attractionObject.setPlaceName(landmark);
             if (Pattern.compile("[0-9]").matcher(landmark).find()) {
                 Log.d("Invalid Landmark", "Not added");
@@ -331,22 +332,22 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         }
         listView = findViewById(R.id.landmarksInCity);
-        if (landmarksArrayList.size() > 0){
+        if (landmarksArrayList.size() > 0) {
             loadNearByLocations(mAdapter, landmarksArrayList, true);
-        }else {
+        } else {
             Log.d("No Landmarks", "Landmarks Not Available in this city");
         }
 
     }
 
-    private void loadNearByLocations(SearchAdapter adapter, List<AttractionObject> landmarksArrayList1, boolean hasLandmarks) {
+    private void loadNearByLocations(SearchAdapter adapter, List<LandmarkModel> landmarksArrayList1, boolean hasLandmarks) {
 
-        if(hasLandmarks){
+        if (hasLandmarks) {
             runOnUiThread(() -> {
                 if (landmarksArrayList1.size() == 0) {
                     handleIncomingIntent(cityTextView.getText().toString());
                 } else {
-                    SearchAdapter mAdapter = new SearchAdapter(CitiesActivity.this, landmarksArrayList1, CitiesActivity.this);
+                    SearchAdapter mAdapter = new SearchAdapter(landmarksArrayList1, CitiesActivity.this);
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(CitiesActivity.this);
                     listView.setLayoutManager(mLayoutManager);
                     listView.setAdapter(adapter);
@@ -574,14 +575,9 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         });
     }
 
-//    private void closeKeyboard() {
-//        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-//    }
-
     // Landmark Selected
     @Override
-    public void onLandmarkSelected(AttractionObject place) {
+    public void onLandmarkSelected(LandmarkModel place) {
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", CitiesActivity.this);
         Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getPlaceName() + "%20" + cityTextView.getText().toString()));
         httpClientCall(request, LANDMARKIDREQUEST);

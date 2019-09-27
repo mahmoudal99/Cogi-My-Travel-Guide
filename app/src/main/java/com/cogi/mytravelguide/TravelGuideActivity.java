@@ -39,9 +39,10 @@ import com.cogi.mytravelguide.utils.GooglePlacesApi;
 import com.cogi.mytravelguide.utils.ImageProcessing;
 import com.cogi.mytravelguide.utils.JsonReader;
 import com.cogi.mytravelguide.utils.Landmark;
-import com.cogi.mytravelguide.models.LandmarkSwipeModel;
+import com.cogi.mytravelguide.models.LandmarkSwipeViewModel;
 import com.cogi.mytravelguide.adapters.LandmarkSwipeViewAdapter;
 import com.cogi.mytravelguide.utils.TaskLoadedCallback;
+import com.cogi.mytravelguide.utils.WikiData;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -104,7 +105,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     ViewPager viewPager;
     LandmarkSwipeViewAdapter adapter;
-    List<LandmarkSwipeModel> models;
+    List<LandmarkSwipeViewModel> models;
 
     // Variables
     private String landmarkNameString;
@@ -158,10 +159,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     private void createModels(PhotoMetadata[] imageStrings) {
         models = new ArrayList<>();
-        models.add(new LandmarkSwipeModel(imageStrings[0]));
-        models.add(new LandmarkSwipeModel(imageStrings[1]));
-        models.add(new LandmarkSwipeModel(imageStrings[2]));
-        models.add(new LandmarkSwipeModel(imageStrings[3]));
+        models.add(new LandmarkSwipeViewModel(imageStrings[0]));
+        models.add(new LandmarkSwipeViewModel(imageStrings[1]));
+        models.add(new LandmarkSwipeViewModel(imageStrings[2]));
+        models.add(new LandmarkSwipeViewModel(imageStrings[3]));
         callSwipeViewAdapter();
     }
 

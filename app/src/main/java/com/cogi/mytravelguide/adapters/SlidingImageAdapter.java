@@ -16,26 +16,20 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.CitiesActivity;
-import com.cogi.mytravelguide.models.ImageModel;
+import com.cogi.mytravelguide.models.HomePageImageModel;
 import com.cogi.mytravelguide.SettingsActivity;
 import com.cogi.mytravelguide.utils.ImageProcessing;
 
 import java.util.ArrayList;
 
-/**
- * Created by Parsania Hardik on 23/04/2016.
- */
 public class SlidingImageAdapter extends PagerAdapter {
 
-
-    private ArrayList<ImageModel> imageModelArrayList;
+    private ArrayList<HomePageImageModel> imageModelArrayList;
     private LayoutInflater inflater;
     private Context context;
-    private Button exploreButton;
-    private ImageProcessing imageProcessing;
 
 
-    public SlidingImageAdapter(Context context, ArrayList<ImageModel> imageModelArrayList) {
+    public SlidingImageAdapter(Context context, ArrayList<HomePageImageModel> imageModelArrayList) {
         this.context = context;
         this.imageModelArrayList = imageModelArrayList;
         inflater = LayoutInflater.from(context);
@@ -58,21 +52,23 @@ public class SlidingImageAdapter extends PagerAdapter {
 
         assert imageLayout != null;
         final ImageView imageView = imageLayout.findViewById(R.id.image);
-        Button exploreButton = imageLayout.findViewById(R.id.exploreButton);
+
         final ImageView settingsImage = imageLayout.findViewById(R.id.settings);
         TextView landmarkName = imageLayout.findViewById(R.id.landmarkName);
-        settingsImage.setOnClickListener(v -> context.startActivity(new Intent(context, SettingsActivity.class)));
-        imageProcessing = new ImageProcessing(context);
-        imageProcessing.new SetLandmarkImage(imageView).execute(imageModelArrayList.get(position).getImage_drawable());
         landmarkName.setText(imageModelArrayList.get(position).getImage_name());
 
+        ImageProcessing imageProcessing = new ImageProcessing(context);
+        imageProcessing.new SetLandmarkImage(imageView).execute(imageModelArrayList.get(position).getImage_drawable());
+
+        Button exploreButton = imageLayout.findViewById(R.id.exploreButton);
         exploreButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, CitiesActivity.class);
             intent.putExtra("cityName", imageModelArrayList.get(position).getImage_name());
             context.startActivity(intent);
-            Toast.makeText(context, imageModelArrayList.get(position).getImage_name().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, imageModelArrayList.get(position).getImage_name(), Toast.LENGTH_SHORT).show();
         });
 
+        settingsImage.setOnClickListener(v -> context.startActivity(new Intent(context, SettingsActivity.class)));
         view.addView(imageLayout, 0);
 
         return imageLayout;

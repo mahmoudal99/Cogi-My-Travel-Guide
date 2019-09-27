@@ -105,7 +105,7 @@ public class SignInActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(Objects.requireNonNull(account));
             } catch (ApiException e) {
-                Log.w("HIRHEFOIH", "Google sign in failed", e);
+                Log.w("Google Auth", "Google sign in failed", e);
             }
         }
     }
@@ -115,7 +115,7 @@ public class SignInActivity extends AppCompatActivity {
         authentication.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Log.d("HIRHEFOIH", "Login Successful");
+                        Log.d("Google Auth", "Login Successful");
                     } else {
                         Toast.makeText(context, "Sign In Failed, Please Try Again", Toast.LENGTH_SHORT).show();
                     }

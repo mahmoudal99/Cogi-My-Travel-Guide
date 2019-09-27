@@ -27,7 +27,7 @@
             android:layout_width="@dimen/googe_sign_width"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/google_sign_in_top" />
+            android:layout_marginTop="100dp" />
 
     </LinearLayout>
 

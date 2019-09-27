@@ -3,6 +3,7 @@ package com.cogi.mytravelguide.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.TextView;
+
 import com.cogi.mytravelguide.authentication.SignInActivity;
 import com.cogi.mytravelguide.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

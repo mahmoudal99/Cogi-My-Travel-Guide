@@ -76,13 +76,12 @@ public class ImageProcessing {
 
     private void saveImageBitmap(Bitmap bitmap, String city) {
         String path = Environment.getExternalStorageDirectory().toString();
-        OutputStream outputStream = null;
+        OutputStream outputStream;
         File file = new File(path, city + ".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
         try {
             outputStream = new FileOutputStream(file);
 
-            Bitmap pictureBitmap = bitmap;
-            pictureBitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream);
             outputStream.flush();
             outputStream.close();
 
@@ -102,18 +101,20 @@ public class ImageProcessing {
         }
 
         protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            String url = urls[0];
+            Bitmap bitmap = null;
             try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
+                InputStream in = new java.net.URL(url).openStream();
+                bitmap = BitmapFactory.decodeStream(in);
 
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-            saveImageBitmap(mIcon11, "city");
-            return mIcon11;
+            if(bitmap != null){
+                saveImageBitmap(bitmap, "city");
+            }
+            return bitmap;
         }
 
         protected void onPostExecute(Bitmap result) {
@@ -130,17 +131,20 @@ public class ImageProcessing {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            Bitmap bitmap = null;
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
+                bitmap = BitmapFactory.decodeStream(in);
 
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-            saveImageBitmap(mIcon11, "landmark");
-            return mIcon11;
+
+            if(bitmap != null){
+                saveImageBitmap(bitmap, "landmark");
+            }
+            return bitmap;
         }
 
         protected void onPostExecute(Bitmap result) {

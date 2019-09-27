@@ -3,11 +3,11 @@ package com.cogi.mytravelguide.models;
 
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 
-public class LandmarkSwipeModel {
+public class LandmarkSwipeViewModel {
 
     private PhotoMetadata image;
 
-    public LandmarkSwipeModel(PhotoMetadata image) {
+    public LandmarkSwipeViewModel(PhotoMetadata image) {
         this.image = image;
     }
 

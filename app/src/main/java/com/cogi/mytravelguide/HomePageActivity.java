@@ -14,7 +14,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cogi.mytravelguide.models.ImageModel;
+import com.cogi.mytravelguide.models.HomePageImageModel;
 import com.cogi.mytravelguide.adapters.SlidingImageAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -47,7 +47,7 @@ public class HomePageActivity extends AppCompatActivity {
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-    private ArrayList<ImageModel> imageModelArrayList;
+    private ArrayList<HomePageImageModel> imageModelArrayList;
 
     private String[] myImageList = new String[]{"https://images.unsplash.com/photo-1539650116574-8efeb43e2750?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjgzMjIyfQ",
                                                 "https://images.unsplash.com/photo-1542743408-218cc173cda0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjgzMjIyfQ",
@@ -117,12 +117,12 @@ public class HomePageActivity extends AppCompatActivity {
         });
     }
 
-    private ArrayList<ImageModel> populateList() {
+    private ArrayList<HomePageImageModel> populateList() {
 
-        ArrayList<ImageModel> list = new ArrayList<>();
+        ArrayList<HomePageImageModel> list = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            ImageModel imageModel = new ImageModel();
+            HomePageImageModel imageModel = new HomePageImageModel();
             imageModel.setImage_drawable(myImageList[i]);
             imageModel.setImage_text(imageNames[i]);
             list.add(imageModel);

@@ -13,19 +13,16 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.cogi.mytravelguide.BuildConfig;
 import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.utils.GooglePlacesApi;
-import com.cogi.mytravelguide.utils.ImageProcessing;
-import com.cogi.mytravelguide.models.LandmarkSwipeModel;
+import com.cogi.mytravelguide.models.LandmarkSwipeViewModel;
 
 import java.util.List;
 
 public class LandmarkSwipeViewAdapter extends PagerAdapter {
 
-    private List<LandmarkSwipeModel> models;
-    private LayoutInflater layoutInflater;
+    private List<LandmarkSwipeViewModel> models;
     private Context context;
-    private ImageProcessing imageProcessing;
 
-    public LandmarkSwipeViewAdapter(List<LandmarkSwipeModel> models, Context context) {
+    public LandmarkSwipeViewAdapter(List<LandmarkSwipeViewModel> models, Context context) {
         this.models = models;
         this.context = context;
     }
@@ -43,7 +40,7 @@ public class LandmarkSwipeViewAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-        layoutInflater = LayoutInflater.from(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.city_slideshow_item, container, false);
 
         ImageView imageView;

@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.cogi.mytravelguide.models.VisitedPlaceObject;
+import com.cogi.mytravelguide.models.TimelineItemModel;
 import com.cogi.mytravelguide.adapters.TimelineAdapter;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
@@ -42,7 +42,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     private PlacesClient placesClient;
 
-    private ArrayList<VisitedPlaceObject> landmarksList;
+    private ArrayList<TimelineItemModel> landmarksList;
     private RecyclerView.Adapter timelineAdapter;
 
     // Firebase
@@ -129,7 +129,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void callAdapter(String name, String dateVisited, PhotoMetadata photoMetadata) {
-        VisitedPlaceObject landmark = new VisitedPlaceObject();
+        TimelineItemModel landmark = new TimelineItemModel();
         landmark.placeName = name;
         landmark.photoMetadata = photoMetadata;
         landmark.dateVisited = dateVisited;

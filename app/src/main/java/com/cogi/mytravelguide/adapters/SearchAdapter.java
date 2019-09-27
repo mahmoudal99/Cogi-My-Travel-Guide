@@ -1,11 +1,8 @@
 package com.cogi.mytravelguide.adapters;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +11,14 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.cogi.mytravelguide.R;
-import com.cogi.mytravelguide.models.AttractionObject;
+import com.cogi.mytravelguide.models.LandmarkModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder> implements Filterable {
-    private List<AttractionObject> contactList;
-    private List<AttractionObject> contactListFiltered;
+    private List<LandmarkModel> contactList;
+    private List<LandmarkModel> contactListFiltered;
     private LandmarkAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -38,7 +35,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     }
 
 
-    public SearchAdapter(Context context, List<AttractionObject> contactList, LandmarkAdapterListener listener) {
+    public SearchAdapter(List<LandmarkModel> contactList, LandmarkAdapterListener listener) {
         this.listener = listener;
         this.contactList = contactList;
         this.contactListFiltered = contactList;
@@ -55,9 +52,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final AttractionObject attractionObject = contactListFiltered.get(position);
+        final LandmarkModel attractionObject = contactListFiltered.get(position);
         holder.name.setText(attractionObject.getPlaceName());
-        Log.d("HEUIHIUDIU", attractionObject.getPlaceName());
     }
 
     @Override
@@ -74,8 +70,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                 if (charString.isEmpty()) {
                     contactListFiltered = contactList;
                 } else {
-                    List<AttractionObject> filteredList = new ArrayList<>();
-                    for (AttractionObject row : contactList) {
+                    List<LandmarkModel> filteredList = new ArrayList<>();
+                    for (LandmarkModel row : contactList) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
@@ -94,13 +90,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                contactListFiltered = (ArrayList<AttractionObject>) filterResults.values;
+                contactListFiltered = (ArrayList<LandmarkModel>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
     }
 
     public interface LandmarkAdapterListener {
-        void onLandmarkSelected(AttractionObject contact);
+        void onLandmarkSelected(LandmarkModel contact);
     }
 }

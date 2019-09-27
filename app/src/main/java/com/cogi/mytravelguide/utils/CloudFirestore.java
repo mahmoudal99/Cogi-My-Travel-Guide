@@ -21,7 +21,7 @@ public class CloudFirestore {
         this.currentUser = currentUser;
     }
 
-    public void addPlace() {
+    void addPlace() {
         // Access a Cloud Firestore instance from your Activity
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -30,6 +30,7 @@ public class CloudFirestore {
                 .document(currentUser.getUid())
                 .collection("MyPlaces").add(placeMap)
                 .addOnCompleteListener(task -> {
+                    Log.d("Firestore Adding Image", "Successful");
                 });
     }
 

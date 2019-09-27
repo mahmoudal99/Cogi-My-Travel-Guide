@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cogi.mytravelguide.models.VisitedPlaceObject;
+import com.cogi.mytravelguide.models.TimelineItemModel;
 import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.utils.GooglePlacesApi;
 
@@ -19,11 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyViewHolder> {
 
-    private ArrayList<VisitedPlaceObject> places;
+    private ArrayList<TimelineItemModel> places;
     private Context context;
     private ImageView tourist;
-    int index = 0;
-    int[] drawables = {R.drawable.tourist1, R.drawable.tourist2, R.drawable.tourist3, R.drawable.tourist4, R.drawable.tourist6, R.drawable.tourist7, R.drawable.tourist8};
+    private int index = 0;
+    private int[] drawables = {R.drawable.tourist1, R.drawable.tourist2, R.drawable.tourist3, R.drawable.tourist4, R.drawable.tourist6, R.drawable.tourist7, R.drawable.tourist8};
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView placeName, dateVisited;
@@ -38,7 +38,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
         }
     }
 
-    public TimelineAdapter(ArrayList<VisitedPlaceObject> places, Context context) {
+    public TimelineAdapter(ArrayList<TimelineItemModel> places, Context context) {
         this.places = places;
         this.context = context;
     }
@@ -54,7 +54,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        VisitedPlaceObject placeModel = places.get(position);
+        TimelineItemModel placeModel = places.get(position);
         holder.placeName.setText(placeModel.placeName);
         holder.dateVisited.setText(placeModel.dateVisited);
         GooglePlacesApi googlePlacesApi = new GooglePlacesApi(context);

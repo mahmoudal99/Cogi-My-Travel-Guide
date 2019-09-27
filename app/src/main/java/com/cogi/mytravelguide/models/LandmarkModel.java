@@ -1,6 +1,6 @@
 package com.cogi.mytravelguide.models;
 
-public class AttractionObject {
+public class LandmarkModel {
     public String placeName = "";
 
     public String getPlaceName() {

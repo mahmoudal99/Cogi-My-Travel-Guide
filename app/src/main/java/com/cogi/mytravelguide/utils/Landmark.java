@@ -31,15 +31,10 @@ public class Landmark {
     private static final String API_KEY = BuildConfig.APIKEY;
     private Context context;
     private Map<String, String> placeMap;
-    private boolean landmarkAdded = false;
 
     public Landmark(Context context) {
         this.context = context;
         placeMap = new HashMap<>();
-    }
-
-    private void setLandmarkAddedTrue() {
-        landmarkAdded = true;
     }
 
     private void addLandmarkToTimeline(FirebaseUser currentUser, String placeID, String landmarkName, String dateVisited) {
@@ -52,7 +47,6 @@ public class Landmark {
 
             CloudFirestore cloudFirestore = new CloudFirestore(placeMap, currentUser);
             cloudFirestore.addPlace();
-            setLandmarkAddedTrue();
             Toast.makeText(context, "Landmark added to timeline", Toast.LENGTH_SHORT).show();
         }
     }
@@ -65,7 +59,6 @@ public class Landmark {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                             if (Objects.requireNonNull(document.get("Place Name")).toString().equals(landmarkName)) {
-                                setLandmarkAddedTrue();
                                 Toast.makeText(context, "Landmark Already Added To Timeline", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -93,8 +86,7 @@ public class Landmark {
                 Place.Field.PHOTO_METADATAS, Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL, Place.Field.PHONE_NUMBER, Place.Field.VIEWPORT,
                 Place.Field.WEBSITE_URI, Place.Field.ADDRESS, Place.Field.LAT_LNG);
 
-        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(context);
-        return intent;
+        return new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(context);
     }
 }
 

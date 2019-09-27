@@ -44,8 +44,7 @@ public class JsonReader {
                 landmarks.add(jsonObject.get("value").toString());
             }
             Set<String> landmarksSet = new LinkedHashSet<>(landmarks);
-            List<String> landmarksList = new ArrayList<>(landmarksSet);
-            return landmarksList;
+            return new ArrayList<>(landmarksSet);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -55,7 +54,7 @@ public class JsonReader {
 
     public JSONObject getLandmarkPlaceIDFromJson(String response) {
 
-        JSONObject placeIDObject = null;
+        JSONObject placeIDObject;
         try {
             placeIDObject = new JSONObject(response);
             JSONArray jsonArray = placeIDObject.getJSONArray("results");
@@ -69,7 +68,7 @@ public class JsonReader {
     }
 
     public List<String> getDirectionsInformation(String jsonData){
-        JSONObject directionJsonData = null;
+        JSONObject directionJsonData;
 
         try {
             directionJsonData = new JSONObject(jsonData);
@@ -93,7 +92,7 @@ public class JsonReader {
     }
 
     public List<String> getCityPopulationFromJson(String response){
-        JSONObject populationJsonData = null;
+        JSONObject populationJsonData;
         List<String> cityInformation = new ArrayList<>();
         try {
             populationJsonData = new JSONObject(response);
