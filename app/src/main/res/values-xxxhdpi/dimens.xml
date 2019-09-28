@@ -47,7 +47,7 @@
 
     <dimen name="timeline_card_view_height">100dp</dimen>
 
-    <dimen name="view_page_height">350dp</dimen>
+    <dimen name="view_pager_height">400dp</dimen>
 
     <dimen name="timeline_image_margin_top">0dp</dimen>
 
