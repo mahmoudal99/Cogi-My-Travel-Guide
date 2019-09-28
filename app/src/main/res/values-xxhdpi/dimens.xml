@@ -35,33 +35,37 @@
     //--------------- Home Page Page Dimens ---------------//
 
     // Home Page Images Dimens
-    <dimen name="travelGuidePageImage">120dp</dimen>
-    <dimen name="attractionsPageImage">160dp</dimen>
-    <dimen name="timelinePageImageHeight">140dp</dimen>
+    <dimen name="travelGuidePageImage">100dp</dimen>
+    <dimen name="attractionsPageImage">120dp</dimen>
+    <dimen name="timelinePageImageHeight">85dp</dimen>
 
     <dimen name="image_margin_bottom_10dp">10dp</dimen>
-    <dimen name="image_margin_bottom_20dp">20dp</dimen>
+    <dimen name="image_margin_bottom_20dp">-5dp</dimen>
     <dimen name="image_margin_bottom_25dp">25dp</dimen>
     <dimen name="image_margin_bottom_30dp">30dp</dimen>
 
     // Home Page Dimens
-    <dimen name="settingsIcon">32dp</dimen>
+    <dimen name="settingsIcon">24dp</dimen>
     <dimen name="settings_padding">10dp</dimen>
 
     <dimen name="homeRelativeLayoutHeight">280dp</dimen>
-    <dimen name="cardViewHeight">180dp</dimen>
+    <dimen name="cardViewHeight">120dp</dimen>
 
     <dimen name="logo_margin_top">20dp</dimen>
 
     <dimen name="timeline_card_view_height">100dp</dimen>
 
-    <dimen name="view_pager_height">400dp</dimen>
+    <dimen name="view_pager_height">330dp</dimen>
+
+    <dimen name="timeline_image_margin_top">5dp</dimen>
+
+    <dimen name="timeline_text_view_margin_top">-6dp</dimen>
 
     //--------------- Trave Guide Page Dimens ---------------//
     <dimen name="landmarkImageHeight">280dp</dimen>
     <dimen name="galleryImageDimens">55dp</dimen>
-    <dimen name="locationImageDimens">40dp</dimen>
-    <dimen name="searchImageDimens">35dp</dimen>
+    <dimen name="locationImageDimens">30dp</dimen>
+    <dimen name="informationImageDimens">25dp</dimen>
     <dimen name="dropDownButtonDimens">30dp</dimen>
 
     <dimen name="microphone_dimens">35dp</dimen>
@@ -77,10 +81,6 @@
     <dimen name="list_height">200dp</dimen>
 
     <dimen name="landmark_image_height">300dp</dimen>
-
-    <dimen name="timeline_image_margin_top">0dp</dimen>
-
-    <dimen name="timeline_text_view_margin_top">0dp</dimen>
 
     //--------------- Tab Dimens ---------------//
     <dimen name="backArrowDimens">30dp</dimen>
@@ -98,13 +98,13 @@
     <dimen name="_20sp">20sp</dimen>
     <dimen name="_21sp">21sp</dimen>
     <dimen name="_22sp">22sp</dimen>
-    <dimen name="_24sp">24sp</dimen>
+    <dimen name="_24sp">21sp</dimen>
     <dimen name="_25sp">25sp</dimen>
     <dimen name="_28sp">28sp</dimen>
     <dimen name="_30sp">30sp</dimen>
 
     // Margin Values
-    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_10dp">5dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
     <dimen name="margin_25dp">25dp</dimen>
     <dimen name="margin_30dp">30dp</dimen>
@@ -112,5 +112,7 @@
     // Logo Splash Position
     <dimen name="LogoMarginTop">600px</dimen>
 
-    <dimen name="map_card_view_height">380dp</dimen>
+    <dimen name="map_card_view_height">350dp</dimen>
+
+    <dimen name="city_slideshow_item_height">270dp</dimen>
 </resources>

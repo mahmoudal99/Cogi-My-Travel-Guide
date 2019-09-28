@@ -124,7 +124,8 @@
             android:overScrollMode="never"
             android:clipToPadding="false"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="@dimen/city_slideshow_item_height">
+
         </androidx.viewpager.widget.ViewPager>
 
         <androidx.cardview.widget.CardView
@@ -230,7 +231,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:padding="1dip"
             app:cardCornerRadius="8dp">

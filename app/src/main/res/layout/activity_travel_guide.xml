@@ -127,8 +127,8 @@
 
                         <ImageView
                             android:id="@+id/informationImageView"
-                            android:layout_width="@dimen/searchImageDimens"
-                            android:layout_height="@dimen/searchImageDimens"
+                            android:layout_width="@dimen/informationImageDimens"
+                            android:layout_height="@dimen/informationImageDimens"
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:src="@drawable/information" />
@@ -434,7 +434,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/mapCardView"
                     android:layout_width="match_parent"
-                    android:layout_height="380dp"
+                    android:layout_height="@dimen/map_card_view_height"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
@@ -592,8 +592,8 @@
 
                             <ImageView
                                 android:id="@+id/journeyMode"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
+                                android:layout_width="@dimen/informationImageDimens"
+                                android:layout_height="@dimen/informationImageDimens"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
@@ -645,7 +645,7 @@
                                 android:text="20 mins"
                                 android:visibility="invisible"
                                 android:textColor="@color/black"
-                                android:textSize="24sp"
+                                android:textSize="@dimen/_24sp"
                                 app:fontFamily="@font/rancho" />
 
                         </LinearLayout>

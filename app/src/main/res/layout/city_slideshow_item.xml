@@ -14,7 +14,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="@dimen/city_slideshow_item_height">
 
             <ImageView
                 android:id="@+id/image"

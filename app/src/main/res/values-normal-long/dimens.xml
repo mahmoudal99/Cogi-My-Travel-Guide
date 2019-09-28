@@ -54,6 +54,12 @@
 
     <dimen name="logo_margin_top">30dp</dimen>
 
+    <dimen name="timeline_card_view_height">100dp</dimen>
+
+    <dimen name="view_page_height">350dp</dimen>
+
+    <dimen name="timeline_image_margin_top">0dp</dimen>
+
     //--------------- Trave Guide Page Dimens ---------------//
     <dimen name="landmarkImageHeight">210dp</dimen>
     <dimen name="galleryImageDimens">45dp</dimen>
@@ -100,4 +106,6 @@
 
     // Logo Splash Position
     <dimen name="LogoMarginTop">600px</dimen>
+
+    <dimen name="map_card_view_height">380dp</dimen>
 </resources>
