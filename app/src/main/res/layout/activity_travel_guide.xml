@@ -371,7 +371,7 @@
                                 android:padding="1dip"
                                 app:cardCornerRadius="2dp">
 
-                                <EditText
+                                <TextView
                                     android:id="@+id/searchStartingPoint"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

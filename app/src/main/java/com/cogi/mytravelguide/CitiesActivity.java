@@ -1,13 +1,18 @@
 package com.cogi.mytravelguide;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -25,13 +30,18 @@ import com.cogi.mytravelguide.utils.ImageProcessing;
 import com.cogi.mytravelguide.utils.JsonReader;
 import com.cogi.mytravelguide.adapters.SearchAdapter;
 import com.cogi.mytravelguide.adapters.SwipeViewAdapter;
+import com.cogi.mytravelguide.utils.Landmark;
 import com.cogi.mytravelguide.utils.WikiData;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.kc.unsplash.Unsplash;
 import com.kc.unsplash.models.SearchResults;
@@ -44,7 +54,9 @@ import com.squareup.okhttp.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,6 +83,8 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private static final String CITYPOPULATIONREQUEST = "CITYPOPULATIONREQUEST";
     private static final String GETCITYLATLNGREQUEST = "GETCITYLATLNGREQUEST";
 
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
+
     // Widgets
     private ImageView backArrow, searchImageView, cityImage, closeSearchArrow, blackSearchButton, noCityImage;
     private CardView mapCardView, searchBarCardView;
@@ -93,6 +107,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     WikiData wikiData;
     ImageProcessing imageProcessing;
     SearchAdapter mAdapter = new SearchAdapter(landmarksArrayList, this);
+    private Landmark landmark;
 
     //Shared Preference
     SharedPreferences pref;
@@ -174,6 +189,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         imageProcessing = new ImageProcessing(CitiesActivity.this);
         cityImage = findViewById(R.id.cityImage);
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        landmark = new Landmark(CitiesActivity.this);
         editor = pref.edit();
         editor.apply();
     }
@@ -184,7 +200,13 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
             startActivity(backIntent);
         });
 
-        searchImageView.setOnClickListener(v -> toggleSearchWidgets(searchEditText.getVisibility()));
+//        searchImageView.setOnClickListener(v -> toggleSearchWidgets(searchEditText.getVisibility()));
+
+        searchImageView.setOnClickListener(v -> {
+            Intent intent = landmark.landmarkPicker();
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+        });
+
         searchPlacesEditText.setHint("Search Places in " + cityTextView.getText().toString());
 
         closeSearchArrow.setOnClickListener(v -> {
@@ -193,22 +215,20 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
-        searchEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-        searchEditText.setOnKeyListener((v, keyCode, event) -> {
-            String cityName = searchEditText.getText().toString();
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                String cityLat = pref.getString("CityLat", null);
-                if (cityLat == null) {
-                    cityTextView.setText(getResources().getString(R.string.city));
-                } else {
-                    cityTextView.setText(cityName);
-                }
-
-                handleCitySearchResult(cityName);
-                return true;
-            }
-            return false;
-        });
+//        searchEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+//        searchEditText.setOnKeyListener((v, keyCode, event) -> {
+//            String cityName = searchEditText.getText().toString();
+//            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+//                String cityLat = pref.getString("CityLat", null);
+//                if (cityLat == null) {
+//                    cityTextView.setText(getResources().getString(R.string.city));
+//                } else {
+//                    cityTextView.setText(cityName);
+//                }
+//                return true;
+//            }
+//            return false;
+//        });
 
         searchPlacesEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         searchPlacesEditText.setOnKeyListener((v, keyCode, event) -> {
@@ -483,20 +503,20 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         searchBarCardView.setVisibility(View.VISIBLE);
     }
 
-    // Search
-    private void toggleSearchWidgets(int visibilityValue) {
-        if (visibilityValue == View.GONE) {
-            cityTextView.setVisibility(View.GONE);
-            searchEditText.setVisibility(View.VISIBLE);
-            closeSearchArrow.setVisibility(View.VISIBLE);
-            backArrow.setVisibility(View.GONE);
-        } else {
-            cityTextView.setVisibility(View.VISIBLE);
-            searchEditText.setVisibility(View.GONE);
-            closeSearchArrow.setVisibility(View.GONE);
-            backArrow.setVisibility(View.VISIBLE);
-        }
-    }
+//    // Search
+//    private void toggleSearchWidgets(int visibilityValue) {
+//        if (visibilityValue == View.GONE) {
+//            cityTextView.setVisibility(View.GONE);
+//            searchEditText.setVisibility(View.VISIBLE);
+//            closeSearchArrow.setVisibility(View.VISIBLE);
+//            backArrow.setVisibility(View.GONE);
+//        } else {
+//            cityTextView.setVisibility(View.VISIBLE);
+//            searchEditText.setVisibility(View.GONE);
+//            closeSearchArrow.setVisibility(View.GONE);
+//            backArrow.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     private void hideSearchWidgets() {
         cityTextView.setVisibility(View.VISIBLE);
@@ -588,6 +608,24 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         intent.putExtra("landmarkID", landmarkId);
         intent.putExtra("city", cityTextView.getText().toString());
         startActivity(intent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                handleCitySearchResult(place.getName());
+
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i("Cities Activity", status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.i("Cities Activity", "Cancelled");
+            }
+        }
     }
 
 }

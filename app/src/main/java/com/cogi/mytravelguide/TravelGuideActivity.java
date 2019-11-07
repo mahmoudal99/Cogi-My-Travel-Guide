@@ -93,6 +93,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private final static int LOCATION = 3;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int PICK_IMAGE = 1;
+    private static final int STARTINGPOINT = 4;
 
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
@@ -101,7 +102,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, journeyMode, noLandmarkImage;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
     private LinearLayout tripInformationLinLayout, tripInformationLinLayout2;
-    private EditText searchStartingPointEditText;
+    private TextView searchStartingPointEditText;
 
     ViewPager viewPager;
     LandmarkSwipeViewAdapter adapter;
@@ -311,16 +312,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         });
 
 
-        searchStartingPointEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-        searchStartingPointEditText.setOnKeyListener((v, keyCode, event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", TravelGuideActivity.this);
-                linearLayoutMode.setVisibility(View.VISIBLE);
-                Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(searchStartingPointEditText.getText().toString() + pref.getString("city", "")));
-                httpClientCall(request, STARTINGPOINTREQUEST);
-                closeKeyboard();
-            }
-            return false;
+        searchStartingPointEditText.setOnClickListener(v -> {
+            Intent intent = landmark.landmarkPicker();
+            startActivityForResult(intent, STARTINGPOINT);
         });
     }
 
@@ -771,8 +765,14 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             } else if (resultCode == RESULT_CANCELED) {
                 Log.i(TAG, "Cancelled");
             }
-        }
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+        }else if(requestCode == STARTINGPOINT){
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", TravelGuideActivity.this);
+            linearLayoutMode.setVisibility(View.VISIBLE);
+            Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery( place.getName() + pref.getString("city", "")));
+            httpClientCall(request, STARTINGPOINTREQUEST);
+
+        }else if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 return;
             }
@@ -785,6 +785,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 e.printStackTrace();
             }
         }
+
     }
 
     /*---------------------------------------------------------------------- Permission Requests -------------------------------------------------------- */
