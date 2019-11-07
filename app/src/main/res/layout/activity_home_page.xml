@@ -71,7 +71,7 @@
                             android:text="@string/landmarks"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
-                            app:fontFamily="@font/rancho" />
+                            app:fontFamily="@font/pompiere" />
 
                     </LinearLayout>
 
@@ -117,12 +117,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginTop="@dimen/timeline_text_view_margin_top"
                             android:gravity="center_horizontal"
                             android:text="@string/cities"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_24sp"
-                            android:layout_marginTop="@dimen/timeline_text_view_margin_top"
-                            app:fontFamily="@font/rancho" />
+                            app:fontFamily="@font/pompiere" />
 
                     </LinearLayout>
 
@@ -162,12 +162,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="-15dp"
+                    android:layout_marginTop="-12dp"
                     android:gravity="center_horizontal"
                     android:text="@string/timeline"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_24sp"
-                    app:fontFamily="@font/rancho" />
+                    app:fontFamily="@font/pompiere" />
 
             </LinearLayout>
 

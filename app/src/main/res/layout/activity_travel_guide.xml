@@ -182,7 +182,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="6"
-                                android:fontFamily="@font/rancho"
+                                android:fontFamily="@font/pompiere"
                                 android:padding="@dimen/information_padding_10dp"
                                 android:text="@string/information"
                                 android:textColor="@color/black"
@@ -201,7 +201,7 @@
                                 android:fontFamily="monospace"
                                 android:padding="@dimen/information_padding_10dp"
                                 android:text="@string/opening_hours"
-                                android:textColor="@color/Red"
+                                android:textColor="#607D8B"
                                 android:textSize="@dimen/_14sp" />
 
                             <TextView
@@ -227,7 +227,7 @@
                                 android:fontFamily="monospace"
                                 android:padding="@dimen/information_padding_10dp"
                                 android:text="@string/address"
-                                android:textColor="@color/LightBlue"
+                                android:textColor="#607D8B"
                                 android:textSize="@dimen/_14sp" />
 
                             <TextView
@@ -252,7 +252,7 @@
                                 android:fontFamily="monospace"
                                 android:padding="@dimen/information_padding_10dp"
                                 android:text="@string/rating"
-                                android:textColor="@color/Green"
+                                android:textColor="#607D8B"
                                 android:textSize="@dimen/_14sp" />
 
                             <TextView
@@ -278,7 +278,7 @@
                                 android:fontFamily="monospace"
                                 android:padding="@dimen/information_padding_10dp"
                                 android:text="@string/number"
-                                android:textColor="#FF6D00"
+                                android:textColor="#607D8B"
                                 android:textSize="@dimen/_14sp" />
 
                             <TextView

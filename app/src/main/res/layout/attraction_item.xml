@@ -21,16 +21,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="6"
             android:duplicateParentState="true"
-            android:fontFamily="@font/rancho"
+            android:fontFamily="@font/pompiere"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="Attraction "
             android:textColor="@color/black"
-            android:textSize="@dimen/_20sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="10dp" />
+            android:textSize="@dimen/_20sp" />
 
     </LinearLayout>
 
