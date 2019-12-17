@@ -513,6 +513,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     /*---------------------------------------------------------------------- Landmark ----------------------------------------------------------------------*/
 
     private void loadLandmark(Place place) {
+
         if (place.getName().equals("The Blue Mosque")) {
             landmarkTextView.setText(context.getString(R.string.sultan_ahmed_mosque));
         } else {
@@ -537,13 +538,15 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             websiteTextView.setText(getResources().getString(R.string.no_infotmation_available));
         }
 
-
-        if (place.getOpeningHours().getWeekdayText().contains(getResources().getString(R.string.close))) {
-            open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
-            landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
-        } else {
-            open_closedTextView.setVisibility(View.VISIBLE);
-            open_closedTextView.setText(getResources().getString(R.string.open));
+        if (place.getOpeningHours() != null) {
+            if (place.getOpeningHours().getWeekdayText().contains(getResources().getString(R.string.close))) {
+                open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+            } else {
+                open_closedTextView.setVisibility(View.VISIBLE);
+                open_closedTextView.setText(getResources().getString(R.string.open));
+                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+            }
         }
 
 
@@ -765,14 +768,14 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             } else if (resultCode == RESULT_CANCELED) {
                 Log.i(TAG, "Cancelled");
             }
-        }else if(requestCode == STARTINGPOINT){
+        } else if (requestCode == STARTINGPOINT) {
             Place place = Autocomplete.getPlaceFromIntent(data);
             GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", TravelGuideActivity.this);
             linearLayoutMode.setVisibility(View.VISIBLE);
-            Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery( place.getName() + pref.getString("city", "")));
+            Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getName() + pref.getString("city", "")));
             httpClientCall(request, STARTINGPOINTREQUEST);
 
-        }else if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 return;
             }

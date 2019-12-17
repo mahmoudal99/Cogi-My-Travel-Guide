@@ -22,7 +22,7 @@
                 android:layout_width="32dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/back_arrow_black" />
+                android:contentDescription="TODO" android:src="@drawable/back_arrow_black" />
 
             <TextView
                 android:layout_width="match_parent"

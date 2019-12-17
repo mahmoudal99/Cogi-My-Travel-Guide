@@ -19,7 +19,7 @@
             android:layout_height="@dimen/travel_guide_logo_height"
             android:layout_gravity="center"
             android:layout_marginTop="-30dp"
-            android:src="@drawable/logo_white" />
+            android:contentDescription="TODO" android:src="@drawable/logo_white" />
 
 
         <com.google.android.gms.common.SignInButton

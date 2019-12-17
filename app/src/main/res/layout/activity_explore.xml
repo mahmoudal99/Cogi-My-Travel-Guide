@@ -25,7 +25,7 @@
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/back_arrow_black" />
+                android:layout_marginStart="15dp" android:contentDescription="TODO" android:src="@drawable/back_arrow_black" />
 
             <ImageView
                 android:id="@+id/closeSearchArrow"
@@ -33,7 +33,7 @@
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:layout_marginStart="15dp" android:contentDescription="TODO" android:src="@drawable/ic_arrow_back_black_24dp"
                 android:visibility="gone" />
 
             <TextView
@@ -57,7 +57,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="60dp"
                 android:layout_marginRight="30dp"
-                android:background="@null"
+                android:layout_marginEnd="30dp" android:layout_marginStart="60dp" android:background="@null"
                 android:hint="@string/search_cities"
                 android:imeOptions="actionSearch"
                 android:inputType="textCapSentences"
@@ -68,11 +68,11 @@
                 android:id="@+id/searchButton"
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" android:layout_alignParentRight="true"
                 android:layout_gravity="end"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/search" />
+                android:layout_marginEnd="20dp" android:layout_marginRight="20dp"
+                android:contentDescription="TODO" android:src="@drawable/search" />
 
         </RelativeLayout>
 
@@ -93,7 +93,7 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:contentDescription="TODO" android:scaleType="centerCrop"
                 android:src="@drawable/sphinx" />
 
             <ImageView
@@ -101,7 +101,7 @@
                 android:layout_width="180dp"
                 android:layout_height="180dp"
                 android:layout_gravity="center"
-                android:src="@drawable/tourist9" />
+                android:contentDescription="TODO" android:src="@drawable/tourist9" />
 
             <TextView
                 android:id="@+id/noLandmarkSelected"
@@ -203,7 +203,7 @@
                     android:layout_marginLeft="40dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="30dp"
-                    android:background="@null"
+                    android:layout_marginEnd="30dp" android:layout_marginStart="40dp" android:background="@null"
                     android:hint="@string/search_places"
                     android:imeOptions="actionSearch"
                     android:inputType="textCapSentences"
@@ -216,9 +216,9 @@
                     android:layout_height="24dp"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp" android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_search_black_24dp"
+                    android:contentDescription="TODO" android:src="@drawable/ic_search_black_24dp"
                     android:visibility="gone" />
 
             </androidx.cardview.widget.CardView>
@@ -274,7 +274,7 @@
                     android:layout_height="@dimen/dropDownButtonDimens"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_10dp"
-                    android:src="@drawable/ic_expand_more_black_24dp" />
+                    android:contentDescription="TODO" android:src="@drawable/ic_expand_more_black_24dp" />
 
             </LinearLayout>
 

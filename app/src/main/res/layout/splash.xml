@@ -6,9 +6,9 @@
     android:orientation="vertical">
 
     <VideoView android:id="@+id/videoViewRelative"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true" android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -21,6 +21,6 @@
         android:layout_height="@dimen/LogoHeight"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-40dp"
-        android:src="@drawable/company_logo" />
+        android:contentDescription="TODO" android:src="@drawable/company_logo" />
 
 </RelativeLayout>

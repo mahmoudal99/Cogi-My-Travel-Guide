@@ -565,6 +565,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void handleCitySearchResult(String cityName) {
         cityName = cityName.substring(0, 1).toUpperCase() + cityName.substring(1);
+        Toast.makeText(CitiesActivity.this, cityName, Toast.LENGTH_SHORT).show();
         closeSearchArrow.setVisibility(View.GONE);
         backArrow.setVisibility(View.VISIBLE);
         Request request = wikiData.callCityDataApi(cityName);
@@ -613,6 +614,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 

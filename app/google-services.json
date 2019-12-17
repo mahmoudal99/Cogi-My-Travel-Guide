@@ -8,18 +8,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:210036705944:android:4e5cb7ba746aa64d",
+        "mobilesdk_app_id": "1:210036705944:android:d71f8d16b5c18f5fd4deed",
         "android_client_info": {
           "package_name": "com.cogi.mytravelguide"
         }
       },
       "oauth_client": [
         {
-          "client_id": "210036705944-ucq8a9td4o2tlsjjdn8e7go4rqog1lcj.apps.googleusercontent.com",
+          "client_id": "210036705944-is42dq8sc9ff5bk58tch8u9vidca9mmc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cogi.mytravelguide",
             "certificate_hash": "6ce359fea048c94f4384a8558c5733bdb3014495"
+          }
+        },
+        {
+          "client_id": "210036705944-gqpb8l5e1dqqja8bovtvpisvn9dg7epi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cogi.mytravelguide",
+            "certificate_hash": "72267f27a386b2407759165aea13e0850684ce6a"
           }
         },
         {
@@ -29,14 +37,43 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCuN1aUDPThyzelVqaejp5_89s2dZs5tV0"
+          "current_key": "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "210036705944-f1m5r8t0r0lii2quu16ea9s384d7hrmq.apps.googleusercontent.com",
+              "client_id": "210036705944-qbkomamdjc3ji96guipq121ji57bflcn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210036705944:android:4e5cb7ba746aa64d",
+        "android_client_info": {
+          "package_name": "com.example.mytravelguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210036705944-f1m5r8t0r0lii2quu16ea9s384d7hrmq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVuZm4ZWwkzJdxeSOFEBWk37srFby2e4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210036705944-qbkomamdjc3ji96guipq121ji57bflcn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

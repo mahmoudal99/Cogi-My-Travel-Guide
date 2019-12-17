@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/loading" />
+            android:contentDescription="TODO" android:src="@drawable/loading" />
 
     </androidx.cardview.widget.CardView>
 
@@ -68,15 +68,15 @@
             android:layout_width="3dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="100dp"
-            android:background="#2196f3" />
+            android:layout_marginStart="100dp" android:background="#2196f3" />
 
         <ImageView
             android:id="@+id/touristImg"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginLeft="120dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/tourist1" />
+            android:layout_marginStart="120dp" android:layout_marginTop="10dp"
+            android:contentDescription="TODO" android:src="@drawable/tourist1" />
 
     </LinearLayout>
 

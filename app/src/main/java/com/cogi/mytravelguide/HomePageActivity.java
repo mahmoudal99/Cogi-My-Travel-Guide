@@ -71,10 +71,7 @@ public class HomePageActivity extends AppCompatActivity {
         setUpFirebaseAuthentication();
         initViewPager();
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
+        MobileAds.initialize(this, initializationStatus -> {
         });
 
         mAdView = findViewById(R.id.adView);

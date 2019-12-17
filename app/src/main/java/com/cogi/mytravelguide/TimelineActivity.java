@@ -36,7 +36,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     // Widgets
     private ImageView backArrow;
-    private RecyclerView listView;
+    private RecyclerView recyclerView;
 
     Context context;
 
@@ -67,12 +67,12 @@ public class TimelineActivity extends AppCompatActivity {
     private void init() {
         backArrow = findViewById(R.id.backArrow);
         context = TimelineActivity.this;
-        listView = findViewById(R.id.list);
+        recyclerView = findViewById(R.id.list);
         Places.initialize(context, API_KEY);
         placesClient = Places.createClient(context);
         landmarksList = new ArrayList<>();
         timelineAdapter = new TimelineAdapter(landmarksList, TimelineActivity.this);
-        listView = findViewById(R.id.list);
+        recyclerView = findViewById(R.id.list);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
@@ -85,9 +85,9 @@ public class TimelineActivity extends AppCompatActivity {
 
     private void setUpListView() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        listView.setLayoutManager(mLayoutManager);
-        listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(timelineAdapter);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(timelineAdapter);
     }
 
     private void setUpTimeline() {

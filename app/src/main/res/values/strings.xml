@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Travel Guide</string>
+    <string name="app_name" translatable="false">My Travel Guide</string>
 
     <string name="style_json" translatable="false">[
   {
@@ -253,48 +253,48 @@
     <string name="sultan_ahmed_mosque" translatable="false">Sultan Ahmed Mosque</string>
     <string name="MyPlaces" translatable="false">MyPlaces</string>
 
-    <string name="near_by">Near By Locations</string>
+    <string name="near_by" translatable="false">Near By Locations</string>
 
-    <string name="information">Information</string>
-    <string name="opening_hours">Opening Hours:</string>
-    <string name="price">Price:</string>
-    <string name="rating">Rating:</string>
-    <string name="address">Address:</string>
-    <string name="number">Number:</string>
-    <string name="website">Website:</string>
+    <string name="information" translatable="false">Information</string>
+    <string name="opening_hours" translatable="false">Opening Hours:</string>
+    <string name="price" translatable="false">Price:</string>
+    <string name="rating" translatable="false">Rating:</string>
+    <string name="address" translatable="false">Address:</string>
+    <string name="number" translatable="false">Number:</string>
+    <string name="website" translatable="false">Website:</string>
 
-    <string name="language">Language</string>
+    <string name="language" translatable="false">Language</string>
 
-    <string name="settings">Settings</string>
-    <string name="log_out_capital">LOG OUT</string>
-    <string name="log_out">Log Out</string>
-    <string name="account_caps">ACCOUNT</string>
-    <string name="notification">Notification</string>
-    <string name="account">Account</string>
-    <string name="location">Location</string>
+    <string name="settings" translatable="false">Settings</string>
+    <string name="log_out_capital" translatable="false">LOG OUT</string>
+    <string name="log_out" translatable="false">Log Out</string>
+    <string name="account_caps" translatable="false">ACCOUNT</string>
+    <string name="notification" translatable="false">Notification</string>
+    <string name="account" translatable="false">Account</string>
+    <string name="location" translatable="false">Location</string>
 
-    <string name="timeline">Timeline</string>
-    <string name="landmark">Landmark</string>
-    <string name="cities">Cities</string>
+    <string name="timeline" translatable="false">Timeline</string>
+    <string name="landmark" translatable="false">Landmark</string>
+    <string name="cities" translatable="false">Cities</string>
 
-    <string name="search_cities">Search Cities</string>
-    <string name="search_places">Search Places</string>
+    <string name="search_cities" translatable="false">Search Cities</string>
+    <string name="search_places" translatable="false">Search Places</string>
 
-    <string name="date_visited">Date Visited</string>
-    <string name="landmarks">Landmarks</string>
-    <string name="map">Map</string>
+    <string name="date_visited" translatable="false">Date Visited</string>
+    <string name="landmarks" translatable="false">Landmarks</string>
+    <string name="map" translatable="false">Map</string>
 
-    <string name="city">City</string>
+    <string name="city" translatable="false">City</string>
 
-    <string name="starting_point">Starting Point</string>
-    <string name="distance">Distance</string>
-    <string name="duration">Duration</string>
-    <string name="mode">Mode</string>
-    <string name="open">Open</string>
-    <string name="close">Closed</string>
+    <string name="starting_point" translatable="false">Starting Point</string>
+    <string name="distance" translatable="false">Distance</string>
+    <string name="duration" translatable="false">Duration</string>
+    <string name="mode" translatable="false">Mode</string>
+    <string name="open" translatable="false">Open</string>
+    <string name="close" translatable="false">Closed</string>
 
-    <string name="no_landmark_selected">No Landmark Selected</string>
-    <string name="no_infotmation_available">No Information Available</string>
-    <string name="search_for_a_city_to_explore">Search For a City to Explore</string>
+    <string name="no_landmark_selected" translatable="false">No Landmark Selected</string>
+    <string name="no_infotmation_available" translatable="false">No Information Available</string>
+    <string name="search_for_a_city_to_explore" translatable="false">Search For a City to Explore</string>
 
 </resources>

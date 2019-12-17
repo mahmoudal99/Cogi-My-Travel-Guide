@@ -22,7 +22,7 @@
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/back_arrow_black" />
+                android:layout_marginStart="15dp" android:contentDescription="TODO" android:src="@drawable/back_arrow_black" />
 
             <TextView
                 android:id="@+id/attractionName"
@@ -64,14 +64,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:scaleType="centerCrop" />
+                        android:contentDescription="TODO" android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/noLandmarkImage"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:layout_gravity="center"
-                        android:scaleType="centerCrop"
+                        android:contentDescription="TODO" android:scaleType="centerCrop"
                         android:src="@drawable/tourist5" />
 
                     <TextView
@@ -123,7 +123,7 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:src="@drawable/search" />
+                            android:contentDescription="TODO" android:src="@drawable/search" />
 
                         <ImageView
                             android:id="@+id/informationImageView"
@@ -131,7 +131,7 @@
                             android:layout_height="@dimen/informationImageDimens"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:src="@drawable/information" />
+                            android:contentDescription="TODO" android:src="@drawable/information" />
 
                         <ImageView
                             android:id="@+id/mapImageView"
@@ -139,7 +139,7 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:src="@drawable/map" />
+                            android:contentDescription="TODO" android:src="@drawable/map" />
 
                         <ImageView
                             android:id="@+id/addPlace"
@@ -147,7 +147,7 @@
                             android:layout_height="@dimen/locationImageDimens"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:src="@drawable/add_location" />
+                            android:contentDescription="TODO" android:src="@drawable/add_location" />
 
                     </LinearLayout>
 
@@ -356,9 +356,9 @@
                                 android:layout_height="30dp"
                                 android:layout_gravity="start|center_vertical"
                                 android:layout_marginLeft="10dp"
-                                android:layout_marginTop="5dp"
+                                android:layout_marginStart="10dp" android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
-                                android:src="@drawable/route" />
+                                android:contentDescription="TODO" android:src="@drawable/route" />
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/searchBarCardView"
@@ -379,7 +379,7 @@
                                     android:layout_marginTop="5dp"
                                     android:layout_marginRight="30dp"
                                     android:layout_marginBottom="5dp"
-                                    android:background="@null"
+                                    android:layout_marginEnd="30dp" android:layout_marginStart="10dp" android:background="@null"
                                     android:hint="@string/starting_point"
                                     android:imeOptions="actionSearch"
                                     android:inputType="textCapSentences"
@@ -404,7 +404,7 @@
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
                                 android:layout_weight="2"
-                                android:src="@drawable/sports_car" />
+                                android:contentDescription="TODO" android:src="@drawable/sports_car" />
 
                             <ImageView
                                 android:id="@+id/cycleImage"
@@ -414,7 +414,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:layout_weight="2"
-                                android:src="@drawable/bike" />
+                                android:contentDescription="TODO" android:src="@drawable/bike" />
 
                             <ImageView
                                 android:id="@+id/walkingImage"
@@ -422,7 +422,7 @@
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
                                 android:layout_weight="2"
-                                android:src="@drawable/hiking" />
+                                android:contentDescription="TODO" android:src="@drawable/hiking" />
 
                         </LinearLayout>
 
@@ -597,7 +597,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
-                                android:src="@drawable/sports_car_black" />
+                                android:contentDescription="TODO" android:src="@drawable/sports_car_black" />
 
                             <TextView
                                 android:layout_width="match_parent"
