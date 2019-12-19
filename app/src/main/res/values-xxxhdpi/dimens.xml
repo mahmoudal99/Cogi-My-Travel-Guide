@@ -73,8 +73,8 @@
     <dimen name="landmark_image_height">400dp</dimen>
 
     //--------------- Tab Dimens ---------------//
-    <dimen name="backArrowDimens">34dp</dimen>
-    <dimen name="backArrowHeightDimens">44dp</dimen>
+    <dimen name="backArrowDimens">39dp</dimen>
+    <dimen name="backArrowHeightDimens">49dp</dimen>
 
     // Text Size
     <dimen name="_13sp">13sp</dimen>

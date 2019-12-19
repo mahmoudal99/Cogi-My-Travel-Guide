@@ -83,8 +83,8 @@
     <dimen name="landmark_image_height">300dp</dimen>
 
     //--------------- Tab Dimens ---------------//
-    <dimen name="backArrowDimens">30dp</dimen>
-    <dimen name="backArrowHeightDimens">40dp</dimen>
+    <dimen name="backArrowDimens">35dp</dimen>
+    <dimen name="backArrowHeightDimens">45dp</dimen>
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

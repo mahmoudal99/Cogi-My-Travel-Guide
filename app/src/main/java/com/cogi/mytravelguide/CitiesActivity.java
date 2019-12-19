@@ -175,14 +175,12 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         noLandmarkSelected = findViewById(R.id.noLandmarkSelected);
         searchPlacesEditText = findViewById(R.id.searchPlacesEditText);
         searchBarCardView = findViewById(R.id.searchBarCardView);
-        closeSearchArrow = findViewById(R.id.closeSearchArrow);
         blackSearchButton = findViewById(R.id.blackSearchButton);
         mapCardView = findViewById(R.id.mapCardView);
         listView = findViewById(R.id.landmarksInCity);
         backArrow = findViewById(R.id.backArrow);
         noCityImage = findViewById(R.id.noCityImage);
         cityTextView = findViewById(R.id.cityTextView);
-        searchEditText = findViewById(R.id.searchTextView);
         searchEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         searchPlacesEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         searchImageView = findViewById(R.id.searchButton);
