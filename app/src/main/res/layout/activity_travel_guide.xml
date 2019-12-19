@@ -22,8 +22,8 @@
                 android:layout_width="@dimen/backArrowDimens"
                 android:layout_height="@dimen/backArrowDimens"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
                 android:src="@drawable/back_arrow_black" />
 
             <TextView
@@ -66,14 +66,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:contentDescription="TODO" android:scaleType="centerCrop" />
+                        android:contentDescription="TODO"
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/noLandmarkImage"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:layout_gravity="center"
-                        android:contentDescription="TODO" android:scaleType="centerCrop"
+                        android:contentDescription="TODO"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/tourist5" />
 
                     <TextView
@@ -81,8 +83,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|bottom"
-                        android:fontFamily="@font/rancho"
                         android:layout_marginBottom="30dp"
+                        android:fontFamily="@font/rancho"
                         android:gravity="center_horizontal"
                         android:text="@string/no_landmark_selected"
                         android:textColor="@color/black"
@@ -92,14 +94,13 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.viewpager.widget.ViewPager
-                    android:foregroundGravity="center"
                     android:id="@+id/viewPager"
-                    android:layout_centerInParent="true"
-                    android:overScrollMode="never"
-                    android:clipToPadding="false"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp">
-                </androidx.viewpager.widget.ViewPager>
+                    android:layout_height="300dp"
+                    android:layout_centerInParent="true"
+                    android:clipToPadding="false"
+                    android:foregroundGravity="center"
+                    android:overScrollMode="never"></androidx.viewpager.widget.ViewPager>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/optionsTab"
@@ -125,7 +126,8 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:contentDescription="TODO" android:src="@drawable/search" />
+                            android:contentDescription="TODO"
+                            android:src="@drawable/search" />
 
                         <ImageView
                             android:id="@+id/informationImageView"
@@ -133,7 +135,8 @@
                             android:layout_height="@dimen/informationImageDimens"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:contentDescription="TODO" android:src="@drawable/information" />
+                            android:contentDescription="TODO"
+                            android:src="@drawable/information" />
 
                         <ImageView
                             android:id="@+id/mapImageView"
@@ -141,7 +144,8 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:contentDescription="TODO" android:src="@drawable/map" />
+                            android:contentDescription="TODO"
+                            android:src="@drawable/map" />
 
                         <ImageView
                             android:id="@+id/addPlace"
@@ -149,7 +153,8 @@
                             android:layout_height="@dimen/locationImageDimens"
                             android:layout_gravity="center"
                             android:layout_weight="2"
-                            android:contentDescription="TODO" android:src="@drawable/add_location" />
+                            android:contentDescription="TODO"
+                            android:src="@drawable/add_location" />
 
                     </LinearLayout>
 
@@ -189,6 +194,18 @@
                                 android:text="@string/information"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp" />
+
+
+                            <TextView
+                                android:id="@+id/open_closedTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/Green"
+                                android:layout_marginRight="10dp"
+                                android:textSize="@dimen/_24sp"
+                                android:text="Opened"
+                                android:fontFamily="@font/pompiere"/>
+
 
                         </LinearLayout>
 
@@ -357,10 +374,12 @@
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="start|center_vertical"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginLeft="10dp"
-                                android:layout_marginStart="10dp" android:layout_marginTop="5dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
-                                android:contentDescription="TODO" android:src="@drawable/route" />
+                                android:contentDescription="TODO"
+                                android:src="@drawable/route" />
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/searchBarCardView"
@@ -377,11 +396,13 @@
                                     android:id="@+id/searchStartingPoint"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
                                     android:layout_marginLeft="10dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="30dp"
                                     android:layout_marginRight="30dp"
                                     android:layout_marginBottom="5dp"
-                                    android:layout_marginEnd="30dp" android:layout_marginStart="10dp" android:background="@null"
+                                    android:background="@null"
                                     android:hint="@string/starting_point"
                                     android:imeOptions="actionSearch"
                                     android:inputType="textCapSentences"
@@ -406,7 +427,8 @@
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
                                 android:layout_weight="2"
-                                android:contentDescription="TODO" android:src="@drawable/sports_car" />
+                                android:contentDescription="TODO"
+                                android:src="@drawable/sports_car" />
 
                             <ImageView
                                 android:id="@+id/cycleImage"
@@ -416,7 +438,8 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:layout_weight="2"
-                                android:contentDescription="TODO" android:src="@drawable/bike" />
+                                android:contentDescription="TODO"
+                                android:src="@drawable/bike" />
 
                             <ImageView
                                 android:id="@+id/walkingImage"
@@ -424,7 +447,8 @@
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
                                 android:layout_weight="2"
-                                android:contentDescription="TODO" android:src="@drawable/hiking" />
+                                android:contentDescription="TODO"
+                                android:src="@drawable/hiking" />
 
                         </LinearLayout>
 
@@ -461,8 +485,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:baselineAligned="false"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
 
                     <androidx.cardview.widget.CardView
@@ -552,101 +576,6 @@
                                 android:gravity="center_horizontal"
                                 android:text="@string/duration"
                                 android:textColor="@color/Green"
-                                android:textSize="@dimen/_24sp"
-                                app:fontFamily="@font/rancho" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tripInformationLinLayout2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:baselineAligned="false"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
-
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/modeCardView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="@dimen/margin_10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="@dimen/margin_10dp"
-                        android:layout_marginBottom="@dimen/margin_10dp"
-                        android:layout_weight="3"
-                        android:background="@drawable/cardview_bg"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:background="@drawable/cardview_bg_white"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/journeyMode"
-                                android:layout_width="@dimen/informationImageDimens"
-                                android:layout_height="@dimen/informationImageDimens"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:contentDescription="TODO" android:src="@drawable/sports_car_black" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:gravity="center_horizontal"
-                                android:text="@string/mode"
-                                android:textColor="#FF6D00"
-                                android:textSize="@dimen/_24sp"
-                                app:fontFamily="@font/rancho" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/arrivalCardView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="@dimen/margin_10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="@dimen/margin_10dp"
-                        android:layout_marginBottom="@dimen/margin_10dp"
-                        android:layout_weight="3"
-                        android:background="@drawable/cardview_bg"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:background="@drawable/cardview_bg_white"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/open_closedTextView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginTop="21dp"
-                                android:layout_marginBottom="21dp"
-                                android:gravity="center_horizontal"
-                                android:text="20 mins"
-                                android:visibility="invisible"
-                                android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp"
                                 app:fontFamily="@font/rancho" />
 

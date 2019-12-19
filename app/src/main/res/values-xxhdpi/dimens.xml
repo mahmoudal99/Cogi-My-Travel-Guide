@@ -112,7 +112,7 @@
     // Logo Splash Position
     <dimen name="LogoMarginTop">600px</dimen>
 
-    <dimen name="map_card_view_height">350dp</dimen>
+    <dimen name="map_card_view_height">370dp</dimen>
 
     <dimen name="city_slideshow_item_height">270dp</dimen>
 </resources>

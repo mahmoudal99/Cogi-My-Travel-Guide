@@ -219,7 +219,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mapImageView = findViewById(R.id.mapImageView);
         carImage = findViewById(R.id.carImage);
         walkingImageView = findViewById(R.id.walkingImage);
-        journeyMode = findViewById(R.id.journeyMode);
         cycleImageView = findViewById(R.id.cycleImage);
         informationImageView = findViewById(R.id.informationImageView);
 
@@ -228,7 +227,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mapCardView = findViewById(R.id.mapCardView);
         landmarkImageCardView = findViewById(R.id.landmarkImageCardView);
         tripInformationLinLayout = findViewById(R.id.tripInformationLinLayout);
-        tripInformationLinLayout2 = findViewById(R.id.tripInformationLinLayout2);
 
         landmarkImage = findViewById(R.id.landmarkImage);
         landmark = new Landmark(context);
@@ -380,7 +378,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mapCardView.setVisibility(View.VISIBLE);
         mapOptionsCardView.setVisibility(View.VISIBLE);
         tripInformationLinLayout.setVisibility(View.VISIBLE);
-        tripInformationLinLayout2.setVisibility(View.VISIBLE);
     }
 
     private void setJourneyMode(String mode) {
@@ -428,13 +425,13 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location2.getPosition()));
         durationTextView.setText("");
         distanceTextView.setText("");
-        journeyMode.setVisibility(View.INVISIBLE);
+//        journeyMode.setVisibility(View.INVISIBLE);
     }
 
     private void setDistanceDuration(String distance, String duration) {
         durationTextView.setText(duration);
         distanceTextView.setText(distance);
-        journeyMode.setVisibility(View.VISIBLE);
+//        journeyMode.setVisibility(View.VISIBLE);
     }
 
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
@@ -472,7 +469,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location1.getPosition()));
         durationTextView.setText("");
         distanceTextView.setText("");
-        journeyMode.setVisibility(View.INVISIBLE);
         AsyncTask<String, Void, String> data = new FetchURL(TravelGuideActivity.this).execute(getUrl(location1.getPosition(), location2.getPosition(), "driving"), "driving");
         try {
             JsonReader jsonReader = new JsonReader();
@@ -594,11 +590,11 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
 
             if (pref.getString("LandmarkOpenClosed", "Opened").contains("Closed")) {
-                open_closedTextView.setVisibility(View.VISIBLE);
                 open_closedTextView.setText(getResources().getString(R.string.close));
+                open_closedTextView.setTextColor(getResources().getColor(R.color.Red));
             } else {
-                open_closedTextView.setVisibility(View.VISIBLE);
                 open_closedTextView.setText(getResources().getString(R.string.open));
+                open_closedTextView.setTextColor(getResources().getColor(R.color.Green));
             }
 
             numberTextView.setText(pref.getString("LandmarkNumber", ""));
