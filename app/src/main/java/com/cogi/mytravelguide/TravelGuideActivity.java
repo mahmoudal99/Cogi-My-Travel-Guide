@@ -295,18 +295,24 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         carImage.setOnClickListener(v -> {
             setJourneyMode("driving");
-            journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.sports_car_black));
+            carImage.setImageDrawable(getResources().getDrawable(R.drawable.sports_car_grey));
+            cycleImageView.setImageDrawable(getResources().getDrawable(R.drawable.bike));
+            walkingImageView.setImageDrawable(getResources().getDrawable(R.drawable.hiking));
         });
 
 
         walkingImageView.setOnClickListener(v -> {
             setJourneyMode("walking");
-            journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.hiking_black));
+            walkingImageView.setImageDrawable(getResources().getDrawable(R.drawable.hiking_grey));
+            carImage.setImageDrawable(getResources().getDrawable(R.drawable.sports_car));
+            cycleImageView.setImageDrawable(getResources().getDrawable(R.drawable.bike));
         });
 
         cycleImageView.setOnClickListener(v -> {
             setJourneyMode("bicycling");
-            journeyMode.setImageDrawable(getResources().getDrawable(R.drawable.man_cycling_black));
+            cycleImageView.setImageDrawable(getResources().getDrawable(R.drawable.bike_grey));
+            carImage.setImageDrawable(getResources().getDrawable(R.drawable.sports_car));
+            walkingImageView.setImageDrawable(getResources().getDrawable(R.drawable.hiking));
         });
 
 
