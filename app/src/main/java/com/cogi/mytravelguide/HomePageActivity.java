@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cogi.mytravelguide.models.HomePageImageModel;
 import com.cogi.mytravelguide.adapters.SlidingImageAdapter;
@@ -39,6 +40,8 @@ public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
+    boolean doubleBackToExitPressedOnce = false;
+    int k;
 
     Handler handler;
     Runnable Update;
@@ -163,17 +166,23 @@ public class HomePageActivity extends AppCompatActivity {
     private void setUpWidgets() {
         attractionsCard.setOnClickListener(v -> {
             Intent attractionsIntent = new Intent(HomePageActivity.this, CitiesActivity.class);
+            attractionsIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(attractionsIntent);
+            finish();
         });
 
         travelGuideCard.setOnClickListener(v -> {
             Intent travelGuideIntent = new Intent(HomePageActivity.this, TravelGuideActivity.class);
+            travelGuideIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(travelGuideIntent);
+            finish();
         });
 
         timelineCard.setOnClickListener(v -> {
             Intent visitedIntent = new Intent(HomePageActivity.this, TimelineActivity.class);
+            visitedIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(visitedIntent);
+            finish();
         });
 
     }
@@ -216,6 +225,7 @@ public class HomePageActivity extends AppCompatActivity {
         super.onStart();
         authentication.addAuthStateListener(authStateListener);
         handler.removeCallbacks(Update);
+        k = 0;
     }
 
     @Override
@@ -226,6 +236,21 @@ public class HomePageActivity extends AppCompatActivity {
         }
         swipeTimer.cancel();
         handler.removeCallbacks(Update);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        k++;
+        if(k == 1) {
+            Toast.makeText(this, "Press back twice to exit app", Toast.LENGTH_SHORT).show();
+        } else {
+            //exit app to home screen
+            Intent homeScreenIntent = new Intent(Intent.ACTION_MAIN);
+            homeScreenIntent.addCategory(Intent.CATEGORY_HOME);
+            homeScreenIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(homeScreenIntent);
+        }
     }
 
 }

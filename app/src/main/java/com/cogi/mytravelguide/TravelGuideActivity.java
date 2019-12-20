@@ -21,6 +21,7 @@ import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.util.Linkify;
@@ -882,6 +883,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     public void onProviderDisabled(String provider) {
 
     }
+
 }
 
 
