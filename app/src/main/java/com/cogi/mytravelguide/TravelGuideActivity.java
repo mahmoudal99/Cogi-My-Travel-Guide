@@ -541,12 +541,13 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         if (place.getOpeningHours() != null) {
             if (place.getOpeningHours().getWeekdayText().contains(getResources().getString(R.string.close))) {
-                open_closedTextView.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
-                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+                open_closedTextView.setText(getResources().getString(R.string.close));
+                open_closedTextView.setTextColor(getResources().getColor(R.color.Red));
+                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
             } else {
-                open_closedTextView.setVisibility(View.VISIBLE);
                 open_closedTextView.setText(getResources().getString(R.string.open));
-                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+                open_closedTextView.setTextColor(getResources().getColor(R.color.Green));
+                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
             }
         }
 
@@ -651,8 +652,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
 
         if (place.getOpeningHours() != null) {
-            editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
-            editor.putString("LandmarkOpenClosed", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+            editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
+            editor.putString("LandmarkOpenClosed", open_closedTextView.getText().toString());
         } else {
             editor.putString("LandmarkWebsite", "Information Not Available");
         }
@@ -692,8 +693,8 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
 
         if (place.getOpeningHours() != null) {
-            editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
-            editor.putString("LandmarkOpenClosed", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 1));
+            editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
+            editor.putString("LandmarkOpenClosed", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
         } else {
             editor.putString("LandmarkWebsite", "Information Not Available");
         }
