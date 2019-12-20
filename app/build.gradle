@@ -2,6 +2,7 @@ import com.google.gms.googleservices.GoogleServicesPlugin
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.firebase-perf'
 GoogleServicesPlugin.config.disableVersionCheck = true
 
 android {
@@ -15,7 +16,17 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
     buildTypes {
+
+        debug {
+            FirebasePerformance {
+                // Set this flag to 'false' to disable @AddTrace annotation processing and
+                // automatic HTTP/S network request monitoring
+                // for a specific build variant at compile time.
+                instrumentationEnabled false
+            }
+        }
 
         debug {
             debuggable = false
@@ -74,6 +85,7 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-perf:19.0.4'
 
     // Recycler View
     implementation 'androidx.recyclerview:recyclerview:1.1.0'

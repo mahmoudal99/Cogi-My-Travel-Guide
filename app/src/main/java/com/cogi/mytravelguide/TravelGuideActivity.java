@@ -99,9 +99,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView, distanceTextView,
             durationTextView, open_closedTextView, noLandmarkSelected;
-    private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, journeyMode, noLandmarkImage;
+    private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, noLandmarkImage;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
-    private LinearLayout tripInformationLinLayout, tripInformationLinLayout2;
+    private LinearLayout tripInformationLinLayout;
     private TextView searchStartingPointEditText;
 
     ViewPager viewPager;
@@ -417,7 +417,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mapCardView.setVisibility(View.GONE);
         mapOptionsCardView.setVisibility(View.GONE);
         tripInformationLinLayout.setVisibility(View.GONE);
-        tripInformationLinLayout2.setVisibility(View.GONE);
     }
 
     @Override

@@ -181,7 +181,6 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         backArrow = findViewById(R.id.backArrow);
         noCityImage = findViewById(R.id.noCityImage);
         cityTextView = findViewById(R.id.cityTextView);
-        searchEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         searchPlacesEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         searchImageView = findViewById(R.id.searchButton);
         imageProcessing = new ImageProcessing(CitiesActivity.this);
@@ -206,12 +205,6 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         });
 
         searchPlacesEditText.setHint("Search Places in " + cityTextView.getText().toString());
-
-        closeSearchArrow.setOnClickListener(v -> {
-            if (closeSearchArrow.getVisibility() == View.VISIBLE) {
-                hideSearchWidgets();
-            }
-        });
 
 //        searchEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 //        searchEditText.setOnKeyListener((v, keyCode, event) -> {
@@ -553,10 +546,6 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         }
 
         cityTextView.setText(name);
-        runOnUiThread(() -> {
-            cityTextView.setVisibility(View.VISIBLE);
-            searchEditText.setVisibility(View.GONE);
-        });
         noLandmarkSelected.setVisibility(View.GONE);
         landmarksArrayList.clear();
     }
@@ -564,13 +553,10 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private void handleCitySearchResult(String cityName) {
         cityName = cityName.substring(0, 1).toUpperCase() + cityName.substring(1);
         Toast.makeText(CitiesActivity.this, cityName, Toast.LENGTH_SHORT).show();
-        closeSearchArrow.setVisibility(View.GONE);
-        backArrow.setVisibility(View.VISIBLE);
         Request request = wikiData.callCityDataApi(cityName);
         httpClientCall(request, CITYPOPULATIONREQUEST);
         loadCity(cityName);
         searchPlacesEditText.setHint("Search Places in " + cityName);
-//        closeKeyboard();
         toggleCityImageVisibility();
     }
 
