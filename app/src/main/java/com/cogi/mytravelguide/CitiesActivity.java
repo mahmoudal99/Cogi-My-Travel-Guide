@@ -418,9 +418,10 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         double cityLng = Double.parseDouble(Objects.requireNonNull(pref.getString("CityLng", "0.0")));
         LatLng cityLatLng = new LatLng(cityLat, cityLng);
         mGoogleMap = googleMap;
+        mGoogleMap.clear();
         mGoogleMap.addMarker(new MarkerOptions().position(cityLatLng).title(cityTextView.getText().toString()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(cityLatLng));
-        mGoogleMap.setMaxZoomPreference(11);
+        mGoogleMap.setMaxZoomPreference(15);
         mGoogleMap.setMinZoomPreference(11);
     }
 
@@ -492,28 +493,6 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         searchPlacesEditText.setVisibility(View.VISIBLE);
         blackSearchButton.setVisibility(View.VISIBLE);
         searchBarCardView.setVisibility(View.VISIBLE);
-    }
-
-//    // Search
-//    private void toggleSearchWidgets(int visibilityValue) {
-//        if (visibilityValue == View.GONE) {
-//            cityTextView.setVisibility(View.GONE);
-//            searchEditText.setVisibility(View.VISIBLE);
-//            closeSearchArrow.setVisibility(View.VISIBLE);
-//            backArrow.setVisibility(View.GONE);
-//        } else {
-//            cityTextView.setVisibility(View.VISIBLE);
-//            searchEditText.setVisibility(View.GONE);
-//            closeSearchArrow.setVisibility(View.GONE);
-//            backArrow.setVisibility(View.VISIBLE);
-//        }
-//    }
-
-    private void hideSearchWidgets() {
-        cityTextView.setVisibility(View.VISIBLE);
-        searchEditText.setVisibility(View.GONE);
-        closeSearchArrow.setVisibility(View.GONE);
-        backArrow.setVisibility(View.VISIBLE);
     }
 
     private void handleIncomingIntent(String cityName) {

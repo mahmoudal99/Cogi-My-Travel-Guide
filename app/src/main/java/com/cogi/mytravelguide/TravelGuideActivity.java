@@ -260,9 +260,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkTextView.setText(getString(R.string.landmark));
         }
 
-
         addLandmarkToTimeline.setOnClickListener(v -> {
-
             if (currentUser == null) {
                 Toast.makeText(TravelGuideActivity.this, "Sign in to add landmark to timeline", Toast.LENGTH_SHORT).show();
             } else {
@@ -282,7 +280,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                     Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
                 }
             }
-
         });
 
         searchLandmarkButton.setOnClickListener(v -> {
@@ -434,7 +431,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.addMarker(location2);
         mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
         mGoogleMap.setMaxZoomPreference(20);
-        mGoogleMap.setMinZoomPreference(10);
+        mGoogleMap.setMinZoomPreference(15);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location2.getPosition()));
         durationTextView.setText("");
         distanceTextView.setText("");
@@ -764,6 +761,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
