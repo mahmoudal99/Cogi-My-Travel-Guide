@@ -23,12 +23,13 @@ import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final String TAG = "TravelGuideActivity";
     private String email;
 
     private ImageView backArrow, languageArrow;
     private LinearLayout logoutLinearLayout;
     private RelativeLayout languageRelativeLayout;
-    private TextView emailTextView, languageTextView;
+    private TextView emailTextView, languageTextView, logoutTextView;
     private GoogleSignInClient googleSignInClient;
 
     // Firebase
@@ -56,18 +57,19 @@ public class SettingsActivity extends AppCompatActivity {
         firebaseMethods = new FirebaseMethods(SettingsActivity.this);
         emailTextView = findViewById(R.id.emailTextView);
         languageTextView = findViewById(R.id.languageTextView);
+        logoutTextView = findViewById(R.id.logoutTextView);
         setLanguageTextView();
         languageRelativeLayout = findViewById(R.id.languageLayout);
     }
 
-    private void setLanguageTextView(){
+    private void setLanguageTextView() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String language = sharedPreferences.getString("Language", "");
-        if(language.contains("en")){
+        if (language.contains("en")) {
             languageTextView.setText("English");
-        }else if(language.contains("es")){
+        } else if (language.contains("es")) {
             languageTextView.setText("Spanish");
-        }else if(language.contains("fr")){
+        } else if (language.contains("fr")) {
             languageTextView.setText("French");
         }
     }
@@ -76,7 +78,11 @@ public class SettingsActivity extends AppCompatActivity {
         backArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HomePageActivity.class)));
         logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
         authentication = FirebaseAuth.getInstance();
-        emailTextView.setText(authentication.getCurrentUser().getProviderData().get(1).getEmail());
+        if (currentUser == null) {
+            Log.d(TAG, "No user signed in");
+        } else {
+            emailTextView.setText(authentication.getCurrentUser().getProviderData().get(1).getEmail());
+        }
         languageRelativeLayout.setOnClickListener(v -> showLanguageOptions());
     }
 
@@ -129,9 +135,9 @@ public class SettingsActivity extends AppCompatActivity {
             currentUser = firebaseAuth.getCurrentUser();
             if (currentUser != null) {
                 Log.d("Firebase Auth" + "GS", "Success" + currentUser.getEmail());
-
             } else {
                 Log.d("Firebase Authentication", "signed out");
+                logoutTextView.setText("Sign In");
             }
         };
     }

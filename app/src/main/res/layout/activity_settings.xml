@@ -189,7 +189,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="110dp"
                     android:layout_marginLeft="90dp"
-
                     android:gravity="center_vertical"
                     android:text="@string/log_out"
                     android:textColor="@color/black"

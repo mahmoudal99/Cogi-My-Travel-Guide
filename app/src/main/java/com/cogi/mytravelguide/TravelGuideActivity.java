@@ -260,23 +260,27 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkTextView.setText(getString(R.string.landmark));
         }
 
-        addLandmarkToTimeline.setOnClickListener(v -> {
-            if (landmarkNameString != null) {
-                datePickerDialog.setTitle("Date Visited");
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
+        if(currentUser == null){
+            Toast.makeText(TravelGuideActivity.this, "Sign in to add landmark to timeline", Toast.LENGTH_SHORT).show();
+        }else {
+            addLandmarkToTimeline.setOnClickListener(v -> {
+                if (landmarkNameString != null) {
+                    datePickerDialog.setTitle("Date Visited");
+                    final Calendar c = Calendar.getInstance();
+                    mYear = c.get(Calendar.YEAR);
+                    mMonth = c.get(Calendar.MONTH);
+                    mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                        (view, year, monthOfYear, dayOfMonth) -> landmark.checkLandmarkAlreadyAdded(pref.getString("LandmarkName", "Landmark"),
-                                pref.getString("LandmarkID", null), currentUser,
-                                dayOfMonth + "-" + (monthOfYear + 1) + "-" + year), mYear, mMonth, mDay);
-                datePickerDialog.show();
-            } else {
-                Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                            (view, year, monthOfYear, dayOfMonth) -> landmark.checkLandmarkAlreadyAdded(pref.getString("LandmarkName", "Landmark"),
+                                    pref.getString("LandmarkID", null), currentUser,
+                                    dayOfMonth + "-" + (monthOfYear + 1) + "-" + year), mYear, mMonth, mDay);
+                    datePickerDialog.show();
+                } else {
+                    Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         searchLandmarkButton.setOnClickListener(v -> {
             Intent intent = landmark.landmarkPicker();
