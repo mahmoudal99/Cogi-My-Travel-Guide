@@ -260,10 +260,12 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkTextView.setText(getString(R.string.landmark));
         }
 
-        if(currentUser == null){
-            Toast.makeText(TravelGuideActivity.this, "Sign in to add landmark to timeline", Toast.LENGTH_SHORT).show();
-        }else {
-            addLandmarkToTimeline.setOnClickListener(v -> {
+
+        addLandmarkToTimeline.setOnClickListener(v -> {
+
+            if (currentUser == null) {
+                Toast.makeText(TravelGuideActivity.this, "Sign in to add landmark to timeline", Toast.LENGTH_SHORT).show();
+            } else {
                 if (landmarkNameString != null) {
                     datePickerDialog.setTitle("Date Visited");
                     final Calendar c = Calendar.getInstance();
@@ -279,8 +281,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 } else {
                     Toast.makeText(TravelGuideActivity.this, "No Landmark Selected", Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
+            }
+
+        });
 
         searchLandmarkButton.setOnClickListener(v -> {
             Intent intent = landmark.landmarkPicker();
