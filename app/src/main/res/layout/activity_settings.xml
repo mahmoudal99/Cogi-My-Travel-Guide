@@ -95,7 +95,7 @@
 
             <RelativeLayout
                 android:id="@+id/languageLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
@@ -120,7 +120,7 @@
                     android:layout_marginStart="60dp"
                     android:layout_marginLeft="60dp"
                     android:gravity="center_vertical"
-                    android:text="Language"
+                    android:text="English"
                     android:textColor="@color/Grey"
                     android:textSize="@dimen/_18sp" />
 

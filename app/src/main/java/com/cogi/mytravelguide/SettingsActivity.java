@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cogi.mytravelguide.utils.FirebaseMethods;
@@ -26,7 +27,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private ImageView backArrow, languageArrow;
     private LinearLayout logoutLinearLayout;
-    private TextView emailTextView;
+    private RelativeLayout languageRelativeLayout;
+    private TextView emailTextView, languageTextView;
     private GoogleSignInClient googleSignInClient;
 
     // Firebase
@@ -53,6 +55,21 @@ public class SettingsActivity extends AppCompatActivity {
         logoutLinearLayout = findViewById(R.id.logoutLayout);
         firebaseMethods = new FirebaseMethods(SettingsActivity.this);
         emailTextView = findViewById(R.id.emailTextView);
+        languageTextView = findViewById(R.id.languageTextView);
+        setLanguageTextView();
+        languageRelativeLayout = findViewById(R.id.languageLayout);
+    }
+
+    private void setLanguageTextView(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String language = sharedPreferences.getString("Language", "");
+        if(language.contains("en")){
+            languageTextView.setText("English");
+        }else if(language.contains("es")){
+            languageTextView.setText("Spanish");
+        }else if(language.contains("fr")){
+            languageTextView.setText("French");
+        }
     }
 
     private void setupWidgets() {
@@ -60,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
         authentication = FirebaseAuth.getInstance();
         emailTextView.setText(authentication.getCurrentUser().getProviderData().get(1).getEmail());
-//        languageArrow.setOnClickListener(v -> showLanguageOptions());
+        languageRelativeLayout.setOnClickListener(v -> showLanguageOptions());
     }
 
     private void showLanguageOptions() {
