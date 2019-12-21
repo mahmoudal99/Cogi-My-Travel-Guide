@@ -13,6 +13,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cogi.mytravelguide.HomePageActivity;
@@ -50,8 +51,7 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     private Context context;
-
-    // Facebook
+    private TextView continue_text_view;
 
     // Google
     private GoogleSignInClient mGoogleSignInClient;
@@ -72,6 +72,7 @@ public class SignInActivity extends AppCompatActivity {
         context = SignInActivity.this;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         handler = new Handler();
+        continue_text_view = findViewById(R.id.continue_text_view);
     }
 
     private void initGoogleAuth() {
@@ -86,6 +87,7 @@ public class SignInActivity extends AppCompatActivity {
     private void setUpWidgets() {
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
         googleSignInButton.setOnClickListener(v -> googleSignIn());
+        continue_text_view.setOnClickListener(v -> startActivity(new Intent(this, HomePageActivity.class)));
     }
 
 

@@ -16,8 +16,8 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.CitiesActivity;
-import com.cogi.mytravelguide.models.HomePageImageModel;
 import com.cogi.mytravelguide.SettingsActivity;
+import com.cogi.mytravelguide.models.HomePageImageModel;
 import com.cogi.mytravelguide.utils.ImageProcessing;
 
 import java.util.ArrayList;

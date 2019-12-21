@@ -53,7 +53,6 @@ public class SettingsActivity extends AppCompatActivity {
         logoutLinearLayout = findViewById(R.id.logoutLayout);
         firebaseMethods = new FirebaseMethods(SettingsActivity.this);
         emailTextView = findViewById(R.id.emailTextView);
-        languageArrow = findViewById(R.id.languageArrow);
     }
 
     private void setupWidgets() {
@@ -61,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
         logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
         authentication = FirebaseAuth.getInstance();
         emailTextView.setText(authentication.getCurrentUser().getProviderData().get(1).getEmail());
-        languageArrow.setOnClickListener(v -> showLanguageOptions());
+//        languageArrow.setOnClickListener(v -> showLanguageOptions());
     }
 
     private void showLanguageOptions() {

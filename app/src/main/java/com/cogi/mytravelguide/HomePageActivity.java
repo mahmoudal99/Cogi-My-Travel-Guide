@@ -41,7 +41,7 @@ public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
     boolean doubleBackToExitPressedOnce = false;
-    int k;
+    int backButtonPressed;
 
     Handler handler;
     Runnable Update;
@@ -225,7 +225,7 @@ public class HomePageActivity extends AppCompatActivity {
         super.onStart();
         authentication.addAuthStateListener(authStateListener);
         handler.removeCallbacks(Update);
-        k = 0;
+        backButtonPressed = 0;
     }
 
     @Override
@@ -241,8 +241,8 @@ public class HomePageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        k++;
-        if(k == 1) {
+        backButtonPressed++;
+        if(backButtonPressed == 1) {
             Toast.makeText(this, "Press back twice to exit app", Toast.LENGTH_SHORT).show();
         } else {
             //exit app to home screen

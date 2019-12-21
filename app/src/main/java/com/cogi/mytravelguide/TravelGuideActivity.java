@@ -772,11 +772,16 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 Log.i(TAG, "Cancelled");
             }
         } else if (requestCode == STARTINGPOINT) {
-            Place place = Autocomplete.getPlaceFromIntent(data);
-            GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", TravelGuideActivity.this);
-            linearLayoutMode.setVisibility(View.VISIBLE);
-            Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getName() + pref.getString("city", "")));
-            httpClientCall(request, STARTINGPOINTREQUEST);
+
+            try {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                GooglePlacesApi googlePlacesApi = new GooglePlacesApi("AIzaSyDUBqf6gebSlU8W7TmX5Y2AsQlQL1ure5o", TravelGuideActivity.this);
+                linearLayoutMode.setVisibility(View.VISIBLE);
+                Request request = wikiData.createLandmarkPlaceIdRequest(googlePlacesApi.getPlacesByQuery(place.getName() + pref.getString("city", "")));
+                httpClientCall(request, STARTINGPOINTREQUEST);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
 
         } else if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {

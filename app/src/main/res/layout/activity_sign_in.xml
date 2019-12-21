@@ -29,6 +29,19 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/google_sign_in_top" />
 
+
+        <TextView
+            android:id="@+id/continue_text_view"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:textColor="@color/White"
+            android:fontFamily="@font/pompiere"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_25sp"
+            android:textStyle="bold"
+            android:text="Continue Without Signing In "/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
