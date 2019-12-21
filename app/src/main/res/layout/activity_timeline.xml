@@ -22,6 +22,8 @@
                 android:id="@+id/backArrow"
                 android:layout_width="32dp"
                 android:layout_height="30dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
                 android:contentDescription="TODO" android:src="@drawable/back_arrow_black" />
 
