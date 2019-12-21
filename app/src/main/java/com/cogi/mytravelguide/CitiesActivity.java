@@ -433,6 +433,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private void setMapsLatLng(double lat, double lng) {
         runOnUiThread(() -> {
             LatLng latLng = new LatLng(lat, lng);
+            mGoogleMap.clear();
             mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(cityTextView.getText().toString()));
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         });

@@ -32,14 +32,14 @@
 
         <TextView
             android:id="@+id/continue_text_view"
+            android:background="@drawable/cardview_bg_white"
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:textColor="@color/White"
-            android:fontFamily="@font/pompiere"
+            android:textColor="@color/black"
+            android:padding="7dp"
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_25sp"
-            android:textStyle="bold"
+            android:textSize="@dimen/_18sp"
             android:text="Continue Without Signing In "/>
 
     </LinearLayout>
