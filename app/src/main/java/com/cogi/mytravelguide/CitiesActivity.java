@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -86,11 +88,10 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
 
     // Widgets
-    private ImageView backArrow, searchImageView, cityImage, closeSearchArrow, blackSearchButton, noCityImage;
+    private ImageView backArrow, searchImageView, cityImage, blackSearchButton, noCityImage;
     private CardView mapCardView, searchBarCardView;
     private RecyclerView listView;
     private TextView cityTextView, searchPlacesEditText, noLandmarkSelected;
-    private EditText searchEditText;
     private TabLayout tabLayout;
 
     ViewPager viewPager;
@@ -422,7 +423,7 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         mGoogleMap.addMarker(new MarkerOptions().position(cityLatLng).title(cityTextView.getText().toString()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(cityLatLng));
         mGoogleMap.setMaxZoomPreference(15);
-        mGoogleMap.setMinZoomPreference(11);
+        mGoogleMap.setMinZoomPreference(5);
     }
 
     private void supportMapFragment() {
@@ -538,6 +539,12 @@ public class CitiesActivity extends AppCompatActivity implements OnMapReadyCallb
         loadCity(cityName);
         searchPlacesEditText.setHint("Search Places in " + cityName);
         toggleCityImageVisibility();
+        closeKeyboard();
+    }
+
+    private void closeKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     private void setCityImage(String cityName) {

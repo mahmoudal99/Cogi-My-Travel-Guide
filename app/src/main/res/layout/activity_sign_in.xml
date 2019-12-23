@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/signInBsckground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sign_in_page_bg"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/signInImageView"
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/loginLinLayout"
@@ -39,7 +45,7 @@
             android:padding="7dp"
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_18sp"
+            android:textSize="@dimen/_14sp"
             android:text="Continue Without Signing In "/>
 
     </LinearLayout>

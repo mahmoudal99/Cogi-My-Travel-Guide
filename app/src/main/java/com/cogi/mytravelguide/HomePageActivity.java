@@ -23,6 +23,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,7 +41,6 @@ public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth authentication;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
-    boolean doubleBackToExitPressedOnce = false;
     int backButtonPressed;
 
     Handler handler;
@@ -226,6 +226,10 @@ public class HomePageActivity extends AppCompatActivity {
         authentication.addAuthStateListener(authStateListener);
         handler.removeCallbacks(Update);
         backButtonPressed = 0;
+    }
+
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(HomePageActivity.this) != null;
     }
 
     @Override

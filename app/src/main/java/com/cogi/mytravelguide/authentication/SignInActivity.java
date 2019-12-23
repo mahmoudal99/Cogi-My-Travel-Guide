@@ -13,9 +13,11 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.cogi.mytravelguide.HomePageActivity;
 import com.cogi.mytravelguide.R;
 
@@ -44,6 +46,8 @@ public class SignInActivity extends AppCompatActivity {
 
     // Widgets
     private SignInButton googleSignInButton;
+    private ConstraintLayout constraintLayout;
+    ImageView imageView;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -63,6 +67,8 @@ public class SignInActivity extends AppCompatActivity {
 
         initGoogleAuth();
         init();
+        Glide.with(this)
+                .load(getResources().getDrawable(R.drawable.sign_in_page_bg)).into(imageView);
         setUpWidgets();
         setUpFirebaseAuthentication();
     }
@@ -72,6 +78,8 @@ public class SignInActivity extends AppCompatActivity {
         context = SignInActivity.this;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         handler = new Handler();
+        imageView = findViewById(R.id.signInImageView);
+        constraintLayout = findViewById(R.id.signInBsckground);
         continue_text_view = findViewById(R.id.continue_text_view);
     }
 

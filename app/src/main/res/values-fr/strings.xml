@@ -45,4 +45,8 @@
     <string name="no_infotmation_available">Aucune information disponible</string>
     <string name="search_for_a_city_to_explore">Recherche d\'une ville à explorer</string>
 
+
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_capital">SIGN IN</string>
+
 </resources>

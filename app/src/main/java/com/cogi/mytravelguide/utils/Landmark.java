@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.cogi.mytravelguide.BuildConfig;
 import com.cogi.mytravelguide.R;
 import com.cogi.mytravelguide.TravelGuideActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -66,6 +67,10 @@ public class Landmark {
                     }
                     addLandmarkToTimeline(currentUser, placeID, landmarkName, dateVisited);
                 });
+    }
+
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(context) != null;
     }
 
     public void getLandmarkFromImage(Bitmap bitmap, TextView textView) {

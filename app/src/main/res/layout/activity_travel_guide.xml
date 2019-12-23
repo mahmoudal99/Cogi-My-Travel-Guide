@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -28,14 +28,15 @@
 
             <TextView
                 android:id="@+id/attractionName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:fontFamily="@font/pompiere"
-                android:gravity="center_horizontal"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_centerHorizontal="true"
                 android:text="@string/landmark"
                 android:textColor="@color/black"
-                android:textSize="28sp" />
+                android:textSize="26sp" />
 
         </RelativeLayout>
 
@@ -194,18 +195,6 @@
                                 android:text="@string/information"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_24sp" />
-
-
-                            <TextView
-                                android:id="@+id/open_closedTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/Green"
-                                android:layout_marginRight="10dp"
-                                android:textSize="@dimen/_24sp"
-                                android:text="Opened"
-                                android:fontFamily="@font/pompiere"/>
-
 
                         </LinearLayout>
 

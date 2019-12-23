@@ -44,6 +44,7 @@ import com.cogi.mytravelguide.models.LandmarkSwipeViewModel;
 import com.cogi.mytravelguide.adapters.LandmarkSwipeViewAdapter;
 import com.cogi.mytravelguide.utils.TaskLoadedCallback;
 import com.cogi.mytravelguide.utils.WikiData;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -70,19 +71,27 @@ import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.apache.jena.sparql.function.library.date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -99,7 +108,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
     // Widgets
     private ImageView backArrow, addLandmarkToTimeline, searchLandmarkButton;
     private TextView landmarkTextView, landmarkOpeningHours, landmarkAddress, landmarkRating, numberTextView, websiteTextView, distanceTextView,
-            durationTextView, open_closedTextView, noLandmarkSelected;
+            durationTextView, noLandmarkSelected;
     private ImageView landmarkImage, mapImageView, informationImageView, carImage, cycleImageView, walkingImageView, noLandmarkImage;
     private CardView informationCardView, mapOptionsCardView, mapCardView, landmarkImageCardView;
     private LinearLayout tripInformationLinLayout;
@@ -111,6 +120,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     // Variables
     private String landmarkNameString;
+    private int day;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -140,13 +150,13 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
     LinearLayout linearLayoutMode;
 
+    String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_travel_guide);
-
-
         requestPermission();
         init();
         setUpWidgets();
@@ -157,6 +167,27 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             loadPreviousLandmark();
         }
         setUpFirebaseAuthentication();
+    }
+
+    private int getDayOfWeek(String day){
+        switch (day){
+            case "Monday":
+                return 0;
+            case "Tuesday":
+                return 1;
+            case "Wednesday":
+                return 2;
+            case "Thursday":
+                return 3;
+            case "Friday":
+                return 4;
+            case "Saturday":
+                return 5;
+            case "Sunday":
+                return 6;
+        }
+
+        return 0;
     }
 
     private void createModels(PhotoMetadata[] imageStrings) {
@@ -243,7 +274,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
 
         durationTextView = findViewById(R.id.durationText);
         distanceTextView = findViewById(R.id.distanceText);
-        open_closedTextView = findViewById(R.id.open_closedTextView);
 
         searchStartingPointEditText = findViewById(R.id.searchStartingPoint);
     }
@@ -261,7 +291,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
 
         addLandmarkToTimeline.setOnClickListener(v -> {
-            if (currentUser == null) {
+            if (!isSignedIn()) {
                 Toast.makeText(TravelGuideActivity.this, "Sign in to add landmark to timeline", Toast.LENGTH_SHORT).show();
             } else {
                 if (landmarkNameString != null) {
@@ -431,7 +461,7 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         mGoogleMap.addMarker(location2);
         mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
         mGoogleMap.setMaxZoomPreference(20);
-        mGoogleMap.setMinZoomPreference(15);
+        mGoogleMap.setMinZoomPreference(10);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location2.getPosition()));
         durationTextView.setText("");
         distanceTextView.setText("");
@@ -545,32 +575,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
 
         if (place.getOpeningHours() != null) {
-            if (place.getOpeningHours().getWeekdayText().contains(getResources().getString(R.string.close))) {
-                open_closedTextView.setText(getResources().getString(R.string.close));
-                open_closedTextView.setTextColor(getResources().getColor(R.color.Red));
-                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
-            } else {
-                open_closedTextView.setText(getResources().getString(R.string.open));
-                open_closedTextView.setTextColor(getResources().getColor(R.color.Green));
-                landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
-            }
+            Date now = new Date();
+            SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
+            landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek(simpleDateformat.format(now))));
         }
-
-
-//        if (place.getName().contains("Great Sphinx of Giza")) {
-//            if (place.getPhotoMetadatas() != null) {
-//                GooglePlacesApi googlePlacesApi = new GooglePlacesApi(BuildConfig.APIKEY, TravelGuideActivity.this);
-//                googlePlacesApi.setLandmarkImageWithBitmap(place.getPhotoMetadatas().get(0), landmarkImage);
-//                landmarkImageCardView.setVisibility(View.VISIBLE);
-//                viewPager.setVisibility(View.GONE);
-//            }
-//        } else {
-//            setLandmarkImage(place.getPhotoMetadatas());
-//            Log.d("METADATA1", place.getPhotoMetadatas().get(0).toString() +
-//                    place.getPhotoMetadatas().get(1).toString() + place.getPhotoMetadatas().get(2));
-//            landmarkImageCardView.setVisibility(View.GONE);
-//            viewPager.setVisibility(View.VISIBLE);
-//        }
 
         if (place.getPhotoMetadatas() != null) {
             setLandmarkImage(place.getPhotoMetadatas());
@@ -599,15 +607,6 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             landmarkNameString = pref.getString("LandmarkName", "Landmark");
             landmarkTextView.setText(pref.getString("LandmarkName", "Landmark"));
             landmarkOpeningHours.setText(pref.getString("LandmarkOpeningHours", "0:00"));
-
-            if (pref.getString("LandmarkOpenClosed", "Opened").contains("Closed")) {
-                open_closedTextView.setText(getResources().getString(R.string.close));
-                open_closedTextView.setTextColor(getResources().getColor(R.color.Red));
-            } else {
-                open_closedTextView.setText(getResources().getString(R.string.open));
-                open_closedTextView.setTextColor(getResources().getColor(R.color.Green));
-            }
-
             numberTextView.setText(pref.getString("LandmarkNumber", ""));
             websiteTextView.setText(pref.getString("LandmarkWebsite", ""));
             landmarkRating.setText(pref.getString("LandmarkRating", ""));
@@ -657,8 +656,9 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
 
         if (place.getOpeningHours() != null) {
-            editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
-            editor.putString("LandmarkOpenClosed", open_closedTextView.getText().toString());
+            Date now = new Date();
+            SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
+            landmarkOpeningHours.setText(place.getOpeningHours().getWeekdayText().get(getDayOfWeek(simpleDateformat.format(now))));
         } else {
             editor.putString("LandmarkWebsite", "Information Not Available");
         }
@@ -698,8 +698,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
         }
 
         if (place.getOpeningHours() != null) {
-            editor.putString("LandmarkOpeningHours", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
-            editor.putString("LandmarkOpenClosed", place.getOpeningHours().getWeekdayText().get(getDayOfWeek() - 2));
+
+
+            editor.putString("LandmarkOpeningHours",landmarkOpeningHours.getText().toString() );
+
         } else {
             editor.putString("LandmarkWebsite", "Information Not Available");
         }
@@ -746,15 +748,11 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
             if (exception instanceof ApiException) {
                 ApiException apiException = (ApiException) exception;
                 int statusCode = apiException.getStatusCode();
-                // Handle error with given status code.
             }
         });
     }
 
-    private int getDayOfWeek() {
-        Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.DAY_OF_WEEK);
-    }
+
 
     /*---------------------------------------------------------------------- Activity Result -------------------------------------------------------------*/
 
@@ -837,6 +835,10 @@ public class TravelGuideActivity extends AppCompatActivity implements OnMapReady
                 Log.d(TAG, "signed out");
             }
         };
+    }
+
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(TravelGuideActivity.this) != null;
     }
 
     @Override

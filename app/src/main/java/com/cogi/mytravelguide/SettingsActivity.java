@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cogi.mytravelguide.utils.FirebaseMethods;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,13 +25,10 @@ import java.util.Locale;
 public class SettingsActivity extends AppCompatActivity {
 
     private static final String TAG = "TravelGuideActivity";
-    private String email;
-
-    private ImageView backArrow, languageArrow;
+    private ImageView backArrow;
     private LinearLayout logoutLinearLayout;
     private RelativeLayout languageRelativeLayout;
-    private TextView emailTextView, languageTextView, logoutTextView;
-    private GoogleSignInClient googleSignInClient;
+    private TextView emailTextView, languageTextView, logoutTextView, logoutTitle;
 
     // Firebase
     private FirebaseAuth authentication;
@@ -58,6 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
         emailTextView = findViewById(R.id.emailTextView);
         languageTextView = findViewById(R.id.languageTextView);
         logoutTextView = findViewById(R.id.logoutTextView);
+        logoutTitle = findViewById(R.id.logoutTitle);
         setLanguageTextView();
         languageRelativeLayout = findViewById(R.id.languageLayout);
     }
@@ -78,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         backArrow.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HomePageActivity.class)));
         logoutLinearLayout.setOnClickListener(v -> firebaseMethods.logout());
         authentication = FirebaseAuth.getInstance();
-        if (currentUser == null) {
+        if (!isSignedIn()) {
             Log.d(TAG, "No user signed in");
         } else {
             emailTextView.setText(authentication.getCurrentUser().getProviderData().get(1).getEmail());
@@ -137,10 +136,16 @@ public class SettingsActivity extends AppCompatActivity {
                 Log.d("Firebase Auth" + "GS", "Success" + currentUser.getEmail());
             } else {
                 Log.d("Firebase Authentication", "signed out");
-                logoutTextView.setText("Sign In");
+                logoutTextView.setText(getResources().getString(R.string.sign_in));
+                logoutTitle.setText(getResources().getString(R.string.sign_in_capital));
             }
         };
     }
+
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(SettingsActivity.this) != null;
+    }
+
 
     @Override
     public void onStart() {

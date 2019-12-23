@@ -2,31 +2,21 @@ import com.google.gms.googleservices.GoogleServicesPlugin
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.firebase-perf'
 GoogleServicesPlugin.config.disableVersionCheck = true
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.cogi.mytravelguide"
         minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 4
-        versionName "3.1"
+        targetSdkVersion 29
+        versionCode 6
+        versionName "3.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
 
     buildTypes {
-
-        debug {
-            FirebasePerformance {
-                // Set this flag to 'false' to disable @AddTrace annotation processing and
-                // automatic HTTP/S network request monitoring
-                // for a specific build variant at compile time.
-                instrumentationEnabled false
-            }
-        }
 
         debug {
             debuggable = false
@@ -86,8 +76,6 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.firebase:firebase-core:17.2.1'
-    implementation 'com.google.firebase:firebase-perf:19.0.4'
-
     // Recycler View
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // Unsplash
@@ -124,12 +112,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
     implementation 'com.google.firebase:firebase-ads:18.3.0'
 
-
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
 
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'com.kc.androidunsplash:androidunsplash:1.0.5'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 }
 
 
