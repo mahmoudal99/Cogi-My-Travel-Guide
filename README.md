@@ -1,5 +1,13 @@
 # My-Travel-Guide
-Android Travel App for guiding tourist on their trips by giving detailed information on tourist attractions
+
+https://play.google.com/store/apps/details?id=com.cogi.mytravelguide
+
+My Travel Guide, taking you to depths of ancient Rome to the holy land of Jerusalem.
+Explore cities around the world.
+Uncover landmarks across the globe.
+Get all necessary information and directions for your journey.
+Build your very own personalized timeline.
+
 <p float="left">
   <img src="https://user-images.githubusercontent.com/42293856/71915249-3f3a3200-3173-11ea-846a-902890c9f568.jpg" width="240" height="470"> 
   
